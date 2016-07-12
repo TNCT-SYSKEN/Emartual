@@ -22,7 +22,7 @@ exports.name_query = function(sqlclient, app){
       for(var i in results){
         //res.send(results[i].name);
       }
-      res.send(results[0].email);
+      res.send(results[0].name + "<br>" + results[0].email + "<br>" + results[0].maintext);
     });
   });
 };
