@@ -20,6 +20,9 @@ console.log(setting.host + ":" + setting.port);
 // サーバーの作成
 var app = express();
 sqlclient = sql_server.sql_connect(sqlclient);
+//テンプレートエンジンの設定
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
 
 // クエリの送信
 sql_server.name_query(sqlclient, app);

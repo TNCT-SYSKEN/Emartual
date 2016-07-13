@@ -24,7 +24,8 @@ exports.name_query = function(sqlclient, app){
       for(var i in results){
         send_data[i] = [results[i].maintext, results[i].created.toString()];
       }
-      console.log(send_data);
+      //ejs側に送信
+      res.render('bbs.ejs', {send_data: send_data});
     });
   });
 };
