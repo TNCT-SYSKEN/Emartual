@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
     <meta charset="utf-8">
     <title>BBS</title>
   </head>
   <body>
     <ul>
-      <li><%= send_data[0][0] %> - <%= send_data[0][1] %></li>
+      <% for(var i in send_data){ %>
+        <li><%= send_data[i][0] %> - <%= send_data[i][1] %></li>
+      <% } %>
     </ul>
   </body>
 </html>
