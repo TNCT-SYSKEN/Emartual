@@ -12,17 +12,20 @@ exports.sql_connect = function(sqlclient){
 
 exports.name_query = function(sqlclient, app){
   // nameフィールドを取得するクエリの作成
+  var sql_command = "select maintext, date_format(created, '%Y/%c/%e %T') as created from users;";
   // クエリの作成
-  sqlclient.query("select * from users", function(err, results, fields){
+  sqlclient.query(sql_command, function(err, results, fields){
     if(err){
       throw err;
     }
     app.get('/name/', function(req, res){
-      var names = [];
+      //ejs側へ送信するデータ
+      var send_data = [];
       for(var i in results){
-        //res.send(results[i].name);
+        send_data[i] = [results[i].maintext, results[i].created.toString()];
       }
-      res.send(results[0].name + "<br>" + results[0].email + "<br>" + results[0].maintext);
+      //ejs側に送信
+      res.render('bbs.ejs', {send_data: send_data});
     });
   });
 };
