@@ -6,13 +6,13 @@
   </head>
   <body>
     <form method="post">
-    <input type="text" name="maintext">
-    <input type="submit" value="投稿">
+      <input type="text" name="maintext">
+      <input type="submit" value="投稿">
     </form>
-    <%  for( var i = 0; i< send_data.length; i++) {%>
       <ul>
-        <li><%= send_data[i] %></li>
+        <% for(var i in send_data){ %>
+        <li><%= send_data[i].maintext %> - <%= send_data[i].created %></li>
+        <% } %>
       </ul>
-    <% } %>
   </body>
 </html>

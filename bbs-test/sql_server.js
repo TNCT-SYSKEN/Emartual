@@ -19,13 +19,8 @@ exports.name_query = function(sqlclient, app){
       throw err;
     }
     app.get('/name/', function(req, res){
-      //ejs側へ送信するデータ
-      var send_data = [];
-      for(var i in results){
-        send_data[i] = [results[i].maintext, results[i].created.toString()];
-      }
       //ejs側に送信
-      res.render('bbs.ejs', {send_data: send_data});
+      res.render('bbs.ejs', {send_data: results});
     });
   });
 };
