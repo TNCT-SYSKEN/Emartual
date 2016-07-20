@@ -1,7 +1,9 @@
 // モジュールの読み込み
 var express = require('express'),
     SqlClient = require('mysql'),
-    sql_server = require('./sql_server.js');
+    sql_server = require('./sql_server.js'),
+    bodyParser = require('body-parser'),
+    multer = require('multer');
 
 // 設定の読み込み
 var setting = require('./setting.js');
@@ -20,9 +22,13 @@ console.log(setting.host + ":" + setting.port);
 // サーバーの作成
 var app = express();
 sqlclient = sql_server.sql_connect(sqlclient);
+
 //テンプレートエンジンの設定
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+//bodyParserの設定
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // クエリの送信
 sql_server.name_query(sqlclient, app);
