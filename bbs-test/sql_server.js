@@ -28,17 +28,21 @@ exports.name_query = function(sqlclient, app){
   });
 
   app.post('/bbs/', function(req, res){
-    sqlclient.query("insert into users (maintext, created) value ('"+ req.body.maintext +"', now());", function(err, results, fields){
-      if(err){
-        throw err;
-      }
-    });
-    sqlclient.query(sql_select, function(err, results, fields){
-      if(err){
-        throw err;
-      }
-      //ejs側に送信
-      res.render('bbs.ejs', {send_data: results});
-    });
+    if(req.body.maintext.match(/^[ 　\r\n\t]*$/)){
+    }
+    else{
+      sqlclient.query("insert into users (maintext, created) value ('"+ req.body.maintext +"', now());", function(err, results, fields){
+        if(err){
+          throw err;
+        }
+      });
+    }
+      sqlclient.query(sql_select, function(err, results, fields){
+        if(err){
+          throw err;
+        }
+        //ejs側に送信
+        res.render('bbs.ejs', {send_data: results});
+      });
   });
 };
