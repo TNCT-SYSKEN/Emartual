@@ -5,6 +5,7 @@
     <title>Emartual Main</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://cdn.rawgit.com/konvajs/konva/1.0.2/konva.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-inverse ">
@@ -12,6 +13,8 @@
         <a class="navbar-brand" href="./bbs">Emartual</a>
       </div>
     </nav>
+
+    <input type="button" class="btn btn-primary" id="reload" value="↻">
 
     <div id="container"></div>
     <script type="text/javascript">
@@ -49,6 +52,10 @@
         },
         stroke: 'blue',
         fill: 'lightblue',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
         stromeWidth: 4
       });
       var oval2 = new Konva.Ellipse({
@@ -60,27 +67,14 @@
         },
         stroke: 'blue',
         fill: 'lightblue',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
         stromeWidth: 4
       });
       group.add(oval);
       group2.add(oval2);
-
-      //MEMO: lineをつなぐ際，ovalの中心とovalの中心をパスとするlineを書くとそれっぽい接続になりそう
-      //TODO: ovalの中心とovalの中心をパスとするlineを書く為のロケール情報の読み出しとパスとする点の計算
-      var line = new Konva.Line({
-        points:  [0, 0, /*oval2.x + 100*/0, 240],
-        stroke: 'blue',
-        strokeWidth: 4,
-        lineCap: 'round',
-        lineJoin: 'round'
-      });
-
-      line.move({
-        x: stage.getWidth() / 2,
-        y: 275,
-      });
-
-      layer.add(line);
 
       // EJSプロパティのテキストの描画
       var text = new Konva.Text({
@@ -105,14 +99,23 @@
       layer.add(group);
       layer.add(group2);
 
+      //MEMO: lineをつなぐ際，ovalの中心とovalの中心をパスとするlineを書くとそれっぽい接続になりそう
+      var line = new Konva.Line({
+        points:  [group.attrs.x, group.attrs.y, group2.attrs.x, group2.attrs.y],
+        stroke: 'blue',
+        strokeWidth: 4,
+        lineCap: 'round',
+        lineJoin: 'round'
+      });
+      layer.add(line);
+      line.moveToBottom();
+
       layer.draw();
 
-      // add cursor styling
-      box.on('mouseover', function() {
-          document.body.style.cursor = 'pointer';
-      });
-      box.on('mouseout', function() {
-          document.body.style.cursor = 'default';
+      // OnClick
+      $('#reload').click(function(){
+        line.attrs.points = [group.attrs.x, group.attrs.y, group2.attrs.x, group2.attrs.y];
+        layer.draw();
       });
     </script>
   </body>
