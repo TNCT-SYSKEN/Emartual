@@ -8,13 +8,13 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-inverse ">
+    <nav class="navbar navbar-inverse">
       <div class="navbar-header">
         <a class="navbar-brand" href="./bbs">Emartual</a>
       </div>
     </nav>
 
-    <input type="button" class="btn btn-primary" id="reload" value="↻">
+    <input type="button" class="btn btn-primary center-block" id="reload" value="↻" style="width: 200px; font-size: 40px;">
 
     <div id="container"></div>
     <script type="text/javascript">
@@ -111,6 +111,7 @@
       line.moveToBottom();
 
       layer.draw();
+
 
       // OnClick
       $('#reload').click(function(){
