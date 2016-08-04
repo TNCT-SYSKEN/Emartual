@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>Emartual Main</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://cdn.rawgit.com/konvajs/konva/1.0.2/konva.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse ">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="./bbs">Emartual</a>
+      </div>
+    </nav>
+
+    <div id="container"></div>
+    <script type="text/javascript">
+      var stage = new Konva.Stage({
+          container: 'container',
+          width: window.innerWidth,
+          height: window.innerHeight
+      });
+
+      // add canvas element
+      var layer = new Konva.Layer();
+      stage.add(layer);
+
+      // グループの作成
+      var group = new Konva.Group({
+        x: stage.getWidth() / 2,
+        y: 200,
+        draggable: true
+      });
+
+      // グループの作成
+      var group2 = new Konva.Group({
+        x: stage.getWidth() / 2,
+        y: 600,
+        draggable: true
+      });
+
+      // 楕円の描画
+      var oval = new Konva.Ellipse({
+        x: 0,
+        y: 0,
+        radius: {
+          x: 200,
+          y: 100
+        },
+        stroke: 'blue',
+        fill: 'lightblue',
+        stromeWidth: 4
+      });
+      var oval2 = new Konva.Ellipse({
+        x: 0,
+        y: 0,
+        radius: {
+          x: 200,
+          y: 100
+        },
+        stroke: 'blue',
+        fill: 'lightblue',
+        stromeWidth: 4
+      });
+      group.add(oval);
+      group2.add(oval2);
+
+      //MEMO: lineをつなぐ際，ovalの中心とovalの中心をパスとするlineを書くとそれっぽい接続になりそう
+      //TODO: ovalの中心とovalの中心をパスとするlineを書く為のロケール情報の読み出しとパスとする点の計算
+      var line = new Konva.Line({
+        points:  [0, 0, /*oval2.x + 100*/0, 240],
+        stroke: 'blue',
+        strokeWidth: 4,
+        lineCap: 'round',
+        lineJoin: 'round'
+      });
+
+      line.move({
+        x: stage.getWidth() / 2,
+        y: 275,
+      });
+
+      layer.add(line);
+
+      // EJSプロパティのテキストの描画
+      var text = new Konva.Text({
+        x: -90,
+        y: -15,
+        text: '<%= text %>',
+        fontSize: 30,
+        fontFamily: 'Calibri',
+        fill: 'green'
+      });
+      var text2 = new Konva.Text({
+        x: -90,
+        y: -15,
+        text: '<%= text %>',
+        fontSize: 30,
+        fontFamily: 'Calibri',
+        fill: 'green'
+      });
+      group.add(text);
+      group2.add(text2);
+
+      layer.add(group);
+      layer.add(group2);
+
+      layer.draw();
+
+      // add cursor styling
+      box.on('mouseover', function() {
+          document.body.style.cursor = 'pointer';
+      });
+      box.on('mouseout', function() {
+          document.body.style.cursor = 'default';
+      });
+    </script>
+  </body>
+</html>
