@@ -10,7 +10,7 @@
   <body>
     <nav class="navbar navbar-inverse">
       <div class="navbar-header">
-        <a class="navbar-brand" href="./bbs">Emartual</a>
+        <a class="navbar-brand" href="/">Emartual</a>
       </div>
     </nav>
 
@@ -78,21 +78,36 @@
 
       // EJSプロパティのテキストの描画
       var text = new Konva.Text({
-        x: -90,
-        y: -15,
+        x: 0,
+        y: 0,
         text: '<%= text %>',
         fontSize: 30,
         fontFamily: 'Calibri',
         fill: 'green'
       });
+      text.move({
+        x: -(text.textWidth / 2),
+        y: -(text.textHeight / 2)
+      });
+
       var text2 = new Konva.Text({
-        x: -90,
-        y: -15,
-        text: '<%= text %>',
+        x: 0,
+        y: 0,
+        text: 'あいうえおかきくけこさし',
         fontSize: 30,
         fontFamily: 'Calibri',
         fill: 'green'
       });
+      text2.move({
+        x: -(text2.textWidth / 2),
+        y: -(text2.textHeight / 2)
+      });
+
+      oval.attrs.radiusX = text.textWidth;
+      oval.attrs.radiusY = text.textHeight * 2.5;
+      oval2.attrs.radiusX = text2.textWidth;
+      oval2.attrs.radiusY = text2.textHeight * 2.5;
+
       group.add(text);
       group2.add(text2);
 
