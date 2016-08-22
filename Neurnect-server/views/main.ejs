@@ -87,26 +87,28 @@
       });
       text.move({
         x: -(text.textWidth / 2),
-        y: -(text.textHeight / 2)
+        y: -(text.textHeight * text.textArr.length / 2)
       });
 
       var text2 = new Konva.Text({
         x: 0,
         y: 0,
-        text: 'あいうえおかきくけこさし',
+        text: "あいうえおかきくけこさし\n\n\n\n\n\nすせそ",
         fontSize: 30,
+        align: 'center',
         fontFamily: 'Calibri',
         fill: 'green'
       });
+      console.log();
       text2.move({
         x: -(text2.textWidth / 2),
-        y: -(text2.textHeight / 2)
+        y: -(text2.textHeight * text2.textArr.length / 2)
       });
 
       oval.attrs.radiusX = text.textWidth;
-      oval.attrs.radiusY = text.textHeight * 2.5;
+      oval.attrs.radiusY = text.textHeight * text.textArr.length + 10;
       oval2.attrs.radiusX = text2.textWidth;
-      oval2.attrs.radiusY = text2.textHeight * 2.5;
+      oval2.attrs.radiusY = text2.textHeight * text2.textArr.length;
 
       group.add(text);
       group2.add(text2);
