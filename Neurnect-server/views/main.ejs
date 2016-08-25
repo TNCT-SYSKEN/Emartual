@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title>Emartual Main</title>
+    <title>Neurnect Main</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://cdn.rawgit.com/konvajs/konva/1.0.2/konva.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
@@ -10,7 +10,7 @@
   <body>
     <nav class="navbar navbar-inverse">
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">Emartual</a>
+        <a class="navbar-brand" href="/">Neurnect</a>
       </div>
     </nav>
 
@@ -93,22 +93,23 @@
       var text2 = new Konva.Text({
         x: 0,
         y: 0,
-        text: "あいうえおかきくけこさし\n\n\n\n\n\nすせそ",
+        text: "あ\nい\nう\nえ\nお\nか\nき\nく\nけ\nこ\nさ\nし\nす\nせ\nそ",
         fontSize: 30,
         align: 'center',
         fontFamily: 'Calibri',
         fill: 'green'
       });
-      console.log();
       text2.move({
         x: -(text2.textWidth / 2),
         y: -(text2.textHeight * text2.textArr.length / 2)
       });
 
-      oval.attrs.radiusX = text.textWidth;
-      oval.attrs.radiusY = text.textHeight * text.textArr.length + 10;
-      oval2.attrs.radiusX = text2.textWidth;
-      oval2.attrs.radiusY = text2.textHeight * text2.textArr.length;
+      oval.attrs.radiusX = text.textWidth / 2 + 95;
+      oval.attrs.radiusY = text.textHeight * (text.textArr.length / 2 + 1) + 10;
+      oval2.attrs.radiusX = text2.textWidth / 2 + 95;
+      oval2.attrs.radiusY = text2.textHeight * (text2.textArr.length / 2 + 1) + 10;
+
+      console.log(text.textWidth + ", " +text2.textHeight);
 
       group.add(text);
       group2.add(text2);
