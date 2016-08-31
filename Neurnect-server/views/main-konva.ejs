@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Neurnect Main</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
+    <script src="https://cdn.rawgit.com/konvajs/konva/1.0.2/konva.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   </head>
   <body style="background-color: #f7f7f7;">
@@ -18,17 +18,17 @@
 
     <div id="container"></div>
     <script type="text/javascript">
-      //レンダラの作成とDOM操作での要素追加
-      const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7}
-      let renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, RENDERER_STYLE);
-      $('#container').append(renderer.view);
+      var stage = new Konva.Stage({
+          container: 'container',
+          width: window.innerWidth,
+          height: window.innerHeight,
+          draggable: true
+      });
 
-      //ルートコンテナの作成
-      var stage = new PIXI.Container();
-      //Graphicsコンテナの作成
-      var graphics = new PIXI.Graphics();
+      // add canvas element
+      var layer = new Konva.Layer();
+      stage.add(layer);
 
-      /*
       // グループの作成
       var group = new Konva.Group({
         x: stage.getWidth() / 2,
@@ -46,15 +46,26 @@
         x: stage.getWidth() * 2 / 3,
         y: 0
       });
-      */
 
       // 楕円の描画
-      graphics.beginFill(0xFFFFFF);
-      graphics.lineStyle(4, 0x4661df);
-      graphics.drawEllipse(300, 200, 250, 100);
-      graphics.drawEllipse(400, 250, 250, 100);
-      graphics.drawEllipse(500, 300, 250, 100);
-      /*
+      var oval = new Konva.Ellipse({
+        stroke: '#4661df',
+        fill: 'white',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+        stromeWidth: 4
+      });
+      var oval2 = new Konva.Ellipse({
+        stroke: '#4661df',
+        fill: 'white',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+        stromeWidth: 4
+      });
       var oval3 = new Konva.Ellipse({
         stroke: '#4661df',
         fill: 'white',
@@ -68,15 +79,18 @@
       group2.add(oval2);
       group3.add(oval3);
 
-      */
-
       // EJSプロパティのテキストの描画
-      var text = new PIXI.Text("<%= text %>", {fontSie:'16px', fill:'black'});
-      text.position.x = 60;
-      text.position.y = 60;
-      stage.addChild(text);
+      var text = new Konva.Text({
+        text: '<%= text %>',
+        fontSize: 14,
+        fontFamily: 'Calibri',
+        fill: '#1d2129'
+      });
+      text.move({
+        x: -(text.textWidth / 2),
+        y: -(text.textHeight * text.textArr.length / 2)
+      });
 
-      /*
       var text2 = new Konva.Text({
         text: "Neurnectの世界へようこそ",
         fontSize: 14,
@@ -101,6 +115,8 @@
         y: -(text3.textHeight * text3.textArr.length / 2)
       });
 
+      oval.attrs.radiusX = text.textWidth / 2 + 45;
+      oval.attrs.radiusY = text.textHeight * (text.textArr.length / 2 + 1) + 10;
       oval2.attrs.radiusX = text2.textWidth / 2 + 45;
       oval2.attrs.radiusY = text2.textHeight * (text2.textArr.length / 2 + 1) + 10;
       oval3.attrs.radiusX = text3.textWidth / 2 + 45;
@@ -149,13 +165,6 @@
       $('#reload').click(function(){
 
       });
-
-      */
-      //Graphicsコンテナの追加
-      stage.addChild(graphics);
-      //ルートコンテナの描画
-      renderer.render(stage);
-
     </script>
   </body>
 </html>

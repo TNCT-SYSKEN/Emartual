@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // '/'リクエストハンドラ
 app.get('/', function(req, res){
   res.render('main.ejs', {
-    text: 'Hello, Konva!'
+    text: 'Hello, Pixi.JS!'
   });
 });
 
