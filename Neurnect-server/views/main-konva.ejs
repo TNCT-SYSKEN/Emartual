@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>Neurnect Main</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://cdn.rawgit.com/konvajs/konva/1.0.2/konva.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  </head>
+  <body style="background-color: #f7f7f7;">
+    <nav class="navbar navbar-inverse">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Neurnect</a>
+      </div>
+    </nav>
+
+    <button class="btn btn-primary center-block" id="reload">🔃</button>
+
+    <div id="container"></div>
+    <script type="text/javascript">
+      var stage = new Konva.Stage({
+          container: 'container',
+          width: window.innerWidth,
+          height: window.innerHeight,
+          draggable: true
+      });
+
+      // add canvas element
+      var layer = new Konva.Layer();
+      stage.add(layer);
+
+      // グループの作成
+      var group = new Konva.Group({
+        x: stage.getWidth() / 2,
+        y: 200
+      });
+
+      // グループの作成
+      var group2 = new Konva.Group({
+        x: stage.getWidth() * 2 / 3,
+        y: 400
+      });
+
+      // グループの作成
+      var group3 = new Konva.Group({
+        x: stage.getWidth() * 2 / 3,
+        y: 0
+      });
+
+      // 楕円の描画
+      var oval = new Konva.Ellipse({
+        stroke: '#4661df',
+        fill: 'white',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+        stromeWidth: 4
+      });
+      var oval2 = new Konva.Ellipse({
+        stroke: '#4661df',
+        fill: 'white',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+        stromeWidth: 4
+      });
+      var oval3 = new Konva.Ellipse({
+        stroke: '#4661df',
+        fill: 'white',
+        shadowColor: 'black',
+        shadowBlur: 30,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+        stromeWidth: 4
+      });
+      group.add(oval);
+      group2.add(oval2);
+      group3.add(oval3);
+
+      // EJSプロパティのテキストの描画
+      var text = new Konva.Text({
+        text: '<%= text %>',
+        fontSize: 14,
+        fontFamily: 'Calibri',
+        fill: '#1d2129'
+      });
+      text.move({
+        x: -(text.textWidth / 2),
+        y: -(text.textHeight * text.textArr.length / 2)
+      });
+
+      var text2 = new Konva.Text({
+        text: "Neurnectの世界へようこそ",
+        fontSize: 14,
+        align: 'center',
+        fontFamily: 'Calibri',
+        fill: '#1d2129'
+      });
+      text2.move({
+        x: -(text2.textWidth / 2),
+        y: -(text2.textHeight * text2.textArr.length / 2)
+      });
+
+      var text3 = new Konva.Text({
+        text: "さあ、始めましょう",
+        fontSize: 14,
+        align: 'center',
+        fontFamily: 'Calibri',
+        fill: '#1d2129'
+      });
+      text3.move({
+        x: -(text3.textWidth / 2),
+        y: -(text3.textHeight * text3.textArr.length / 2)
+      });
+
+      oval.attrs.radiusX = text.textWidth / 2 + 45;
+      oval.attrs.radiusY = text.textHeight * (text.textArr.length / 2 + 1) + 10;
+      oval2.attrs.radiusX = text2.textWidth / 2 + 45;
+      oval2.attrs.radiusY = text2.textHeight * (text2.textArr.length / 2 + 1) + 10;
+      oval3.attrs.radiusX = text3.textWidth / 2 + 45;
+      oval3.attrs.radiusY = text3.textHeight * (text3.textArr.length / 2 + 1) + 10;
+
+      group.add(text);
+      group2.add(text2);
+      group3.add(text3);
+
+      layer.add(group);
+      layer.add(group2);
+      layer.add(group3);
+
+      //MEMO: lineをつなぐ際，ovalの中心とovalの中心をパスとするlineを書くとそれっぽい接続になりそう
+      var line = new Konva.Line({
+        points:  [group.attrs.x, group.attrs.y, group2.attrs.x, group2.attrs.y],
+        stroke: '#4661df',
+        strokeWidth: 4,
+        lineCap: 'round',
+        lineJoin: 'round',
+        shadowColor: 'black',
+        shadowBlur: 10,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+      });
+      var line2 = new Konva.Line({
+        points:  [group.attrs.x, group.attrs.y, group3.attrs.x, group3.attrs.y],
+        stroke: '#4661df',
+        strokeWidth: 4,
+        lineCap: 'round',
+        lineJoin: 'round',
+        shadowColor: 'black',
+        shadowBlur: 10,
+        shadowOffset: 20,
+        shadowOpacity: 0.75,
+      });
+      layer.add(line);
+      layer.add(line2);
+      line.moveToBottom();
+      line2.moveToBottom();
+
+      layer.draw();
+
+
+      // OnClick
+      $('#reload').click(function(){
+
+      });
+    </script>
+  </body>
+</html>
