@@ -5,7 +5,7 @@
     <title>Neurnect Main</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
   </head>
   <body style="background-color: #f7f7f7;">
     <nav class="navbar navbar-inverse">
@@ -14,148 +14,9 @@
       </div>
     </nav>
 
-    <button class="btn btn-primary center-block" id="reload">🔃</button>
+    <a class="btn btn-primary center-block" id="reload" style="width: 50px; height: auto;">🔃</a>
 
     <div id="container"></div>
-    <script type="text/javascript">
-      //レンダラの作成とDOM操作での要素追加
-      const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7}
-      let renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, RENDERER_STYLE);
-      $('#container').append(renderer.view);
-
-      //ルートコンテナの作成
-      var stage = new PIXI.Container();
-      //Graphicsコンテナの作成
-      var graphics = new PIXI.Graphics();
-
-      /*
-      // グループの作成
-      var group = new Konva.Group({
-        x: stage.getWidth() / 2,
-        y: 200
-      });
-
-      // グループの作成
-      var group2 = new Konva.Group({
-        x: stage.getWidth() * 2 / 3,
-        y: 400
-      });
-
-      // グループの作成
-      var group3 = new Konva.Group({
-        x: stage.getWidth() * 2 / 3,
-        y: 0
-      });
-      */
-
-      // 楕円の描画
-      graphics.beginFill(0xFFFFFF);
-      graphics.lineStyle(4, 0x4661df);
-      graphics.drawEllipse(300, 200, 250, 100);
-      graphics.drawEllipse(400, 250, 250, 100);
-      graphics.drawEllipse(500, 300, 250, 100);
-      /*
-      var oval3 = new Konva.Ellipse({
-        stroke: '#4661df',
-        fill: 'white',
-        shadowColor: 'black',
-        shadowBlur: 30,
-        shadowOffset: 20,
-        shadowOpacity: 0.75,
-        stromeWidth: 4
-      });
-      group.add(oval);
-      group2.add(oval2);
-      group3.add(oval3);
-
-      */
-
-      // EJSプロパティのテキストの描画
-      var text = new PIXI.Text("<%= text %>", {fontSie:'16px', fill:'black'});
-      text.position.x = 60;
-      text.position.y = 60;
-      stage.addChild(text);
-
-      /*
-      var text2 = new Konva.Text({
-        text: "Neurnectの世界へようこそ",
-        fontSize: 14,
-        align: 'center',
-        fontFamily: 'Calibri',
-        fill: '#1d2129'
-      });
-      text2.move({
-        x: -(text2.textWidth / 2),
-        y: -(text2.textHeight * text2.textArr.length / 2)
-      });
-
-      var text3 = new Konva.Text({
-        text: "さあ、始めましょう",
-        fontSize: 14,
-        align: 'center',
-        fontFamily: 'Calibri',
-        fill: '#1d2129'
-      });
-      text3.move({
-        x: -(text3.textWidth / 2),
-        y: -(text3.textHeight * text3.textArr.length / 2)
-      });
-
-      oval2.attrs.radiusX = text2.textWidth / 2 + 45;
-      oval2.attrs.radiusY = text2.textHeight * (text2.textArr.length / 2 + 1) + 10;
-      oval3.attrs.radiusX = text3.textWidth / 2 + 45;
-      oval3.attrs.radiusY = text3.textHeight * (text3.textArr.length / 2 + 1) + 10;
-
-      group.add(text);
-      group2.add(text2);
-      group3.add(text3);
-
-      layer.add(group);
-      layer.add(group2);
-      layer.add(group3);
-
-      //MEMO: lineをつなぐ際，ovalの中心とovalの中心をパスとするlineを書くとそれっぽい接続になりそう
-      var line = new Konva.Line({
-        points:  [group.attrs.x, group.attrs.y, group2.attrs.x, group2.attrs.y],
-        stroke: '#4661df',
-        strokeWidth: 4,
-        lineCap: 'round',
-        lineJoin: 'round',
-        shadowColor: 'black',
-        shadowBlur: 10,
-        shadowOffset: 20,
-        shadowOpacity: 0.75,
-      });
-      var line2 = new Konva.Line({
-        points:  [group.attrs.x, group.attrs.y, group3.attrs.x, group3.attrs.y],
-        stroke: '#4661df',
-        strokeWidth: 4,
-        lineCap: 'round',
-        lineJoin: 'round',
-        shadowColor: 'black',
-        shadowBlur: 10,
-        shadowOffset: 20,
-        shadowOpacity: 0.75,
-      });
-      layer.add(line);
-      layer.add(line2);
-      line.moveToBottom();
-      line2.moveToBottom();
-
-      layer.draw();
-
-
-      // OnClick
-      $('#reload').click(function(){
-
-      });
-
-      */
-      //Graphicsコンテナの追加
-      stage.addChild(graphics);
-      //ルートコンテナの描画
-      renderer.render(stage);
-
-    </script>
+    <script type="text/ecmascript" src="/js/app.js"></script>
   </body>
 </html>
