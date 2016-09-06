@@ -1,76 +1,71 @@
+$('#reload').click(() => {
+  DrawObject();
+})
+
 //レンダラの作成とDOM操作での要素追加
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
 let renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, RENDERER_STYLE);
 $('#container').append(renderer.view);
 
 // ルートコンテナの作成
-var stage = new PIXI.Container();
-// Graphicsコンテナの作成
-var graphics = new PIXI.Graphics();
+let stage = new PIXI.Container();
 // オブジェクトコンテナの作成
-var object = new PIXI.Container();
+let object = new PIXI.Container();
+// Graphicsコンテナの作成
+let graphics = new PIXI.Graphics();
 
-// line,text,Ellipseの描画
-graphics.beginFill(0xFFFFFF);
-graphics.lineStyle(4, 0x4661df);
+CreateObject("ほげほげほげほげ");
 
-// lineの描画
-graphics.moveTo(renderer.width / 2, 200);
-graphics.lineTo(renderer.width * 2 / 3, 400);
+DrawObject();
 
-// textの描画
-var text = new PIXI.Text("Hello, Pixi!", {fontSie:'16px', fill: 0x1d2129});
-text.anchor.x = 0.5;
-text.anchor.y = 0.5;
-text.position.x = renderer.width / 2;
-text.position.y = 200;
+function CreateObject(textData){
+  // line,text,Ellipseの描画
+  graphics.beginFill(0xFFFFFF);
+  graphics.lineStyle(4, 0x4661df);
 
-// Ellipseの描画
-graphics.drawEllipse(renderer.width / 2, 200, 100, 50);
+  // lineの描画
+  graphics.moveTo(renderer.width / 2, 200);
+  graphics.lineTo(renderer.width * 2 / 3, 400);
 
-graphics.moveTo(renderer.width * 2 / 3, 400);
-graphics.lineTo(renderer.width * 2 / 3, 0);
+  // textの描画
+  var textObj = new PIXI.Text(textData, {fontSize:'20px', fill: 0x1d2129});
+  textObj.anchor.x = 0.5;
+  textObj.anchor.y = 0.5;
+  textObj.position.x = renderer.width / 2;
+  textObj.position.y = 200;
 
-graphics.drawEllipse(renderer.width * 2 / 3, 400, 100, 50);
-var text2 = new PIXI.Text("Neurnectの世界へようこそ", {fontSie:'16px', fill: 0x1d2129});
-text2.anchor.x = 0.5;
-text2.anchor.y = 0.5;
-text2.position.x = renderer.width * 2 / 3;
-text2.position.y = 400;
+  console.log(textObj.height);
 
-graphics.drawEllipse(renderer.width * 2 / 3, 0, 100, 50);
-var text3 = new PIXI.Text("さあ、始めましょう", {fontSie:'16px', fill: 0x1d2129});
-text3.anchor.x = 0.5;
-text3.anchor.y = 0.5;
-text3.position.x = renderer.width * 2 / 3;
-text3.position.y = 0;
+  // Ellipseの描画
+  graphics.drawEllipse(renderer.width / 2, 200, textObj.width / 2 + 45, textObj.height / 2 + 20);
 
-// オブジェクトコンテナに追加
-object.addChild(graphics);
-object.addChild(text);
-object.addChild(text2);
-object.addChild(text3);
+  // オブジェクトコンテナに追加
+  object.addChild(graphics);
+  object.addChild(textObj);
+}
 
-object.interactive = true;
-object.buttonMode = true;
+function DrawObject(){
+  object.interactive = true;
 
-object
-  .on('mousedown', onDragStart)
-  .on('touchstart', onDragStart)
-  .on('mouseup', onDragEnd)
-  .on('mouseupoutside', onDragEnd)
-  .on('touchend', onDragEnd)
-  .on('touchendoutside', onDragEnd)
-  .on('mousemove', onDragMove)
-  .on('touchmove', onDragMove);
+  // ドラッグ有効化
+  object
+    .on('mousedown', onDragStart)
+    .on('touchstart', onDragStart)
+    .on('mouseup', onDragEnd)
+    .on('mouseupoutside', onDragEnd)
+    .on('touchend', onDragEnd)
+    .on('touchendoutside', onDragEnd)
+    .on('mousemove', onDragMove)
+    .on('touchmove', onDragMove);
 
-// オブジェクトコンテナをルートコンテナに追加
-stage.addChild(object);
-//ルートコンテナの描画
-renderer.render(stage);
+  // オブジェクトコンテナをルートコンテナに追加
+  stage.addChild(object);
+  //ルートコンテナの描画
+  renderer.render(stage);
 
-// アニメーションメソッドの呼び出し
-animate();
+  // アニメーションメソッドの呼び出し
+  animate();
+}
 
 function animate(){
   requestAnimationFrame(animate);
