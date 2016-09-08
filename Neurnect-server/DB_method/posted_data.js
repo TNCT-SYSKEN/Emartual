@@ -7,7 +7,7 @@ var dbdefine = function() {
 
   var PostedSchema = new Schema ({
     text:   { type: String },
-    form:   { type: String, enum: ['ellipse', 'Rect', 'unique'] },
+    form:   { type: String, enum: ['ellipse', 'rect', 'unique'] },
     image:  { type: String },
     position:    { x: Number, y: Number, required: true },
     cate:   { type: String, enum: ['normal', 'sports'] },
