@@ -1,6 +1,7 @@
 $('#reload').click(() => {
   DrawObject();
-})
+});
+
 
 //レンダラの作成とDOM操作での要素追加
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
@@ -14,12 +15,19 @@ let object = new PIXI.Container();
 // Graphicsコンテナの作成
 let graphics = new PIXI.Graphics();
 
-CreateObject("ほげほげほげほげ");
 
-DrawObject();
+socket.on('init_data', function(init_data){
+  for(let item of init_data){
+    CreateObject(item.text, item.form, item.position);
+  }
+  DrawObject();
+});
 
-function CreateObject(textData){
-  // line,text,Ellipseの描画
+function CreateObject(textData, formData, positionData){
+  const ELLIPSE = "ellipse";
+  const RECT = "rect";
+
+  // 描画プロパティ
   graphics.beginFill(0xFFFFFF);
   graphics.lineStyle(4, 0x4661df);
 
@@ -34,10 +42,13 @@ function CreateObject(textData){
   textObj.position.x = renderer.width / 2;
   textObj.position.y = 200;
 
-  console.log(textObj.height);
-
-  // Ellipseの描画
-  graphics.drawEllipse(renderer.width / 2, 200, textObj.width / 2 + 45, textObj.height / 2 + 20);
+  if (formData == ELLIPSE){
+    // Ellipseの描画
+    graphics.drawEllipse(renderer.width / 2, 200, textObj.width / 2 + 45, textObj.height / 2 + 20);
+  }
+  else if(formData == RECT){
+    graphics.drawRect(renderer.width / 2, 200, textObj.width / 2 + 45, textObj.height / 2 + 20);
+  }
 
   // オブジェクトコンテナに追加
   object.addChild(graphics);
