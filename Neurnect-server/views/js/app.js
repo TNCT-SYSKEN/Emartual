@@ -1,6 +1,6 @@
 $('#post').click(() => {
-  $('.form').fadeIn("fast");
   $('.form').draggable();
+  $('.form').fadeIn("fast");
 });
 
 $('#form_remove').click(() => {

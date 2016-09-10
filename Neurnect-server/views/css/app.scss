@@ -8,8 +8,23 @@ a.btn{
 }
 
 div.form{
-  width: 100px;
+  background-color: white;
   height: auto;
   border: inset;
   display: none;
+  position: absolute;
+}
+
+div.ellipse{
+  color: green;
+  border: solid;
+  border-color: black;
+  margin: 10px;
+  border-radius: 50%;
+  width: 200px;
+  height: 100px;
+}
+
+input#postdata{
+  border: none;
 }
