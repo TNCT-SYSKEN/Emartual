@@ -5,4 +5,10 @@ a.btn {
   width: 50px;
   height: auto; }
 
+div.form {
+  width: 100px;
+  height: auto;
+  border: inset;
+  display: none; }
+
 /*# sourceMappingURL=app.css.map */

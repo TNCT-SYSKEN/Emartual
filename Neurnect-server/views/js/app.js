@@ -1,3 +1,12 @@
+$('#post').click(() => {
+  $('.form').fadeIn("fast");
+  $('.form').draggable();
+});
+
+$('#form_remove').click(() => {
+  $('.form').fadeOut("fast");
+})
+
 $('#reload').click(() => {
   DrawObject();
 });
@@ -6,7 +15,7 @@ var socket = io.connect('http://localhost:1337/');
 
 //レンダラの作成とDOM操作での要素追加
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
-let renderer = new PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, RENDERER_STYLE);
+let renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight, RENDERER_STYLE);
 $('#container').append(renderer.view);
 
 // ルートコンテナの作成
@@ -100,6 +109,8 @@ function DrawObject(){
   stage.addChild(object);
   //ルートコンテナの描画
   renderer.render(stage);
+
+  console.log("アニメーション呼び出し前");
 
   // アニメーションメソッドの呼び出し
   animate();
