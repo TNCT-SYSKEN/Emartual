@@ -2,6 +2,7 @@ $('#reload').click(() => {
   DrawObject();
 });
 
+var socket = io.connect('http://localhost:1337/');
 
 //レンダラの作成とDOM操作での要素追加
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
@@ -13,13 +14,22 @@ let stage = new PIXI.Container();
 // オブジェクトコンテナの作成
 let object = new PIXI.Container();
 // Graphicsコンテナの作成
+let line = new PIXI.Graphics();
 let graphics = new PIXI.Graphics();
 
+
+// 前回のオブジェクトの位置
+let before_position = null;
+
+// タグ描画が2回以降であるか
+let tag_draw_flag = false
 
 socket.on('init_data', function(init_data){
   for(let item of init_data){
     CreateObject(item.text, item.form, item.position);
   }
+  object.addChildAt(line, 0);
+  object.addChildAt(graphics, 1);
   DrawObject();
 });
 
@@ -28,31 +38,48 @@ function CreateObject(textData, formData, positionData){
   const RECT = "rect";
 
   // 描画プロパティ
+  line.beginFill(0xFFFFFF);
   graphics.beginFill(0xFFFFFF);
+  line.lineStyle(4, 0x4661df);
   graphics.lineStyle(4, 0x4661df);
 
-  // lineの描画
-  graphics.moveTo(renderer.width / 2, 200);
-  graphics.lineTo(renderer.width * 2 / 3, 400);
+
+  if(! tag_draw_flag){
+    tag_draw_flag = true;
+  }
+  else{
+    // lineの描画
+    line.moveTo(before_position.x, before_position.y);
+    line.lineTo(positionData.x, positionData.y);
+  }
+
+  // 前回のオブジェクトの位置
+  before_position = positionData;
 
   // textの描画
   var textObj = new PIXI.Text(textData, {fontSize:'20px', fill: 0x1d2129});
+
+  // textの配置変更
+  textObj.position.x = positionData.x;
+  textObj.position.y = positionData.y;
+  // textのアンカーポイント変更
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
-  textObj.position.x = renderer.width / 2;
-  textObj.position.y = 200;
 
   if (formData == ELLIPSE){
     // Ellipseの描画
-    graphics.drawEllipse(renderer.width / 2, 200, textObj.width / 2 + 45, textObj.height / 2 + 20);
+    graphics.drawEllipse(positionData.x, positionData.y, textObj.width / 2 + 45, textObj.height / 2 + 20);
+
   }
   else if(formData == RECT){
-    graphics.drawRect(renderer.width / 2, 200, textObj.width / 2 + 45, textObj.height / 2 + 20);
+    // Rectの描画
+    graphics.drawRect(positionData.x - (textObj.width + 45) / 2, positionData.y - (textObj.height + 20) / 2, textObj.width + 45, textObj.height + 20);
   }
 
   // オブジェクトコンテナに追加
-  object.addChild(graphics);
-  object.addChild(textObj);
+  object.addChildAt(line, 0);
+  object.addChildAt(graphics, 1);
+  object.addChildAt(textObj, 2);
 }
 
 function DrawObject(){
