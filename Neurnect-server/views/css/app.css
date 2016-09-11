@@ -1,27 +1,30 @@
-body {
-  background-color: #f7f7f7; }
+body{
+  background-color: #f7f7f7;
+}
 
-a.btn {
+a.btn{
   width: 50px;
-  height: auto; }
+  height: auto;
+}
 
-div.form {
+div.form{
   background-color: white;
   height: auto;
   border: inset;
   display: none;
-  position: absolute; }
+  position: absolute;
+}
 
-div.ellipse {
+div.ellipse{
   color: green;
   border: solid;
   border-color: black;
   margin: 10px;
   border-radius: 50%;
   width: 200px;
-  height: 100px; }
+  height: 100px;
+}
 
-input#postdata {
-  border: none; }
-
-/*# sourceMappingURL=app.css.map */
+input#postdata{
+  border: none;
+}
