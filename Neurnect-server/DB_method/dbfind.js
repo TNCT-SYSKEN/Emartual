@@ -1,14 +1,16 @@
-var posted_data = require('./DB_method/posted_data.js');
-
-posted_data.dbdefine(mongoose);
+// MEMO: 抽出されたドキュメントはcallbackに渡すこととする
+// MEMO: 理由: 非同期I/OのためPosted.findが後から実行される可能性があるため
+// MEMO: 理由: つまるところundefinedの状態でmongoose-test.jsの処理が進む
+// MEMO: これを全てに適用して
 
 //全件抽出
-module.exports.dball = function(Posted) {
+module.exports.dball = function(mongoose, callback) {
+  var Posted = mongoose.model('Posted');
   Posted.find({}, function(err, docs) {
     if(err){ console.log(err); }
-    else{
-      return (docs);
-     }
+
+     // callbackの起動
+     callback(docs);
   });
 };
 
@@ -16,7 +18,7 @@ module.exports.dball = function(Posted) {
 module.exports.dballid = function() {
   Posted.find({}, ['_id'], function(err, docs){
     if(err){ console.log(err); }
-    else{ return (docs); }
+    else{ return docs; }
   });
 };
 
@@ -24,7 +26,7 @@ module.exports.dballid = function() {
 module.exports.dbtag = function(tag) {
   Posted.find({ tag: tag }, function(err, docs) {
     if(err){ console.log(err); }
-    else{ return (docs); }
+    else{ return docs; }
   });
 };
 
@@ -32,7 +34,7 @@ module.exports.dbtag = function(tag) {
 module.exports.dbtagid = function(tag) {
   Posted.find({ tag: tag }, ['_id'], function(err, docs) {
     if(err){ console.log(err); }
-    else{ return (docs); }
+    else{ return docs; }
   });
 };
 
@@ -48,7 +50,7 @@ module.exports.dbtagcount = function(tag) {
 module.exports.dbcate = function(cate) {
   Posted.find({ cate: cate }, function(err, docs) {
     if(err){ console.log(err); }
-    else{ return (docs); }
+    else{ return docs; }
   });
 };
 
@@ -56,7 +58,7 @@ module.exports.dbcate = function(cate) {
 module.exports.dbcateid = function(cate) {
   Posted.find({ cate: cate }, ['_id'], function(err, docs) {
     if(err){ console.log(err); }
-    else{ return (docs); }
+    else{ return docs; }
   });
 };
 
@@ -64,6 +66,6 @@ module.exports.dbcateid = function(cate) {
 module.exports.dbcatecount = function(cate) {
   Posted.count({ cate: cate }, function(err, count) {
     if(err){ console.log(err); }
-    else{ return (count); }
+    else{ return count; }
   });
 };

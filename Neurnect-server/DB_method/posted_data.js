@@ -1,5 +1,5 @@
 //スキーマ定義
-module.exports.dbdefine = function() {
+module.exports.dbdefine = function(mongoose) {
   mongoose.connect('mongodb://localhost/Neurnect');
   var Schema = mongoose.Schema;
 
@@ -7,29 +7,25 @@ module.exports.dbdefine = function() {
     text:   { type: String },
     form:   { type: String, enum: ['ellipse', 'rect', 'unique'] },
     image:  { type: String },
-    position:    { x: Number, y: Number, required: true },
-    cate:   { type: String, enum: ['normal', 'sports'] },
+    position:    { x: { type: Number, required: true }, y: { type: Number, required: true } },
+    // MEMO: 仮にプロパティ名をcategoryに変更しているので何とかしてください
+    category:   { type: String, enum: ['normal', 'sports'] },
     tag:    { type: String, required: true },
     like:   { type: Number, default: 0 },
     link:   { type: String },
     date:   { type: Date, default: Date.now }
   });
-  mongoose.model('Posted', PostedSchema);
+  // MEMO: モデル名, コレクション名を変更していないので何とかしてください(Mongoose doc(下記URL)を参照のこと)
+  // MEMO: http://mongoosejs.com/docs/api.html#index_Mongoose-model
+  var collection = "Posted";
+  mongoose.model('Posted', PostedSchema, collection);
 };
 
 //ドキュメント生成
-module.exports.dbinsert = function(dbobj) {
+module.exports.dbinsert = function(mongoose, dbobj) {
   var Posted = mongoose.model('Posted');
-  var posted = new Posted();
-  posted.text = dbobj.text;
-  posted.form = dbobj.form;
-  posted.image = dbobj.image;
-  posted.position = dbobj.position;
-  posted.cate = dbobj.cate;
-  posted.tag = dbobj.tag;
-  posted.like = dbobj.like;
-  posted.link = dbobj.link;
-  posted.date = dbobj.date;
+  // MEMO: 新規オブジェクトの作成はこれでやらないとdefaultも全てnullでオーバーライトされる
+  var posted = new Posted(dbobj);
   posted.save(function(err) {
     if(err){ console.log(err); }
   });
