@@ -2,19 +2,19 @@ var posted_data = require('./DB_method/posted_data.js');
 
 posted_data.dbdefine(mongoose);
 
-]//全件抽出
+//全件抽出
 module.exports.dball = function(Posted) {
   Posted.find({}, function(err, docs) {
     if(err){ console.log(err); }
     else{
       return (docs);
      }
-   }
+  });
 };
 
 //全件抽出 IDのみ
 module.exports.dballid = function() {
-  Posted.find({}, {'_id'}, function(err, docs){
+  Posted.find({}, ['_id'], function(err, docs){
     if(err){ console.log(err); }
     else{ return (docs); }
   });
@@ -30,7 +30,7 @@ module.exports.dbtag = function(tag) {
 
 //タグ毎に抽出　IDのみ
 module.exports.dbtagid = function(tag) {
-  Posted.find({ tag: tag }, {'_id'}, function(err, docs) {
+  Posted.find({ tag: tag }, ['_id'], function(err, docs) {
     if(err){ console.log(err); }
     else{ return (docs); }
   });
@@ -54,7 +54,7 @@ module.exports.dbcate = function(cate) {
 
 //カテゴリ毎に抽出 IDのみ
 module.exports.dbcateid = function(cate) {
-  Posted.find({ cate: cate }, {'_id'}, function(err, docs) {
+  Posted.find({ cate: cate }, ['_id'], function(err, docs) {
     if(err){ console.log(err); }
     else{ return (docs); }
   });

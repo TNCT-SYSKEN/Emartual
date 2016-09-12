@@ -1,5 +1,3 @@
-var mongoose = require('mongoose');
-
 //スキーマ定義
 module.exports.dbdefine = function() {
   mongoose.connect('mongodb://localhost/Neurnect');
@@ -17,7 +15,7 @@ module.exports.dbdefine = function() {
     date:   { type: Date, default: Date.now }
   });
   mongoose.model('Posted', PostedSchema);
-}
+};
 
 //ドキュメント生成
 module.exports.dbinsert = function(dbobj) {
@@ -35,4 +33,4 @@ module.exports.dbinsert = function(dbobj) {
   posted.save(function(err) {
     if(err){ console.log(err); }
   });
-}
+};
