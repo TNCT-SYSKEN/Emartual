@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 //スキーマ定義
-var dbdefine = function() {
+module.exports.dbdefine = function() {
   mongoose.connect('mongodb://localhost/Neurnect');
   var Schema = mongoose.Schema;
 
@@ -20,7 +20,7 @@ var dbdefine = function() {
 }
 
 //ドキュメント生成
-var dbinsert = function(dbobj) {
+module.exports.dbinsert = function(dbobj) {
   var Posted = mongoose.model('Posted');
   var posted = new Posted();
   posted.text = dbobj.text;
