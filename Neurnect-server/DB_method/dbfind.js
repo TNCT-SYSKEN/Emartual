@@ -4,8 +4,8 @@
 // MEMO: これを全てに適用して
 
 //全件抽出
-module.exports.dball = function(mongoose, callback) {
-  var Posted = mongoose.model('Posted');
+module.exports.dball = function(callback) {
+  var Posted = this.mongoose.model('Posted');
   Posted.find({}, function(err, docs) {
     if(err){ console.log(err); }
 

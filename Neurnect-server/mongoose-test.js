@@ -1,7 +1,6 @@
 // require文
 var mongoose = require('mongoose');
-var posted_data = require('./DB_method/posted_data.js');
-var db_find = require('./DB_method/dbfind.js');
+var DBModule = require('./DB_method/dbmodule.js');
 var fs = require('fs');
 
 // 引数用
@@ -11,8 +10,11 @@ var category = "fuga";
 // MEMO: ここでmongooseを渡す
 // MEMO: 理由: mongoose.modelプロパティを保存してやりたいから
 // MEMO: JavaScriptの規約上オブジェクトは参照渡しされるためmongooseをreturnする必要がない
-posted_data.dbdefine(mongoose);
+var dbmodule = new DBModule(mongoose);
 
+dbmodule.dbdefine();
+
+// insert用データ
 var prepost_data = [
   {
     text: "Hello, Neurnect",
@@ -38,7 +40,7 @@ for(var i = 0; i < prepost_data.length; i++){
 */
 
 // 全件全要素抽出テスト
-db_find.dball(mongoose, function(result){
+dbmodule.dball(function(result){
   // 結果表示
   console.log(result);
 
