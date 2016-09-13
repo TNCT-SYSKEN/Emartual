@@ -26,8 +26,8 @@ module.exports.dbdefine = function() {
 };
 
 //ドキュメント生成
-module.exports.dbinsert = function(mongoose, dbobj) {
-  var Posted = mongoose.model('Posted');
+module.exports.dbinsert = function(dbobj) {
+  var Posted = this.mongoose.model('Posted');
   // MEMO: 新規オブジェクトの作成はこれでやらないとdefaultも全てundefinedでオーバーライトされる
   var posted = new Posted(dbobj);
   posted.save(function(err) {

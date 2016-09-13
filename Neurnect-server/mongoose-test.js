@@ -35,7 +35,7 @@ var prepost_data = [
 // MEMO: 非同期のため単体で一度だけ動作させること
 /*
 for(var i = 0; i < prepost_data.length; i++){
-  posted_data.dbinsert(mongoose, prepost_data[i]);
+  posted_data.dbinsert(prepost_data[i]);
 }
 */
 
