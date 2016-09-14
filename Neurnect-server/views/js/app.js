@@ -1,17 +1,40 @@
+// Socket.IOコネクション
+var socket = io.connect('http://localhost:1337/');
+
+$('form').submit((e) => {
+  // formのsubmit時のページ遷移停止
+  e.preventDefault();
+
+  // データのemit
+  socket.emit('upload_data', {
+    "text": $("input#uploadtext").val(),
+    "form": "オブジェクトの形状",
+    "image": "画像URL",
+    "position": {x: "x座標", y: "y座標"},
+    "category": "カテゴリ名",
+    "tag": "タグ名",
+    "link": "ライン接続先オブジェクトのドキュメントid",
+    "date": "投稿日時"
+  });
+
+  // 投稿フォーム非表示
+  $('.form').fadeOut("fast");
+});
+
 $('#post').click(() => {
+  // 投稿フォーム表示
   $('.form').draggable();
   $('.form').fadeIn("fast");
 });
 
 $('#form_remove').click(() => {
+  // 投稿フォーム非表示
   $('.form').fadeOut("fast");
 })
 
 $('#reload').click(() => {
   DrawObject();
 });
-
-var socket = io.connect('http://localhost:1337/');
 
 //レンダラの作成とDOM操作での要素追加
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
