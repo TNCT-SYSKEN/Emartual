@@ -9,8 +9,12 @@ app.engine('ejs', ejs.renderFile);
 
 mainUI.mainUI(app); //mainUIの情報を受け取る
 
-app.post('/js/app.js', function(req, res){
+app.get('/js/app.js', function(req, res){
   res.sendFile(__dirname + "/views/js/app.js");
+});
+
+app.get('/css/app.css', function(req, res){
+  res.sendFile(__dirname + "/views/css/app.css");
 });
 
 app.listen(setting.port, setting.host, function(){
