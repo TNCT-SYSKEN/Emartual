@@ -5,8 +5,8 @@
 
 //全件抽出
 module.exports.dball = function(callback) {
-  var Posted = this.mongoose.model('Posted');
-  Posted.find({}, function(err, docs) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.find({}, function(err, docs) {
     if(err){ console.log(err); }
 
      // callbackの起動
@@ -15,57 +15,71 @@ module.exports.dball = function(callback) {
 };
 
 //全件抽出 IDのみ
-module.exports.dballid = function() {
-  Posted.find({}, ['_id'], function(err, docs){
+module.exports.dballid = function(callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.find({}, function(err, docs){
     if(err){ console.log(err); }
-    else{ return docs; }
-  });
+
+    callback(docs);
+  }).select('_id');
 };
 
 //タグ毎に抽出
-module.exports.dbtag = function(tag) {
-  Posted.find({ tag: tag }, function(err, docs) {
+module.exports.dbtag = function(tag, callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.find({ tag: tag }, function(err, docs) {
     if(err){ console.log(err); }
-    else{ return docs; }
+
+    callback(docs);
   });
 };
 
 //タグ毎に抽出　IDのみ
-module.exports.dbtagid = function(tag) {
-  Posted.find({ tag: tag }, ['_id'], function(err, docs) {
+module.exports.dbtagid = function(tag, callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.find({ tag: tag }, function(err, docs) {
     if(err){ console.log(err); }
-    else{ return docs; }
-  });
+
+    callback(docs);
+  }).select('_id');
 };
 
 //各タグに対する投稿数
-module.exports.dbtagcount = function(tag) {
-  Posted.count({ tag: tag }, function(err, count) {
+module.exports.dbtagcount = function(tag, callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.count({ tag: tag }, function(err, count) {
     if(err){ console.log(err); }
-    else{ return (count); }
+
+    callback(count);
   });
 };
 
 //カテゴリ毎に抽出
-module.exports.dbcate = function(cate) {
-  Posted.find({ cate: cate }, function(err, docs) {
+module.exports.dbcate = function(category, callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.find({ category: category }, function(err, docs) {
     if(err){ console.log(err); }
-    else{ return docs; }
+
+    callback(docs);
   });
 };
 
 //カテゴリ毎に抽出 IDのみ
-module.exports.dbcateid = function(cate) {
-  Posted.find({ cate: cate }, ['_id'], function(err, docs) {
+module.exports.dbcateid = function(category, callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.find({ category: category }, function(err, docs) {
     if(err){ console.log(err); }
-    else{ return docs; }
-  });
+
+    callback(docs);
+  }).select('_id');
 };
 
 //各カテゴリに対する投稿数
-module.exports.dbcatecount = function(cate) {
-  Posted.count({ cate: cate }, function(err, count) {
+module.exports.dbcatecount = function(category, callback) {
+  var Posted_data = this.mongoose.model('Posted_data');
+  Posted_data.count({ cate: cate }, function(err, count) {
     if(err){ console.log(err); }
-    else{ return count; }
+
+    callback(count);
   });
 };

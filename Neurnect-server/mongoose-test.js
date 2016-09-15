@@ -4,8 +4,8 @@ var DBModule = require('./DB_method/dbmodule.js');
 var fs = require('fs');
 
 // 引数用
-var tag = "hoge";
-var category = "fuga";
+var tag = "aiueo";
+var category = "normal";
 
 // MEMO: ここでmongooseを渡す
 // MEMO: 理由: mongoose.modelプロパティを保存してやりたいから
@@ -40,7 +40,7 @@ for(var i = 0; i < prepost_data.length; i++){
 */
 
 // 全件全要素抽出テスト
-dbmodule.dball(function(result){
+dbmodule.dbcateid(category, function(result){
   // 結果表示
   console.log(result);
 
