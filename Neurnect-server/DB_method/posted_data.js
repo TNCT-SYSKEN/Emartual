@@ -5,7 +5,6 @@ module.exports.dbdefine = function() {
 
   // MEMO: requiredってtextとかformとかにも必要だと思うので吟味して再設計してください
   var Posted_dataSchema = new Schema ({
-    _id:    { type: String },
     text:   { type: String, required: true },
     form:   { type: String, enum: ['ellipse', 'rect', 'unique'], default: "ellipse" },
     image:  { type: String },
