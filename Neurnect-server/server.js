@@ -9,6 +9,7 @@ var setting = require("./setting.js");
 var mainUI = require("./mainUI.js");
 var DBModule = require("./DB_method/dbmodule.js");
 
+var flag = 0; //初回ページを表示するか判別用の変数
 
 var dbmodule = new DBModule(mongoose);
 dbmodule.dbdefine();
@@ -17,10 +18,25 @@ app.engine('ejs', ejs.renderFile);
 
 mainUI.mainUI(app); //mainUIの情報を受け取る
 
-
 io.sockets.on("connection", function(socket){
-  dbmodule.dball(function(docs){
-      io.sockets.emit("init_data", docs);
+  //初回ページの要求
+  if(flag != 1){
+    dbmodule.dball(function(init_data){
+      io.sockets.emit("init_data", init_data);
+      console.log("init_data:");
+      console.log(init_data);
+    });
+  }
+  socket.on('upload_data', function(upload_data){
+    console.log("upload_data:");
+    console.log(upload_data);
+    flag = 1;
+
+    dbmodule.dball(function(update_data){
+      io.sockets.emit("update_data", update_data);
+      console.log("update_data:");
+      console.log(update_data);
+    });
   });
 });
 
