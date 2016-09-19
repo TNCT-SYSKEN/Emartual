@@ -37,12 +37,14 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  var text = "ほげほげ";
-  var form = "rect";
+  var data = {
+    "text": "ほげほげ",
+    "form": "rect",
+  };
 
-  var objectPosition = CalcPosition(text, form);
+  data.position = CalcPosition(data.text, data.form);
 
-  CreateObject(text, form, objectPosition);
+  CreateObject(data);
 
   DrawObject();
 });
@@ -59,7 +61,7 @@ let init_isfirst = false;
 socket.on('init_data', function(init_data){
   if(! init_isfirst){
     for(let item of init_data){
-      CreateObject(item.text, item.form, item.position);
+      CreateObject(item);
     }
     object.addChildAt(line, 0);
     object.addChildAt(graphics, 1);

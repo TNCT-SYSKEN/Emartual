@@ -13,8 +13,6 @@ let object = new PIXI.Container();
 let line = new PIXI.Graphics();
 let graphics = new PIXI.Graphics();
 
-let Posted = new PIXI.Container();
-
 // 前回のオブジェクトの位置
 let before_position = null;
 
@@ -31,7 +29,6 @@ function CalcSize(textData, formData){
   // textのアンカーポイント変更
   CalctextObj.anchor.x = 0.5;
   CalctextObj.anchor.y = 0.5;
-
 
   var objectSize = null;
 
@@ -102,7 +99,7 @@ function CalcPosition(textData, formData){
   return objectPosition;
 }
 
-function CreateObject(textData, formData, positionData){
+function CreateObject(document){
   // 描画プロパティ
   line.beginFill(0xFFFFFF);
   graphics.beginFill(0xFFFFFF);
@@ -115,43 +112,42 @@ function CreateObject(textData, formData, positionData){
   else{
     // lineの描画
     line.moveTo(before_position.x, before_position.y);
-    line.lineTo(positionData.x, positionData.y);
+    line.lineTo(document.position.x, document.position.y);
   }
 
   // 前回のオブジェクトの位置
-  before_position = positionData;
+  before_position = document.position;
 
   // textの描画
-  var textObj = new PIXI.Text(textData, {fontSize:'20px', fill: 0x1d2129});
+  var textObj = new PIXI.Text(document.text, {fontSize:'20px', fill: 0x1d2129});
 
   // textの配置変更
-  textObj.position.x = positionData.x;
-  textObj.position.y = positionData.y;
+  textObj.position.x = document.position.x;
+  textObj.position.y = document.position.y;
   // textのアンカーポイント変更
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
 
-  var objectSize = CalcSize(textData, formData);
+  // オブジェクトのサイズ計算
+  var objectSize = CalcSize(document.text, document.form);
 
-  if (formData == ELLIPSE){
+  if (document.form == ELLIPSE){
     // Ellipseの描画
-    graphics.drawEllipse(positionData.x, positionData.y, objectSize.width, objectSize.height);
+    graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
 
   }
-  else if(formData == RECT){
+  else if(document.form == RECT){
     // Rectの描画
-    graphics.drawRect(positionData.x - (textObj.width + 45) / 2, positionData.y - (textObj.height + 20) / 2, objectSize.width, objectSize.height);
+    graphics.drawRect(document.position.x - (textObj.width + 45) / 2, document.position.y - (textObj.height + 20) / 2, objectSize.width, objectSize.height);
   }
 
-  Posted.addChildAt(graphics, 0);
-  Posted.addChildAt(textObj, 1);
   // 前回のオブジェクトのサイズ(debug用)
   before_size = objectSize;
 
   // オブジェクトコンテナに追加
   object.addChildAt(line, 0);
-  object.addChildAt(Posted, 1);
-  //object.addChildAt(textObj, 2);
+  object.addChildAt(graphics, 1);
+  object.addChildAt(textObj, 2);
 }
 
 function DrawObject(){
