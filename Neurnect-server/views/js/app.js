@@ -8,7 +8,7 @@ $('form').submit((e) => {
   // データのemit
   socket.emit('upload_data', {
     "text": $("input#uploadtext").val(),
-    "form": $("#graphic-form option:selected").text(),
+    "form": $("#graphic-form").val(),
     "image": "",
     "position": objectPosition,
     "category": "",
@@ -59,7 +59,7 @@ let tag_draw_flag = false
 
 socket.on('init_data', function(init_data){
   for(let item of init_data){
-    CreateObject(item.text, item.form, item.position);
+    CreateObject(item.text, item.form, item.position, item.tag);
   }
   object.addChildAt(line, 0);
   object.addChildAt(graphics, 1);
