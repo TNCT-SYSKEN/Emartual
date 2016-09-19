@@ -8,13 +8,13 @@ $('form').submit((e) => {
   // データのemit
   socket.emit('upload_data', {
     "text": $("input#uploadtext").val(),
-    "form": "オブジェクトの形状",
-    "image": "画像URL",
-    "position": {x: "x座標", y: "y座標"},
-    "category": "カテゴリ名",
-    "tag": "タグ名",
-    "link": "ライン接続先オブジェクトのドキュメントid",
-    "date": "投稿日時"
+    "form": $("#graphic-form").val(),
+    "image": "",
+    "position": objectPosition,
+    "category": "",
+    "tag": $("input#tag").val(),
+    "link": "",
+    "date": new Date()
   });
 
   // 投稿フォーム非表示
@@ -49,6 +49,7 @@ let object = new PIXI.Container();
 let line = new PIXI.Graphics();
 let graphics = new PIXI.Graphics();
 
+let Posted = new PIXI.Container();
 
 // 前回のオブジェクトの位置
 let before_position = null;
@@ -58,7 +59,7 @@ let tag_draw_flag = false
 
 socket.on('init_data', function(init_data){
   for(let item of init_data){
-    CreateObject(item.text, item.form, item.position);
+    CreateObject(item.text, item.form, item.position, item.tag);
   }
   object.addChildAt(line, 0);
   object.addChildAt(graphics, 1);
@@ -108,10 +109,13 @@ function CreateObject(textData, formData, positionData){
     graphics.drawRect(positionData.x - (textObj.width + 45) / 2, positionData.y - (textObj.height + 20) / 2, textObj.width + 45, textObj.height + 20);
   }
 
+  Posted.addChildAt(graphics, 0);
+  Posted.addChildAt(textObj, 1);
+
   // オブジェクトコンテナに追加
   object.addChildAt(line, 0);
-  object.addChildAt(graphics, 1);
-  object.addChildAt(textObj, 2);
+  object.addChildAt(Posted, 1);
+  //object.addChildAt(textObj, 2);
 }
 
 function DrawObject(){
