@@ -9,7 +9,7 @@ module.exports.tagdefine = function() {
     tag:    { type: String, required: true },
     color:  { type: String, enum: ['blue', 'red', 'yellow', 'black', 'green', 'purple'] }
   });
-  var collection = "tag";
+  var collection = "Tag_data";
   this.mongoose.model('Tag', TagSchema, collection);
 };
 
