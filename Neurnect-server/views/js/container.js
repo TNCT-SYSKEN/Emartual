@@ -2,7 +2,7 @@
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
 const ELLIPSE = "ellipse";
 const RECT = "rect";
-let renderer = new PIXI.CanvasRenderer(window.innerWidth - 15, window.innerHeight, RENDERER_STYLE);
+let renderer = new PIXI.autoDetectRenderer(window.innerWidth - 15, window.innerHeight, RENDERER_STYLE);
 $('#container').append(renderer.view);
 
 // ルートコンテナの作成
