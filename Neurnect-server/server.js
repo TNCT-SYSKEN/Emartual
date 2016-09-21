@@ -19,28 +19,15 @@ app.engine('ejs', ejs.renderFile);
 mainUI.mainUI(app); //mainUIの情報を受け取る
 
 io.sockets.on("connection", function(socket){
-  console.log("-------------------------------------------");
   //初回ページの要求
   dbmodule.dball(function(init_data){
     io.sockets.emit("init_data", init_data);
-    console.log("init_data:");
-    console.log(init_data);
-    console.log("");
   });
-  socket.on('upload_data', function(upload_data){
-    console.log("upload_data:");
-    console.log(upload_data);
-    console.log("");
-    dbmodule.dbinsert(function(upload_data){
-      console.log("upload_data:");
-      console.log(upload_data);
-      console.log("");
-    });
 
+  socket.on('upload_data', function(upload_data){
+    dbmodule.dbinsert(upload_data);
     dbmodule.dball(function(update_data){
       io.sockets.emit("update_data", update_data);
-      console.log("update_data:");
-      console.log(update_data);
     });
   });
 });
