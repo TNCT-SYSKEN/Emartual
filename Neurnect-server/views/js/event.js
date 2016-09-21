@@ -9,10 +9,8 @@ $('form').submit(function (e){
   socket.emit('upload_data', {
     "text": $("input#uploadtext").val(),
     "form": $("#graphic-form").val(),
-    "image": "",
-    "position": "",
-    "category": "",
-    "tag": $("input#tag").val(),
+    "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), $("input#tag-select").val()),
+    "tag": $("input#tag-select").val(),
     "link": "",
     "date": new Date()
   });
@@ -68,6 +66,17 @@ socket.on('init_data', function(init_data){
 
     init_isfirst = true;
   }
+});
+
+socket.on('update_data', function(update_data){
+  if(update_data.text.match(/^[ 　\r\n\t]*$/)){
+
+  }
+  if(update_data.tag.match(/^[ 　\r\n\t]*$/)){
+    
+  }
+    CreateObject(update_data);
+    DrawObject();
 });
 
 let tag_item;
