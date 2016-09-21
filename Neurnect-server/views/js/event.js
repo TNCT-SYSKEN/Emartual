@@ -68,6 +68,17 @@ socket.on('init_data', function(init_data){
   }
 });
 
+socket.on('update_data', function(update_data){
+  if(update_data.text.match(/^[ 　\r\n\t]*$/)){
+
+  }
+  if(update_data.tag.match(/^[ 　\r\n\t]*$/)){
+    
+  }
+    CreateObject(update_data);
+    DrawObject();
+});
+
 let tag_item;
 
 socket.on('init_tag', function(init_tag) {
