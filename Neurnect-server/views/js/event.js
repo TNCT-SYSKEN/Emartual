@@ -40,9 +40,10 @@ $('#reload').click(function (){
   var data = {
     "text": "ほげほげ",
     "form": "rect",
+    "tag": "fuga"
   };
 
-  data.position = CalcPosition(data.text, data.form);
+  data.position = CalcPosition(data.text, data.form, data.tag);
 
   CreateObject(data);
 
@@ -63,8 +64,6 @@ socket.on('init_data', function(init_data){
     for(let item of init_data){
       CreateObject(item);
     }
-    object.addChildAt(line, 0);
-    object.addChildAt(graphics, 1);
     DrawObject();
 
     init_isfirst = true;
