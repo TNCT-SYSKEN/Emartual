@@ -9,10 +9,8 @@ $('form').submit(function (e){
   socket.emit('upload_data', {
     "text": $("input#uploadtext").val(),
     "form": $("#graphic-form").val(),
-    "image": "",
-    "position": "",
-    "category": "",
-    "tag": $("input#tag").val(),
+    "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), $("input#tag-select").val()),
+    "tag": $("input#tag-select").val(),
     "link": "",
     "date": new Date()
   });
