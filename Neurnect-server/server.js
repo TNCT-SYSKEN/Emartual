@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var setting = require("./setting.js");
 var mainUI = require("./mainUI.js");
 var DBModule = require("./DB_method/dbmodule.js");
-var SVModule = require("./svmodule.js");
+var SVModule = require("./SendFiles.js");
 
 var dbmodule = new DBModule(mongoose);
 
