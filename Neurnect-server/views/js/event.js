@@ -55,6 +55,12 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
+let tag_color;
+
+socket.on('init_tag', function(init_tag) {
+  tag_color = init_tag;
+});
+
 let init_isfirst = false;
 
 socket.on('init_data', function(init_data){
@@ -77,10 +83,4 @@ socket.on('update_data', function(update_data){
   }
     CreateObject(update_data);
     DrawObject();
-});
-
-let tag_item;
-
-socket.on('init_tag', function(init_tag) {
-  tag_item = init_tag;
 });
