@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var setting = require("./setting.js");
 var mainUI = require("./mainUI.js");
 var DBModule = require("./DB_method/dbmodule.js");
-var SVModule = require("./SendFiles.js");
+var SendFiles = require("./SendFiles.js");
 
 var dbmodule = new DBModule(mongoose);
 
@@ -26,13 +26,11 @@ io.sockets.on("connection", function(socket){
 
   socket.on('upload_data', function(upload_data){
     dbmodule.dbinsert(upload_data);
-    dbmodule.dball(function(update_data){
-      io.sockets.emit("update_data", update_data);
-    });
+    io.sockets.emit("update_data", upload_data);
   });
 });
 
-SVModule.send_Files(app);
+SendFiles.send_Files(app);
 
 server.listen(setting.port, setting.host, function(){
   console.log("server listening...  " + setting.host + ":" + setting.port);
