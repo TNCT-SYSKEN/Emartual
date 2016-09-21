@@ -70,3 +70,9 @@ socket.on('init_data', function(init_data){
     init_isfirst = true;
   }
 });
+
+let tag_item;
+
+socket.on('init_tag', function(init_tag) {
+  tag_item = init_tag;
+});
