@@ -18,6 +18,7 @@ let before_position = [];
 // 前回のオブジェクトのサイズ
 let before_size = [];
 
+// オブジェクトに必要なサイズの計算
 function CalcSize(textData, formData){
   // textのオブジェクトサイズ計算
   var CalctextObj = new PIXI.Text(textData, {fontSize:'20px', fill: 0x1d2129});
@@ -49,6 +50,7 @@ function CalcSize(textData, formData){
   return objectSize;
 }
 
+// 新しく作成したオブジェクトの配置の計算
 function CalcPosition(textData, formData, tagData){
   // 0, 1, 2, 3の4値の乱数取得
   var form_rand = Math.floor(Math.random() * (4 - 0) + 0);
@@ -117,6 +119,7 @@ function isTagIn(listobject, tag){
   return null;
 }
 
+// オブジェクトの挿入
 function CreateObject(document){
   var tag_object_index = isTagIn(tag_object, document.tag);
 
@@ -135,8 +138,9 @@ function CreateObject(document){
   // 描画プロパティ
   line.beginFill(0xFFFFFF);
   graphics.beginFill(0xFFFFFF);
-  line.lineStyle(4, 0x4661df);
-  graphics.lineStyle(4, 0x4661df);
+  // タグ名を元に色を指定
+  line.lineStyle(4, tag_data[isTagIn(tag_data, document.tag)].color);
+  graphics.lineStyle(4, tag_data[isTagIn(tag_data, document.tag)].color);
 
   // 前回のオブジェクトの位置
   var before_position_index = isTagIn(before_position, document.tag);
@@ -195,6 +199,7 @@ function CreateObject(document){
   object.addChildAt(textObj, 2);
 }
 
+// レンダラの描画開始
 function DrawObject(){
   object.interactive = true;
 
@@ -218,11 +223,13 @@ function DrawObject(){
   animate();
 }
 
+// アニメーションメソッド
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(stage);
 }
 
+// ドラッグ開始時のイベント
 function onDragStart(event){
   // store a reference to the data
   // the reason for this is because of multitouch
@@ -234,6 +241,7 @@ function onDragStart(event){
   this.dragPoint.y -= this.position.y;
 }
 
+// ドラッグ中のイベント
 function onDragMove(){
   if(this.dragging){
     var newPosition = this.data.getLocalPosition(this.parent);
@@ -242,6 +250,7 @@ function onDragMove(){
   }
 }
 
+// ドラッグ終了時のイベント
 function onDragEnd(){
   this.dragging = false;
   // set the interaction data to null
