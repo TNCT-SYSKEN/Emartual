@@ -83,3 +83,23 @@ module.exports.dbcatecount = function(category, callback) {
     callback(count);
   });
 };
+
+//ポジションの最大最小の確認
+module.exports.dbposition =function(callback){
+  var Posted_data = this.mongoose.model('Posted_data');
+  var position = {};
+
+  Posted_data.find({}, function(err, docs) {
+    if(err){console.log(err);}
+    position.x_max = docs[0].position;
+  }).select('position').sort('-position.x').limit(1);
+  Posted_data.find({}, function(err, docs) {
+    if(err){console.log(err);}
+    position.y_max = docs[0].position;
+  }).select('position.y').sort('-position.y').limit(1);
+  Posted_data.find({}, function(err,docs) {
+    if(err){console.log(err);}
+    position.y_min = docs[0].position;
+    callback(position);
+  }).select('position.y').sort('+position.y').limit(1);
+};
