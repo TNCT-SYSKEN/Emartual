@@ -2,6 +2,9 @@
 var socket = io.connect('http://localhost:1337/');
 
 $('#submit').click(function (){
+  // 選択されたタグ
+  var upload_tag = $("input#tag-select").val();
+
   // エラー表示の初期化
   $("input#uploadtext").parent().removeClass('has-error');
   $("input#uploadtext").next().remove();
@@ -22,11 +25,22 @@ $('#submit').click(function (){
     socket.emit('upload_data', {
       "text": $("input#uploadtext").val(),
       "form": $("#graphic-form").val(),
-      "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), removeSpace($("input#tag-select").val())),
-      "tag": removeSpace($("input#tag-select").val()),
+      "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), removeSpace(upload_tag)),
+      "tag": removeSpace(upload_tag),
       "link": "",
       "date": new Date()
     });
+
+    //新規タグ判定用
+    var istag = false;
+
+    for(var i = 0; i < tag_data.length; ++i){
+        if(tag_data[i].tag == upload_tag){
+          tagcheck = true;
+        }
+    }
+
+    if(! tagcheck){socket.emit('upload_tag', {"tag": upload_tag});}
 
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
@@ -80,6 +94,12 @@ $('#graphic-form').change(function (){
 
   // 投稿フォーム後ろの変更をしたい
   console.log(str);
+});
+
+var tag_data = null;
+
+socket.on('init_tag', function(init_tag) {
+  tag_data = init_tag;
 });
 
 let init_isfirst = false;
