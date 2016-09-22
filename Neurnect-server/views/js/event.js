@@ -81,7 +81,7 @@ $('#reload').click(function (){
 
   data.position = CalcPosition(data.text, data.form, data.tag);
 
-  CreateObject(data);
+  //CreateObject(data);
 
   DrawObject();
 });
@@ -98,32 +98,31 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
+//タグ名と色の対応
 var tag_data = null;
 
-socket.on('init_tag', function(init_tag) {
-  tag_data = init_tag;
+socket.on('update_tag', function(update_tag) {
+  tag_data.push(update_tag);
 });
 
 let init_isfirst = false;
 
-socket.on('init_data', function(init_data){
-  if(! init_isfirst){
-    for(let item of init_data){
-      CreateObject(item);
-    }
-    DrawObject();
+if(! init_isfirst){
+  socket.on('init_data', function(init_data){
+      for(let item of init_data){
+        CreateObject(item);
+      }
+      DrawObject();
 
-    init_isfirst = true;
-  }
-});
+  });
 
+  socket.on('init_tag', function(init_tag) {
+    tag_data = init_tag;
+  });
+
+  init_isfirst = true;
+}
 socket.on('update_data', function(update_data){
     CreateObject(update_data);
     DrawObject();
-});
-
-let tag_item = null;
-
-socket.on('init_tag', function(init_tag) {
-  tag_item = init_tag;
 });
