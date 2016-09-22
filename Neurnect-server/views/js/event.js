@@ -16,7 +16,7 @@ $('form').submit(function (e){
   });
 
   var upload_tag = $("input#tag-select").val();
-  var tagcheck;
+  var tagcheck = false;
 
   for(var i=0; i<tag_data.length; ++i){
       if(tag_data[i].tag == upload_tag){
@@ -66,7 +66,7 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
-var tag_data;
+var tag_data = null;
 
 socket.on('init_tag', function(init_tag) {
   tag_data = init_tag;
