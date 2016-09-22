@@ -36,11 +36,11 @@ $('#submit').click(function (){
 
     for(var i = 0; i < tag_data.length; ++i){
         if(tag_data[i].tag == upload_tag){
-          tagcheck = true;
+          istag = true;
         }
     }
 
-    if(! tagcheck){socket.emit('upload_tag', {"tag": upload_tag});}
+    if(! istag){socket.emit('upload_tag', {"tag": upload_tag});}
 
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
