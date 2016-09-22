@@ -16,14 +16,15 @@ $('form').submit(function (e){
   });
 
   var upload_tag = $("input#tag-select").val();
+  var tagcheck;
 
-  for(let item of tag_data){
-    if(upload_tag != item){
-      socket.emit('upload_tag', {
-        "tag": upload_tag
-      });
-    }
+  for(var i=0; i<tag_data.length; ++i){
+      if(tag_data[i].tag == upload_tag){
+        tagcheck = true;
+      }
   }
+
+  if(!tagcheck){socket.emit('upload_tag', {"tag": upload_tag});}
 
   // 投稿フォーム非表示
   $('.form').fadeOut("fast");
