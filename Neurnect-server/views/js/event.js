@@ -3,7 +3,7 @@ var socket = io.connect('http://localhost:1337/');
 
 $('#submit').click(function (){
   // 選択されたタグ
-  var upload_tag = $("input#tag-select").val();
+  var upload_tag = removeSpace($("input#tag-select").val());
 
   // エラー表示の初期化
   $("input#uploadtext").parent().removeClass('has-error');
@@ -25,8 +25,8 @@ $('#submit').click(function (){
     socket.emit('upload_data', {
       "text": $("input#uploadtext").val(),
       "form": $("#graphic-form").val(),
-      "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), removeSpace(upload_tag)),
-      "tag": removeSpace(upload_tag),
+      "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), upload_tag),
+      "tag": upload_tag,
       "link": "",
       "date": new Date()
     });
@@ -40,7 +40,9 @@ $('#submit').click(function (){
         }
     }
 
-    if(! istag){socket.emit('upload_tag', {"tag": upload_tag});}
+    if(! istag){
+      socket.emit('upload_tag', {"tag": upload_tag});
+    }
 
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
