@@ -139,8 +139,8 @@ function CreateObject(document){
   line.beginFill(0xFFFFFF);
   graphics.beginFill(0xFFFFFF);
   // タグ名を元に色を指定
-  line.lineStyle(4, whatColor(document.tag));
-  graphics.lineStyle(4, whatColor(document.tag));
+  line.lineStyle(4, tag_data[isTagIn(tag_data, document.tag)].color);
+  graphics.lineStyle(4, tag_data[isTagIn(tag_data, document.tag)].color);
 
   // 前回のオブジェクトの位置
   var before_position_index = isTagIn(before_position, document.tag);
@@ -255,15 +255,4 @@ function onDragEnd(){
   this.dragging = false;
   // set the interaction data to null
   this.data = null;
-}
-
-// 引数で指定したタグ名に対応する色を返す
-function whatColor(tag){
-  for(var i = 0; i < tag_data.length; i++){
-    if(tag_data[i].tag == tag){
-      return tag_data[i].color;
-    }
-  }
-
-  return null;
 }
