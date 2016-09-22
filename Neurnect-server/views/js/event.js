@@ -1,37 +1,47 @@
 // Socket.IOコネクション
 var socket = io.connect('http://localhost:1337/');
 
-$('form').submit(function (e){
-  // formのsubmit時のページ遷移停止
-  e.preventDefault();
+$('#submit').click(function (){
+  // エラー表示の初期化
+  $("input#uploadtext").parent().removeClass('has-error');
+  $("input#uploadtext").next().remove();
+  $("input#tag-select").parent().removeClass('has-error');
+  $("input#tag-select").next().remove();
 
-    // formのtext, tagが空行かの検出
-    if(isBlankLine($("input#uploadtext").val())){
+  // formのtext, tagが空行かの検出
+  if(isBlankLine($("input#uploadtext").val())){
+    $("input#uploadtext").parent().addClass('has-error');
+    $("input#uploadtext").after($("<span>").addClass('control-label').text("空行では送信できません"));
+  }
+  else if(isBlankLine($("input#tag-select").val())){
+    $("input#tag-select").parent().addClass('has-error');
+    $("input#tag-select").after($("<span>").addClass('control-label').text("空行では送信できません"));
+  }
+  else{
+    // データのemit
+    socket.emit('upload_data', {
+      "text": $("input#uploadtext").val(),
+      "form": $("#graphic-form").val(),
+      "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), removeSpace($("input#tag-select").val())),
+      "tag": removeSpace($("input#tag-select").val()),
+      "link": "",
+      "date": new Date()
+    });
 
-    }
-    else if(isBlankLine($("input#tag-select").val())){
-
-    }
-    else{
-      // データのemit
-      socket.emit('upload_data', {
-        "text": $("input#uploadtext").val(),
-        "form": $("#graphic-form").val(),
-        "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), $("input#tag-select").val()),
-        "tag": $("input#tag-select").val(),
-        "link": "",
-        "date": new Date()
-      });
-
-      // 投稿フォーム非表示
-      $('.form').fadeOut("fast");
-    }
+    // 投稿フォーム非表示
+    $('.form').fadeOut("fast");
+  }
 });
 
 $('#post').click(function (){
   // 入力要素の初期化
   $('input#uploadtext').val('');
   $('input#tag-select').val('');
+  // エラー表示の初期化
+  $("input#uploadtext").parent().removeClass('has-error');
+  $("input#uploadtext").next().remove();
+  $("input#tag-select").parent().removeClass('has-error');
+  $("input#tag-select").next().remove();
 
   // 投稿フォーム表示
   $('.form').draggable();
@@ -58,6 +68,11 @@ $('#reload').click(function (){
   CreateObject(data);
 
   DrawObject();
+});
+
+
+$('#debug-btn').click(function(){
+  $(this).parent().addClass('has-error');
 });
 
 $('#graphic-form').change(function (){
