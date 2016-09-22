@@ -1,4 +1,8 @@
 module.exports.send_Files = function(app){
+  app.get('/js/typical.js', function(req, res){
+    res.sendFile(__dirname + "/views/js/typical.js");
+  });
+
   app.get('/js/container.js', function(req, res){
     res.sendFile(__dirname + "/views/js/container.js");
   });

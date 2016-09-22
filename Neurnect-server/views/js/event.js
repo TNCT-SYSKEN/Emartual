@@ -5,28 +5,40 @@ $('form').submit(function (e){
   // formのsubmit時のページ遷移停止
   e.preventDefault();
 
-  // データのemit
-  socket.emit('upload_data', {
-    "text": $("input#uploadtext").val(),
-    "form": $("#graphic-form").val(),
-    "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), $("input#tag-select").val()),
-    "tag": $("input#tag-select").val(),
-    "link": "",
-    "date": new Date()
-  });
+    // formのtext, tagが空行かの検出
+    if(isBlankLine($("input#uploadtext").val())){
 
-  // 投稿フォーム非表示
-  $('.form').fadeOut("fast");
+    }
+    else if(isBlankLine($("input#tag-select").val())){
+
+    }
+    else{
+      // データのemit
+      socket.emit('upload_data', {
+        "text": $("input#uploadtext").val(),
+        "form": $("#graphic-form").val(),
+        "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), $("input#tag-select").val()),
+        "tag": $("input#tag-select").val(),
+        "link": "",
+        "date": new Date()
+      });
+
+      // 投稿フォーム非表示
+      $('.form').fadeOut("fast");
+    }
 });
 
 $('#post').click(function (){
+  // 入力要素の初期化
+  $('input#uploadtext').val('');
+  $('input#tag-select').val('');
+
   // 投稿フォーム表示
   $('.form').draggable();
   $('.form').fadeIn("fast");
 
-  // selectタグ初期化
-  $('#graphic-form').prop("selectedIndex", 0);
-  console.log($('#graphic-form').prop("selectedIndex"));
+  // #uploadtextに対するフォーカス
+  $('input#uploadtext').focus();
 });
 
 $('#form_remove').click(function (){
@@ -69,17 +81,11 @@ socket.on('init_data', function(init_data){
 });
 
 socket.on('update_data', function(update_data){
-  if(update_data.text.match(/^[ 　\r\n\t]*$/)){
-
-  }
-  if(update_data.tag.match(/^[ 　\r\n\t]*$/)){
-    
-  }
     CreateObject(update_data);
     DrawObject();
 });
 
-let tag_item;
+let tag_item = null;
 
 socket.on('init_tag', function(init_tag) {
   tag_item = init_tag;
