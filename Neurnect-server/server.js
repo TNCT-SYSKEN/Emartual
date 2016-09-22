@@ -14,6 +14,7 @@ var color_settings = require("./color_settings.js")
 
 var dbmodule = new DBModule(mongoose);
 var color_code;
+var docs_color;
 
 dbmodule.dbdefine();
 dbmodule.tagdefine();
@@ -32,21 +33,24 @@ io.sockets.on("connection", function(socket){
 
   //DBへtagデータの受け渡しの要求
   dbmodule.tagall(function(init_tag){
+    docs_color =  color_settings.color_settings[color_code];
     io.sockets.emit("init_tag", init_tag);
+  });
+
+  dbmodule.dbposition(function(position){
+    socket.on("position", position);
+  });
+
+  socket.on('upload_tag', function(upload_tag){
     var propcount = Math.floor(Math.random() * (6 - 0) + 0);
     var count = 0;
     for (var result in color_settings.color_settings){
       if (propcount == count){
-        dbmodule.taginsert(result);
         color_code = result;
         break;
       }
       count++;
     }
-  });
-
-  socket.on('upload_tag', function(upload_tag){
-    var docs_color =  color_settings.color_settings[color_code];
     dbmodule.taginsert({
       "tag": upload_tag,
       "color": docs_color
