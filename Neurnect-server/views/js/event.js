@@ -15,6 +15,18 @@ $('form').submit(function (e){
     "date": new Date()
   });
 
+  var upload_tag = $("input#tag-select").val();
+  //新規タグ判定用
+  var istag = false;
+
+  for(var i = 0; i < tag_data.length; ++i){
+      if(tag_data[i].tag == upload_tag){
+        tagcheck = true;
+      }
+  }
+
+  if(! tagcheck){socket.emit('upload_tag', {"tag": upload_tag});}
+
   // 投稿フォーム非表示
   $('.form').fadeOut("fast");
 });
@@ -55,6 +67,12 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
+var tag_data = null;
+
+socket.on('init_tag', function(init_tag) {
+  tag_data = init_tag;
+});
+
 let init_isfirst = false;
 
 socket.on('init_data', function(init_data){
@@ -73,14 +91,8 @@ socket.on('update_data', function(update_data){
 
   }
   if(update_data.tag.match(/^[ 　\r\n\t]*$/)){
-    
+
   }
     CreateObject(update_data);
     DrawObject();
-});
-
-let tag_item;
-
-socket.on('init_tag', function(init_tag) {
-  tag_item = init_tag;
 });
