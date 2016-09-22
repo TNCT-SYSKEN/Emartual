@@ -15,6 +15,16 @@ $('form').submit(function (e){
     "date": new Date()
   });
 
+  var upload_tag = $("input#tag-select").val();
+
+  for(let item of tag_data){
+    if(upload_tag != item){
+      socket.emit('upload_tag', {
+        "tag": upload_tag
+      });
+    }
+  }
+
   // 投稿フォーム非表示
   $('.form').fadeOut("fast");
 });
@@ -55,10 +65,10 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
-let tag_color;
+var tag_data;
 
 socket.on('init_tag', function(init_tag) {
-  tag_color = init_tag;
+  tag_data = init_tag;
 });
 
 let init_isfirst = false;
@@ -79,7 +89,7 @@ socket.on('update_data', function(update_data){
 
   }
   if(update_data.tag.match(/^[ 　\r\n\t]*$/)){
-    
+
   }
     CreateObject(update_data);
     DrawObject();
