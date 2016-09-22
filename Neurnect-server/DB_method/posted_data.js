@@ -1,6 +1,5 @@
 //スキーマ定義
 module.exports.dbdefine = function() {
-  this.mongoose.connect('mongodb://localhost/Neurnect');
   var Schema = this.mongoose.Schema;
 
   // MEMO: requiredってtextとかformとかにも必要だと思うので吟味して再設計してください

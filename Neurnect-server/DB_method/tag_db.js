@@ -2,11 +2,10 @@ var color_settings = require('../color_settings.js');
 
 //スキーマ定義
 module.exports.tagdefine = function() {
-  this.mongoose.connect('mongodb://localhost/Neurnect');
   var Schema = this.mongoose.Schema;
 
   var TagSchema = new Schema ({
-    tag:    { type: String, required: true },
+    tag:    { type: String, required: true, unique: true },
     color:  { type: String, enum: ['blue', 'red', 'yellow', 'black', 'green', 'purple'] }
   });
   var collection = "Tag_data";
