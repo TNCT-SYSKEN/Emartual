@@ -96,23 +96,26 @@ socket.on('update_tag', function(update_tag) {
 });
 
 // 初回送信であるかの判定用
-let init_isfirst = false;
+let init_data_isfirst = false;
+let init_tag_isfirst = false;
 
-if(! init_isfirst){
-  socket.on('init_data', function(init_data){
-      for(let item of init_data){
-        CreateObject(item);
-      }
-      DrawObject();
+socket.on('init_data', function(init_data){
+  if(! init_data_isfirst){
+    for(let item of init_data){
+      CreateObject(item);
+    }
+    DrawObject();
+  }
+  init_data_isfirst = true;
+});
 
-  });
-
-  socket.on('init_tag', function(init_tag) {
+socket.on('init_tag', function(init_tag) {
+  if(! init_tag_isfirst){
     tag_data = init_tag;
-  });
+  }
+  init_tag_isfirst = true;
+});
 
-  init_isfirst = true;
-}
 socket.on('update_data', function(update_data){
     CreateObject(update_data);
     DrawObject();
