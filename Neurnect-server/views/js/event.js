@@ -84,16 +84,6 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  var data = {
-    "text": "ほげほげ",
-    "form": "rect",
-    "tag": "fuga"
-  };
-
-  data.position = CalcPosition(data.text, data.form, data.tag);
-
-  //CreateObject(data);
-
   DrawObject();
 });
 
@@ -109,30 +99,34 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
-//タグ名と色の対応
-var tag_data = null;
+// タグ名と色の対応
+let tag_data = null;
 
 socket.on('update_tag', function(update_tag) {
   tag_data.push(update_tag);
 });
 
-let init_isfirst = false;
+// 初回送信であるかの判定用
+let init_data_isfirst = false;
+let init_tag_isfirst = false;
 
-if(! init_isfirst){
-  socket.on('init_data', function(init_data){
-      for(let item of init_data){
-        CreateObject(item);
-      }
-      DrawObject();
+socket.on('init_data', function(init_data){
+  if(! init_data_isfirst){
+    for(let item of init_data){
+      CreateObject(item);
+    }
+    DrawObject();
+  }
+  init_data_isfirst = true;
+});
 
-  });
-
-  socket.on('init_tag', function(init_tag) {
+socket.on('init_tag', function(init_tag) {
+  if(! init_tag_isfirst){
     tag_data = init_tag;
-  });
+  }
+  init_tag_isfirst = true;
+});
 
-  init_isfirst = true;
-}
 socket.on('update_data', function(update_data){
     CreateObject(update_data);
     DrawObject();
