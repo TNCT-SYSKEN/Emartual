@@ -29,19 +29,29 @@
 
     <!-- 投稿フォーム -->
     <div class="form col-sm-offset-3 col-sm-6">
-      <div class="close">
-        <a class="btn btn-default pull-right" id="form_remove"><span class="glyphicon glyphicon-remove-circle"></span></a>
-      </div>
+      <a class="btn btn-default pull-right close" id="form_remove"><span class="glyphicon glyphicon-remove-circle"></span></a>
       <div class="ellipse">
-        <form method="post">
+        <form>
           <div class="form-group">
-            <input type="text" class="form-control" id="uploadtext">
-            <input type="submit" class="form-control btn-primary" value="送信">
+            <label class="control-label">Text:</label>
+            <input type="text" class="form-control" id="uploadtext" placeholder="メインテキスト">
+          </div>
+          <div class="form-group">
+            <a class="btn btn-primary form-control" id="submit">送信</a>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Tag:</label>
             <input type="tag" class="form-control" id="tag-select" placeholder="タグ">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Form:</label>
             <select class="selectpicker" id="graphic-form">
               <option>ellipse</option>
               <option>rect</option>
             </select>
+          </div>
+          <div class="form-group">
+            <input type="button" class="form-control btn-primary" id="debug-btn" value="デバッグ用">
           </div>
         </form>
       </div>
@@ -50,6 +60,7 @@
     <!-- 描画コンテナ -->
     <div id="container"></div>
 
+    <script type="text/ecmascript" src="/js/typical.js"></script>
     <script type="text/ecmascript" src="/js/container.js"></script>
     <script type="text/ecmascript" src="/js/event.js"></script>
   </body>

@@ -1,44 +1,68 @@
 // Socket.IOコネクション
 var socket = io.connect('http://localhost:1337/');
 
-$('form').submit(function (e){
-  // formのsubmit時のページ遷移停止
-  e.preventDefault();
-
-  // データのemit
-  socket.emit('upload_data', {
-    "text": $("input#uploadtext").val(),
-    "form": $("#graphic-form").val(),
-    "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), $("input#tag-select").val()),
-    "tag": $("input#tag-select").val(),
-    "link": "",
-    "date": new Date()
-  });
-
+$('#submit').click(function (){
+  // 選択されたタグ
   var upload_tag = $("input#tag-select").val();
-  //新規タグ判定用
-  var istag = false;
 
-  for(var i = 0; i < tag_data.length; ++i){
-      if(tag_data[i].tag == upload_tag){
-        tagcheck = true;
-      }
+  // エラー表示の初期化
+  $("input#uploadtext").parent().removeClass('has-error');
+  $("input#uploadtext").next().remove();
+  $("input#tag-select").parent().removeClass('has-error');
+  $("input#tag-select").next().remove();
+
+  // formのtext, tagが空行かの検出
+  if(isBlankLine($("input#uploadtext").val())){
+    $("input#uploadtext").parent().addClass('has-error');
+    $("input#uploadtext").after($("<span>").addClass('control-label').text("空行では送信できません"));
   }
+  else if(isBlankLine($("input#tag-select").val())){
+    $("input#tag-select").parent().addClass('has-error');
+    $("input#tag-select").after($("<span>").addClass('control-label').text("空行では送信できません"));
+  }
+  else{
+    // データのemit
+    socket.emit('upload_data', {
+      "text": $("input#uploadtext").val(),
+      "form": $("#graphic-form").val(),
+      "position": CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), removeSpace(upload_tag)),
+      "tag": removeSpace(upload_tag),
+      "link": "",
+      "date": new Date()
+    });
 
-  if(! tagcheck){socket.emit('upload_tag', {"tag": upload_tag});}
+    //新規タグ判定用
+    var istag = false;
 
-  // 投稿フォーム非表示
-  $('.form').fadeOut("fast");
+    for(var i = 0; i < tag_data.length; ++i){
+        if(tag_data[i].tag == upload_tag){
+          istag = true;
+        }
+    }
+
+    if(! istag){socket.emit('upload_tag', {"tag": upload_tag});}
+
+    // 投稿フォーム非表示
+    $('.form').fadeOut("fast");
+  }
 });
 
 $('#post').click(function (){
+  // 入力要素の初期化
+  $('input#uploadtext').val('');
+  $('input#tag-select').val('');
+  // エラー表示の初期化
+  $("input#uploadtext").parent().removeClass('has-error');
+  $("input#uploadtext").next().remove();
+  $("input#tag-select").parent().removeClass('has-error');
+  $("input#tag-select").next().remove();
+
   // 投稿フォーム表示
   $('.form').draggable();
   $('.form').fadeIn("fast");
 
-  // selectタグ初期化
-  $('#graphic-form').prop("selectedIndex", 0);
-  console.log($('#graphic-form').prop("selectedIndex"));
+  // #uploadtextに対するフォーカス
+  $('input#uploadtext').focus();
 });
 
 $('#form_remove').click(function (){
@@ -58,6 +82,11 @@ $('#reload').click(function (){
   CreateObject(data);
 
   DrawObject();
+});
+
+
+$('#debug-btn').click(function(){
+  $(this).parent().addClass('has-error');
 });
 
 $('#graphic-form').change(function (){
@@ -87,12 +116,12 @@ socket.on('init_data', function(init_data){
 });
 
 socket.on('update_data', function(update_data){
-  if(update_data.text.match(/^[ 　\r\n\t]*$/)){
-
-  }
-  if(update_data.tag.match(/^[ 　\r\n\t]*$/)){
-
-  }
     CreateObject(update_data);
     DrawObject();
+});
+
+let tag_item = null;
+
+socket.on('init_tag', function(init_tag) {
+  tag_item = init_tag;
 });
