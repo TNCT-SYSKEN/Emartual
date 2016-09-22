@@ -5,6 +5,7 @@ var tag_db = require('./tag_db.js');
 var Database = function (mongoose) {
   // Property and Constructor
   this.mongoose = mongoose;
+  this.mongoose.connect('mongodb://localhost/Neurnect');
 };
 
 // Method
