@@ -104,8 +104,8 @@ socket.on('init_tag', function(init_tag) {
   tag_data = init_tag;
 });
 
-socket.on('upload_tag', function(upload_tag) {
-  tag_data.push(upload_tag);
+socket.on('update_tag', function(update_tag) {
+  tag_data.push(update_tag);
 });
 
 let init_isfirst = false;
