@@ -104,6 +104,10 @@ socket.on('init_tag', function(init_tag) {
   tag_data = init_tag;
 });
 
+socket.on('upload_tag', function(upload_tag) {
+  tag_data.push(upload_tag);
+});
+
 let init_isfirst = false;
 
 socket.on('init_data', function(init_data){
@@ -120,10 +124,4 @@ socket.on('init_data', function(init_data){
 socket.on('update_data', function(update_data){
     CreateObject(update_data);
     DrawObject();
-});
-
-let tag_item = null;
-
-socket.on('init_tag', function(init_tag) {
-  tag_item = init_tag;
 });
