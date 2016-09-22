@@ -73,16 +73,6 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  var data = {
-    "text": "ほげほげ",
-    "form": "rect",
-    "tag": "fuga"
-  };
-
-  data.position = CalcPosition(data.text, data.form, data.tag);
-
-  //CreateObject(data);
-
   DrawObject();
 });
 
@@ -98,13 +88,14 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
-//タグ名と色の対応
-var tag_data = null;
+// タグ名と色の対応
+let tag_data = null;
 
 socket.on('update_tag', function(update_tag) {
   tag_data.push(update_tag);
 });
 
+// 初回送信であるかの判定用
 let init_isfirst = false;
 
 if(! init_isfirst){
