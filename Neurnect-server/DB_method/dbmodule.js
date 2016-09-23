@@ -1,6 +1,7 @@
 var posted_data = require('./posted_data.js');
 var db_find = require('./dbfind.js');
 var tag_db = require('./tag_db.js');
+var reset_db = require('./reset_database.js')
 
 var Database = function (mongoose) {
   // Property and Constructor
@@ -25,5 +26,8 @@ for(var property in tag_db){
   Database.prototype[property] = tag_db[property];
 }
 
+for(var property in reset_db){
+  Database.prototype[property] = reset_db[property];
+}
 // exportsの指定
 module.exports = Database;
