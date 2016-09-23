@@ -4,7 +4,5 @@ module.exports.color_settings = {
   yellow: 0xe3cc04,
   black: 0x5a5a5a,
   green: 0x16c118,
-  purple: 0xd046ff,
-  background: 0xf7f7f7,
-  font: 0x1d2129
+  purple: 0xd046ff
 };
