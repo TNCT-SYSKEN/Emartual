@@ -18,6 +18,12 @@ let before_position = [];
 // 前回のオブジェクトのサイズ
 let before_size = [];
 
+// objectコンテナに関して,指定の位置まで移動させる
+function moveObjectPosition(position){
+  object.position.x = position.x;
+  object.position.y = position.y;
+}
+
 // オブジェクトに必要なサイズの計算
 function CalcSize(textData, formData){
   // textのオブジェクトサイズ計算

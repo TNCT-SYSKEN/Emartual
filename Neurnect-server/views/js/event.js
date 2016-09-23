@@ -59,6 +59,12 @@ $('#submit').click(function (){
 
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
+
+    // 追加予定のオブジェクトに移動
+    moveObjectPosition({
+      "x": (-1 * upload_position.x) + renderer.width / 2,
+      "y": upload_position.y - renderer.height / 2
+    });
   }
 });
 
@@ -92,7 +98,10 @@ $('#reload').click(function (){
 });
 
 $('#debug-btn').click(function(){
-  $(this).parent().addClass('has-error');
+  moveObjectPosition({
+    "x": position_limit.x_max / 2,
+    "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
+  });
 });
 
 $('#graphic-form').change(function (){
@@ -109,22 +118,6 @@ $('#uploadtext').keyup(function(){
 // タグ名と色の対応
 let tag_data = null;
 
-// debug用
-tag_data = [
-  {
-    "tag": "hoge",
-    "color": 0x4661df
-  },
-  {
-    "tag": "fuga",
-    "color": 0xe3cc04
-  },
-  {
-    "tag": "piyo",
-    "color": 0x5a5a5a
-  }
-];
-
 socket.on('update_tag', function(update_tag) {
   tag_data.push(update_tag);
 });
@@ -139,6 +132,12 @@ socket.on('init_data', function(init_data){
       CreateObject(item);
     }
     DrawObject();
+
+    // objectの初期描画位置の変更
+    moveObjectPosition({
+      "x": position_limit.x_max / 2,
+      "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
+    });
   }
   init_data_isfirst = true;
 });
@@ -156,13 +155,6 @@ socket.on('update_data', function(update_data){
 });
 
 var position_limit = null;
-
-// debug用
-position_limit = {
-  "x_max": 823,
-  "y_max": 500,
-  "y_min": 50
-}
 
 socket.on('position_limit', function(position){
   position_limit = position;
