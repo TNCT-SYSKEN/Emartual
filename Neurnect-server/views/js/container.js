@@ -31,17 +31,25 @@ function CalcSize(textData, formData){
 
   // 描画オブジェクトのサイズ計算
   if (formData == ELLIPSE){
+    let bias = {
+      "x": 15,
+      "y": 15
+    };
     // Ellipse
     objectSize = {
-      "width":  CalctextObj.width * Math.sqrt(2) / 2 + 15,
-      "height": CalctextObj.height * Math.sqrt(2) / 2 + 15
+      "width":  CalctextObj.width * Math.sqrt(2) / 2 + bias.x,
+      "height": CalctextObj.height * Math.sqrt(2) / 2 + bias.y
     };
   }
   else if(formData == RECT){
-    // Rectの描画
+    let bias = {
+      "x": 45,
+      "y": 20
+    };
+    // Rect
     objectSize = {
-      "width":  CalctextObj.width + 45,
-      "height": CalctextObj.height + 20
+      "width":  CalctextObj.width + bias.x,
+      "height": CalctextObj.height + bias.y
     };
   }
 
@@ -53,22 +61,42 @@ function CalcSize(textData, formData){
 // 新しく作成したオブジェクトの配置の計算
 function CalcPosition(textData, formData, tagData){
   // 0, 1, 2, 3の4値の乱数取得
-  var form_rand = Math.floor(Math.random() * (4 - 0) + 0);
+  var form_rand = createRandomVal(4, 0);
 
   // 描画予定のオブジェクトの配置保存
   var objectPosition = null;
   // 描画予定のオブジェクトのサイズ計算
   var objectSize = CalcSize(textData, formData);
 
-  var scalar_x = Math.floor(Math.random() * (20 - 0) + 0);
-  var scalar_y = Math.floor(Math.random() * (30 - 0) + 0);
+  // バイアス(ランダム値)の最大値
+  var rand_max = {
+    "x": 20,
+    "y": 30
+  };
+
+  var bias = {
+    "x": createRandomVal(rand_max.x, 0),
+    "y": createRandomVal(rand_max.y, 0)
+  };
 
   var before_position_index = isTagIn(before_position, tagData);
   var before_size_index = isTagIn(before_size, tagData);
-  if(before_position_index === null || before_size_index === null){
-    // タグの初回挿入
 
-    console.log("通った");
+  // タグの初回挿入
+  if(before_position_index === null || before_size_index === null){
+    let bias_x = {
+      "min": 20,
+      "max": 70
+    };
+    // 10文字の日本語テキストを描画した際のサイズ
+    let textwidth_10em = 201;
+    // rectのもの(これが最大)
+    let graphicswidth_bias = 20;
+    objectPosition = {
+      "x": objectSize.width + position_limit.x_max + textwidth_10em + graphicswidth_bias + createRandomVal(bias_x.max, bias_x.min),
+      "y": createRandomVal(position_limit.y_max, position_limit.y_min)
+    };
+    console.log("タグの初回挿入要求");
 
     return objectPosition;
   }
@@ -77,29 +105,29 @@ function CalcPosition(textData, formData, tagData){
   switch(form_rand){
     case 0:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + scalar_x,
-        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + bias.x,
+        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + bias.y
       };
       break;
 
     case 1:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - scalar_x,
-        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - bias.x,
+        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + bias.y
       };
       break;
 
     case 2:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + scalar_x,
-        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + bias.x,
+        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - bias.y
       };
       break;
 
     case 3:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - scalar_x,
-        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - bias.x,
+        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - bias.y
       };
       break;
   }
@@ -169,6 +197,9 @@ function CreateObject(document){
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
 
+  // debug用
+  console.log(textObj.position);
+
   // オブジェクトのサイズ計算
   var objectSize = CalcSize(document.text, document.form);
 
@@ -177,8 +208,13 @@ function CreateObject(document){
     graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
   }
   else if(document.form == RECT){
+    // rect作成時のバイアス参考値
+    let bias = {
+      "x": 45,
+      "y": 20
+    };
     // Rectの描画
-    graphics.drawRect(document.position.x - (textObj.width + 45) / 2, document.position.y - (textObj.height + 20) / 2, objectSize.width, objectSize.height);
+    graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2, document.position.y - (textObj.height + bias.y) / 2, objectSize.width, objectSize.height);
   }
 
   // 前回のオブジェクトのサイズ

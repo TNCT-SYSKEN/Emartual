@@ -29,3 +29,13 @@ function addNewLine(data){
   // 末尾の改行削除
   return after_data.replace(/\n+$/g,'');
 }
+
+// 引数間でのランダム値を生成する
+function createRandomVal(first, second){
+  if(first > second){
+    return Math.floor(Math.random() * (first - second) + second);
+  }
+  else{
+    return Math.floor(Math.random() * (second - first) + first);
+  }
+}
