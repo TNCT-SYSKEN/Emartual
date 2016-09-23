@@ -1,4 +1,4 @@
-// MEMO: 抽出されたドキュメントはcallbackに渡すこととする
+ // MEMO: 抽出されたドキュメントはcallbackに渡すこととする
 // MEMO: 理由: 非同期I/OのためPosted.findが後から実行される可能性があるため
 // MEMO: 理由: つまるところundefinedの状態でmongoose-test.jsの処理が進む
 // MEMO: これを全てに適用して
@@ -85,7 +85,7 @@ module.exports.dbcatecount = function(category, callback) {
 };
 
 //xの最大値の抽出
-module.exports.dbposition_x_max =function(callback){
+module.exports.dbposition_x_max = function(callback){
   var Posted_data = this.mongoose.model('Posted_data');
 
   Posted_data.find({}, function(err, docs) {
@@ -96,7 +96,7 @@ module.exports.dbposition_x_max =function(callback){
 };
 
 //yの最大値の抽出
-module.exports.dbposition_y_max =function(callback){
+module.exports.dbposition_y_max = function(callback){
   var Posted_data = this.mongoose.model('Posted_data');
 
   Posted_data.find({}, function(err, docs) {
@@ -107,7 +107,7 @@ module.exports.dbposition_y_max =function(callback){
 };
 
 //yの最小値の抽出
-module.exports.dbposition_y_min =function(callback){
+module.exports.dbposition_y_min = function(callback){
   var Posted_data = this.mongoose.model('Posted_data');
 
   Posted_data.find({}, function(err,docs) {
