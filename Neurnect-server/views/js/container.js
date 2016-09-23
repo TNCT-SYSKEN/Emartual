@@ -33,8 +33,8 @@ function CalcSize(textData, formData){
   if (formData == ELLIPSE){
     // Ellipse
     objectSize = {
-      "width":  CalctextObj.width / 2 + 45,
-      "height": CalctextObj.height / 2 + 20
+      "width":  CalctextObj.width * Math.sqrt(2) / 2 + 15,
+      "height": CalctextObj.height * Math.sqrt(2) / 2 + 15
     };
   }
   else if(formData == RECT){
@@ -175,7 +175,6 @@ function CreateObject(document){
   if (document.form == ELLIPSE){
     // Ellipseの描画
     graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
-
   }
   else if(document.form == RECT){
     // Rectの描画
@@ -216,6 +215,7 @@ function DrawObject(){
 
   // オブジェクトコンテナをルートコンテナに追加
   stage.addChild(object);
+
   //ルートコンテナの描画
   renderer.render(stage);
 

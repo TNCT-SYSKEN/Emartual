@@ -2,20 +2,22 @@
 var socket = io.connect('http://localhost:1337/');
 
 $('#submit').click(function (){
+  // 入力されたテキスト
+  var upload_text = addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = removeSpace($("input#tag-select").val());
   var upload_position = CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), upload_tag);
 
   // エラー表示の初期化
-  $("input#uploadtext").parent().removeClass('has-error');
-  $("input#uploadtext").next().remove();
+  $("#uploadtext").parent().removeClass('has-error');
+  $("#uploadtext").next().remove();
   $("input#tag-select").parent().removeClass('has-error');
   $("input#tag-select").next().remove();
 
   // formのtext, tagが空行かの検出
-  if(isBlankLine($("input#uploadtext").val())){
-    $("input#uploadtext").parent().addClass('has-error');
-    $("input#uploadtext").after($("<span>").addClass('control-label').text("空行では送信できません"));
+  if(isBlankLine(upload_text)){
+    $("#uploadtext").parent().addClass('has-error');
+    $("#uploadtext").after($("<span>").addClass('control-label').text("空行では送信できません"));
   }
   else if(isBlankLine($("input#tag-select").val())){
     $("input#tag-select").parent().addClass('has-error');
@@ -24,9 +26,13 @@ $('#submit').click(function (){
   else{
     // データのemit
     socket.emit('upload_data', {
-      "text": $("input#uploadtext").val(),
+      "text": upload_text,
       "form": $("#graphic-form").val(),
+<<<<<<< HEAD
       "position": upload_position,
+=======
+      "position": CalcPosition(upload_text, $("#graphic-form").val(), upload_tag),
+>>>>>>> mainui
       "tag": upload_tag,
       "link": "",
       "date": new Date()
@@ -62,20 +68,22 @@ $('#submit').click(function (){
 
 $('#post').click(function (){
   // 入力要素の初期化
-  $('input#uploadtext').val('');
+  $('#uploadtext').val('');
   $('input#tag-select').val('');
   // エラー表示の初期化
-  $("input#uploadtext").parent().removeClass('has-error');
-  $("input#uploadtext").next().remove();
+  $("#uploadtext").parent().removeClass('has-error');
+  $("#uploadtext").next().remove();
   $("input#tag-select").parent().removeClass('has-error');
   $("input#tag-select").next().remove();
+  // 制限入力文字数表示の初期化
+  $('#uploadtext-limit').text(100);
 
   // 投稿フォーム表示
   $('.form').draggable();
   $('.form').fadeIn("fast");
 
   // #uploadtextに対するフォーカス
-  $('input#uploadtext').focus();
+  $('#uploadtext').focus();
 });
 
 $('#form_remove').click(function (){
@@ -87,7 +95,6 @@ $('#reload').click(function (){
   DrawObject();
 });
 
-
 $('#debug-btn').click(function(){
   $(this).parent().addClass('has-error');
 });
@@ -97,6 +104,10 @@ $('#graphic-form').change(function (){
 
   // 投稿フォーム後ろの変更をしたい
   console.log(str);
+});
+
+$('#uploadtext').keyup(function(){
+  $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
 
 // タグ名と色の対応
