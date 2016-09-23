@@ -141,6 +141,6 @@ socket.on('update_data', function(update_data){
 
 let position_limit = null;
 
-socket.on('position_edge', function(position_edge){
-  position_limit = position_edge;
+socket.on('position_limit', function(position){
+  position_limit = position;
 });
