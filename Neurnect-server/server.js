@@ -13,7 +13,6 @@ var SendFiles = require("./SendFiles.js");
 var color_settings = require("./color_settings.js")
 
 var dbmodule = new DBModule(mongoose);
-var color_code;
 
 dbmodule.dbdefine();
 dbmodule.tagdefine();
@@ -32,27 +31,44 @@ io.sockets.on("connection", function(socket){
 
   //DBへtagデータの受け渡しの要求
   dbmodule.tagall(function(init_tag){
-    init_tag =  color_settings.color_settings[color_code];
+    for(var i = 0; i < init_tag.length; i++){
+      init_tag[i].color = color_settings.color_settings[init_tag[i].color];
+    }
     io.sockets.emit("init_tag", init_tag);
-
   });
 
-  dbmodule.dbposition(function(position){
-    socket.on("position", position);
+  //positonの抽出
+  dbmodule.dbposition_x_max(function(position_x){
+    var x_max = position_x;
+
+    dbmodule.dbposition_y_max(function(position_y_max){
+      var y_max = position_y_max;
+
+      dbmodule.dbposition_y_min(function(position_y_min){
+        var y_min = position_y_min;
+
+        io.sockets.emit("position_limit", {
+          "x_max": x_max,
+          "y_max": y_max,
+          "y_min": y_min
+        });
+      });
+    });
   });
 
+  //tag情報の受け渡し
   socket.on('upload_tag', function(upload_tag){
     var propcount = Math.floor(Math.random() * (6 - 0) + 0);
     var count = 0;
     for (var result in color_settings.color_settings){
       if (propcount == count){
-        color_code = result;
+        upload_tag.color = result;
         break;
       }
       count++;
     }
-    color_code =  color_settings.color_settings[color_code];
-    dbmodule.taginsert(color_code);
+    dbmodule.taginsert(upload_tag);
+    upload_tag.color = color_settings.color_settings[upload_tag.color];
     io.sockets.emit("update_tag", upload_tag);
   });
 

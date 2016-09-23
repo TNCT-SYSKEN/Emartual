@@ -73,16 +73,6 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  var data = {
-    "text": "ほげほげ",
-    "form": "rect",
-    "tag": "fuga"
-  };
-
-  data.position = CalcPosition(data.text, data.form, data.tag);
-
-  CreateObject(data);
-
   DrawObject();
 });
 
@@ -98,23 +88,43 @@ $('#graphic-form').change(function (){
   console.log(str);
 });
 
-var tag_data = null;
+// タグ名と色の対応
+let tag_data = null;
 
-socket.on('init_tag', function(init_tag) {
-  tag_data = init_tag;
+tag_data = [{
+  "tag": "hoge",
+  "color": 0xd046ff
+},
+{
+  "tag": "fuga",
+  "color": 0xd046ff
+}];
+
+socket.on('update_tag', function(update_tag) {
+  console.log(update_tag);
+  tag_data.push(update_tag);
 });
 
-let init_isfirst = false;
+// 初回送信であるかの判定用
+let init_data_isfirst = false;
+let init_tag_isfirst = false;
 
 socket.on('init_data', function(init_data){
-  if(! init_isfirst){
+  if(! init_data_isfirst){
     for(let item of init_data){
       CreateObject(item);
     }
     DrawObject();
-
-    init_isfirst = true;
   }
+  init_data_isfirst = true;
+});
+
+socket.on('init_tag', function(init_tag) {
+  console.log(init_tag);
+  if(! init_tag_isfirst){
+    tag_data = init_tag;
+  }
+  init_tag_isfirst = true;
 });
 
 socket.on('update_data', function(update_data){
@@ -122,8 +132,6 @@ socket.on('update_data', function(update_data){
     DrawObject();
 });
 
-let tag_item = null;
-
-socket.on('init_tag', function(init_tag) {
-  tag_item = init_tag;
+socket.on("position_limit", function(position_limit){
+  console.log(position_limit);
 });
