@@ -13,7 +13,6 @@ var SendFiles = require("./SendFiles.js");
 var dbmodule = new DBModule(mongoose);
 
 dbmodule.dbdefine();
-dbmodule.dbreset();
 
 app.engine('ejs', ejs.renderFile);
 
