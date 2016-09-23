@@ -34,7 +34,7 @@ module.exports.dbtag = function(tag, callback) {
   });
 };
 
-//タグ毎に抽出　IDのみ
+//タグ毎に抽出 IDのみ
 module.exports.dbtagid = function(tag, callback) {
   var Posted_data = this.mongoose.model('Posted_data');
   Posted_data.find({ tag: tag }, function(err, docs) {
@@ -77,29 +77,42 @@ module.exports.dbcateid = function(category, callback) {
 //各カテゴリに対する投稿数
 module.exports.dbcatecount = function(category, callback) {
   var Posted_data = this.mongoose.model('Posted_data');
-  Posted_data.count({ cate: cate }, function(err, count) {
+  Posted_data.count({ category: category }, function(err, count) {
     if(err){ console.log(err); }
 
     callback(count);
   });
 };
 
-//ポジションの最大最小の確認
-module.exports.dbposition =function(callback){
+//xの最大値の抽出
+module.exports.dbposition_x_max =function(callback){
   var Posted_data = this.mongoose.model('Posted_data');
-  var position = {};
 
   Posted_data.find({}, function(err, docs) {
     if(err){console.log(err);}
-    position.x_max = docs[0].position;
+
+    callback(docs[0].position);
   }).select('position').sort('-position.x').limit(1);
+};
+
+//yの最大値の抽出
+module.exports.dbposition_y_max =function(callback){
+  var Posted_data = this.mongoose.model('Posted_data');
+
   Posted_data.find({}, function(err, docs) {
     if(err){console.log(err);}
-    position.y_max = docs[0].position;
+
+    callback(docs[0].position);
   }).select('position.y').sort('-position.y').limit(1);
+};
+
+//yの最小値の抽出
+module.exports.dbposition_y_min =function(callback){
+  var Posted_data = this.mongoose.model('Posted_data');
+
   Posted_data.find({}, function(err,docs) {
     if(err){console.log(err);}
-    position.y_min = docs[0].position;
-    callback(position);
+
+    callback(docs[0].position);
   }).select('position.y').sort('+position.y').limit(1);
 };
