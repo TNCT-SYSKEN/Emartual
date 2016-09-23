@@ -6,7 +6,7 @@ $('#submit').click(function (){
   var upload_text = addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = removeSpace($("input#tag-select").val());
-  var upload_position = CalcPosition($("input#uploadtext").val(), $("#graphic-form").val(), upload_tag);
+  var upload_position = CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
 
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
@@ -28,11 +28,7 @@ $('#submit').click(function (){
     socket.emit('upload_data', {
       "text": upload_text,
       "form": $("#graphic-form").val(),
-<<<<<<< HEAD
       "position": upload_position,
-=======
-      "position": CalcPosition(upload_text, $("#graphic-form").val(), upload_tag),
->>>>>>> mainui
       "tag": upload_tag,
       "link": "",
       "date": new Date()
