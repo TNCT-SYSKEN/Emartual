@@ -1,10 +1,8 @@
 module.exports.color_settings = {
-  blue: "#4661df",
-  red:  "#f3211e",
-  yellow: "#e3cc04",
-  black: "#5a5a5a",
-  green: "#16c118",
-  purple: "#d046ff",
-  background: "#f7f7f7",
-  font: "#1d2129"
+  blue: 0x4661df,
+  red:  0xf3211e,
+  yellow: 0xe3cc04,
+  black: 0x5a5a5a,
+  green: 0x16c118,
+  purple: 0xd046ff
 };

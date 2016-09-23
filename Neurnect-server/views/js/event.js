@@ -6,6 +6,7 @@ $('#submit').click(function (){
   var upload_text = addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = removeSpace($("input#tag-select").val());
+  var upload_position = CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
 
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
@@ -27,11 +28,21 @@ $('#submit').click(function (){
     socket.emit('upload_data', {
       "text": upload_text,
       "form": $("#graphic-form").val(),
-      "position": CalcPosition(upload_text, $("#graphic-form").val(), upload_tag),
+      "position": upload_position,
       "tag": upload_tag,
       "link": "",
       "date": new Date()
     });
+
+    if( upload_position.x > position_limit.x_max){
+      position_limit.x_max = upload_position.x;
+    }
+    if( upload_position.y > position_limit.y_max){
+      position_limit.y_max = upload_position.y;
+    }
+    if( upload_position.y < position_limit.y_min){
+      position_limit.y_min = upload_position.y;
+    }
 
     //新規タグ判定用
     var istag = false;
@@ -126,4 +137,10 @@ socket.on('init_tag', function(init_tag) {
 socket.on('update_data', function(update_data){
     CreateObject(update_data);
     DrawObject();
+});
+
+let position_limit = null;
+
+socket.on('position_limit', function(position){
+  position_limit = position;
 });
