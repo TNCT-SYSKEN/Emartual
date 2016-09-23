@@ -35,13 +35,13 @@ $('#submit').click(function (){
     });
 
     if( upload_position.x > position_limit.x_max){
-      position_limit.x_max = upload_position;
+      position_limit.x_max = upload_position.x;
     }
     if( upload_position.y > position_limit.y_max){
-      position_limit.y_max = upload_position;
+      position_limit.y_max = upload_position.y;
     }
     if( upload_position.y < position_limit.y_min){
-      position_limit.y_min = upload_position;
+      position_limit.y_min = upload_position.y;
     }
 
     //新規タグ判定用

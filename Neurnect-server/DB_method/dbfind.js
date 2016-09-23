@@ -1,4 +1,4 @@
- // MEMO: 抽出されたドキュメントはcallbackに渡すこととする
+// MEMO: 抽出されたドキュメントはcallbackに渡すこととする
 // MEMO: 理由: 非同期I/OのためPosted.findが後から実行される可能性があるため
 // MEMO: 理由: つまるところundefinedの状態でmongoose-test.jsの処理が進む
 // MEMO: これを全てに適用して
@@ -91,7 +91,7 @@ module.exports.dbposition_x_max = function(callback){
   Posted_data.find({}, function(err, docs) {
     if(err){console.log(err);}
 
-    callback(docs[0].position);
+    callback(docs[0].position.x);
   }).select('position').sort('-position.x').limit(1);
 };
 
@@ -102,7 +102,7 @@ module.exports.dbposition_y_max = function(callback){
   Posted_data.find({}, function(err, docs) {
     if(err){console.log(err);}
 
-    callback(docs[0].position);
+    callback(docs[0].position.y);
   }).select('position.y').sort('-position.y').limit(1);
 };
 
@@ -113,6 +113,6 @@ module.exports.dbposition_y_min = function(callback){
   Posted_data.find({}, function(err,docs) {
     if(err){console.log(err);}
 
-    callback(docs[0].position);
+    callback(docs[0].position.y);
   }).select('position.y').sort('+position.y').limit(1);
 };
