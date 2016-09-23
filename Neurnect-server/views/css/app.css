@@ -29,8 +29,12 @@ div.ellipse{
   height: 100px;
 }
 
-input#postdata{
-  border: none;
+#container{
+  z-index: 0;
+}
+
+.form{
+  z-index: 1000;
 }
 
 #uploadtext{

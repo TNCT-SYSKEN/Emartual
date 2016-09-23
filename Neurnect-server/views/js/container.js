@@ -2,7 +2,7 @@
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
 const ELLIPSE = "ellipse";
 const RECT = "rect";
-let renderer = new PIXI.autoDetectRenderer(window.innerWidth - 15, window.innerHeight, RENDERER_STYLE);
+let renderer = new PIXI.autoDetectRenderer($('#container').width(), window.innerHeight, RENDERER_STYLE);
 $('#container').append(renderer.view);
 
 // ルートコンテナの作成
@@ -102,7 +102,6 @@ function CalcPosition(textData, formData, tagData){
       "x": objectSize.width + position_limit.x_max + textwidth_10em + graphicswidth_bias + createRandomVal(bias_x.max, bias_x.min),
       "y": createRandomVal(position_limit.y_max, position_limit.y_min)
     };
-    console.log("タグの初回挿入要求");
 
     return objectPosition;
   }
@@ -155,6 +154,8 @@ function isTagIn(listobject, tag){
 
 // オブジェクトの挿入
 function CreateObject(document){
+  var tag_label = null;
+
   var tag_object_index = isTagIn(tag_object, document.tag);
 
   if(tag_object_index === null){
@@ -164,6 +165,9 @@ function CreateObject(document){
       "line": new PIXI.Graphics()
     });
     tag_object_index = isTagIn(tag_object, document.tag);
+
+    // タグ名のラベル表示
+    tag_label = new PIXI.Text("#" + document.tag, {fontSize:'20px', fill: 0x1d2129});
   }
 
   let line = tag_object[tag_object_index].line;
@@ -203,9 +207,6 @@ function CreateObject(document){
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
 
-  // debug用
-  console.log(textObj.position);
-
   // オブジェクトのサイズ計算
   var objectSize = CalcSize(document.text, document.form);
 
@@ -238,6 +239,19 @@ function CreateObject(document){
   object.addChildAt(line, 0);
   object.addChildAt(graphics, 1);
   object.addChildAt(textObj, 2);
+
+  // タグ名ラベルの追加
+  if(tag_label !== null){
+    // アンカー変更
+    tag_label.anchor.x = 0.5;
+    tag_label.anchor.y = 0.5;
+
+    // 配置変更
+    tag_label.position.x = textObj.position.x - objectSize.width - tag_label.width / 2;
+    tag_label.position.y = textObj.position.y - objectSize.height - tag_label.height / 2;
+
+    object.addChildAt(tag_label, 3);
+  }
 }
 
 // レンダラの描画開始
@@ -297,4 +311,8 @@ function onDragEnd(){
   this.dragging = false;
   // set the interaction data to null
   this.data = null;
+}
+
+function resizeContainer(){
+  renderer.resize($('#container').width(), window.innerHeight);
 }

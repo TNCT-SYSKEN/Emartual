@@ -1,6 +1,10 @@
 // Socket.IOコネクション
 var socket = io.connect('http://localhost:1337/');
 
+// ウィンドウリサイズ対応
+$(window).resize(resizeContainer)
+window.onorientationchange = resizeContainer;
+
 $('#submit').click(function (){
   // 入力されたテキスト
   var upload_text = addNewLine($("#uploadtext").val());
@@ -118,6 +122,24 @@ $('#uploadtext').keyup(function(){
 // タグ名と色の対応
 let tag_data = null;
 
+/*
+// debug用
+tag_data = [
+  {
+    "tag": "hoge",
+    "color": 0x4661df
+  },
+  {
+    "tag": "fuga",
+    "color": 0xe3cc04
+  },
+  {
+    "tag": "piyo",
+    "color": 0x5a5a5a
+  }
+];
+*/
+
 socket.on('update_tag', function(update_tag) {
   tag_data.push(update_tag);
 });
@@ -155,6 +177,15 @@ socket.on('update_data', function(update_data){
 });
 
 var position_limit = null;
+
+/*
+// debug用
+position_limit = {
+  "x_max": 823,
+  "y_max": 500,
+  "y_min": 50
+}
+*/
 
 socket.on('position_limit', function(position){
   position_limit = position;
