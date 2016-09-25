@@ -64,10 +64,13 @@ $('#submit').click(function (){
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
 
+    console.log(upload_position.x);
+    console.log(upload_position.y);
+
     // 追加予定のオブジェクトに移動
     moveObjectPosition({
-      "x": (-1 * upload_position.x) + renderer.width / 2,
-      "y": upload_position.y - renderer.height / 2
+      "x":  -1 * upload_position.x + renderer.width / 2,
+      "y": upload_position.y + renderer.height / 2
     });
   }
 });
@@ -103,7 +106,7 @@ $('#reload').click(function (){
 
 $('#debug-btn').click(function(){
   moveObjectPosition({
-    "x": position_limit.x_max / 2,
+    "x": Math.floor(position_limit.x_max / 2),
     "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
   });
 });
@@ -122,7 +125,6 @@ $('#uploadtext').keyup(function(){
 // タグ名と色の対応
 let tag_data = null;
 
-/*
 // debug用
 tag_data = [
   {
@@ -138,7 +140,6 @@ tag_data = [
     "color": 0x5a5a5a
   }
 ];
-*/
 
 socket.on('update_tag', function(update_tag) {
   tag_data.push(update_tag);
@@ -155,9 +156,11 @@ socket.on('init_data', function(init_data){
     }
     DrawObject();
 
+    console.log("最初" + (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2);
+
     // objectの初期描画位置の変更
     moveObjectPosition({
-      "x": position_limit.x_max / 2,
+      "x": (-1 * position_limit.x_max + renderer.width) / 2,
       "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
     });
   }
@@ -177,15 +180,12 @@ socket.on('update_data', function(update_data){
 });
 
 var position_limit = null;
-
-/*
 // debug用
 position_limit = {
-  "x_max": 823,
+  "x_max": 2000,
   "y_max": 500,
   "y_min": 50
-}
-*/
+};
 
 socket.on('position_limit', function(position){
   position_limit = position;
