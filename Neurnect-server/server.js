@@ -10,7 +10,7 @@ var setting = require("./setting.js");
 var mainUI = require("./mainUI.js");
 var DBModule = require("./DB_method/dbmodule.js");
 var SendFiles = require("./SendFiles.js");
-var color_settings = require("./color_settings.js")
+var color_settings = require("./color_settings.js");
 
 var dbmodule = new DBModule(mongoose);
 
@@ -25,16 +25,17 @@ app.use(favicon(__dirname + '/views/image/favicon.ico'));
 
 io.sockets.on("connection", function(socket){
   //初回ページの要求
-  dbmodule.dball(function(init){
-    io.sockets.emit("init", init.data);
-  });
-
-  //DBへtagデータの受け渡しの要求
-  dbmodule.tagall(function(init){
-    for(var i = 0; i < init.tag.length; i++){
-      init.tag[i].color = color_settings.color_settings[init.tag[i].color];
-    }
-    io.sockets.emit("init", init.tag);
+  dbmodule.dball(function(init_data){
+    //DBへtagデータの受け渡しの要求
+    dbmodule.tagall(function(init_tag){
+      for(var i = 0; i < init_tag.length; i++){
+        init_tag[i].color = color_settings.color_settings[init_tag[i].color];
+      }
+      io.sockets.emit("init", {
+        "data": init_data,
+        "tag": init_tag
+      });
+    });
   });
 
   //positonの抽出
