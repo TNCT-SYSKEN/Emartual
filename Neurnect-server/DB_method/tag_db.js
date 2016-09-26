@@ -30,3 +30,14 @@ module.exports.tagall = function(callback) {
     callback(docs);
   });
 };
+
+// タグ名1件検索
+module.exports.tagfindone = function(tag, callback) {
+  var Tag = this.mongoose.model('Tag');
+  Tag.findOne({tag: tag}, function(err, docs) {
+    if(err){ console.log(err); }
+
+    // callbackの起動
+    callback(docs);
+  });
+};
