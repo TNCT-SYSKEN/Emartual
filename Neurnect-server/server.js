@@ -58,28 +58,39 @@ io.sockets.on("connection", function(socket){
   });
 
   //tag情報の受け渡し
-  socket.on('upload_tag', function(upload_tag){
-    var propcount = Math.floor(Math.random() * (6 - 0) + 0);
-    var count = 0;
-    var update_tag = null;
-    for (var result in color_settings.color_settings){
-      if (propcount == count){
-        upload_tag.color = result;
-        break;
-      }
-      count++;
-    }
-    dbmodule.taginsert(upload_tag);
-    update_tag.tag = upload_tag.tag;
-    update_tag.color = color_settings.color_settings[upload_tag.color];
-    io.sockets.emit("update_tag", update_tag);
-  });
+  socket.on('upload', function(upload){
+      var propcount = Math.floor(Math.random() * (6 - 0) + 0);
+      var count = 0;
+      var update = null;
 
-  socket.on('upload_data', function(upload_data){
-    dbmodule.dbinsert(upload_data);
-    io.sockets.emit("update_data", upload_data);
+      if(upload.isnewtag){
+        for (var result in color_settings.color_settings){
+          if (propcount == count){
+            update.color = result;
+            break;
+          }
+          count++;
+        }
+        dbmodule.taginsert({
+          "tag": upload.tag,
+          "color": upload.tag.color
+        });
+      }
+      else{
+        dbmodule.tagfindone(upload.tag);
+      }
+
+      update.tag = upload.tag;
+      update.color = color_settings.color_settings[upload.color];
+
+      dbmodule.dbinsert(upload.data);
+      io.sockets.emit("update", {
+        "data": upload.data,
+        "tag": update.tag,
+        "color": update.color
+      });
+    });
   });
-});
 
 SendFiles.send_Files(app);
 
