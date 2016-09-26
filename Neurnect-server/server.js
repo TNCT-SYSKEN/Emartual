@@ -62,6 +62,7 @@ io.sockets.on("connection", function(socket){
       var propcount = Math.floor(Math.random() * (6 - 0) + 0);
       var count = 0;
       var update_tag = null;
+      update_tag.tag = upload.data.tag;
 
       if(upload.isnewtag){
         for (var result in color_settings.color_settings){
@@ -72,7 +73,7 @@ io.sockets.on("connection", function(socket){
           count++;
         }
         dbmodule.taginsert({
-          "tag": upload.data.tag,
+          "tag": update_tag.tag,
           "color": update_tag.color
         });
       }
@@ -82,8 +83,7 @@ io.sockets.on("connection", function(socket){
         });
       }
 
-      update_tag.tag = upload.data.tag;
-      update_tag.color = color_settings.color_settings[upload.color];
+      update_tag.color = color_settings.color_settings[update_tag.color];
 
       dbmodule.dbinsert(upload.data);
       io.sockets.emit("update", {
