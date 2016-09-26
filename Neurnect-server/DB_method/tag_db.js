@@ -3,7 +3,7 @@ module.exports.tagdefine = function() {
   var Schema = this.mongoose.Schema;
 
   var TagSchema = new Schema ({
-    tag:    { type: String, required: true, unique: true },
+    tag:    { type: String, required: true },
     color:  { type: String, enum: ['blue', 'red', 'yellow', 'black', 'green', 'purple'] }
   });
   var collection = "Tag_data";

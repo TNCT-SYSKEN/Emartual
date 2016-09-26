@@ -92,6 +92,7 @@ $('#graphic-form').change(function (){
 let tag_data = null;
 
 socket.on('update_tag', function(update_tag) {
+  console.log(update_tag);
   tag_data.push(update_tag);
 });
 
@@ -110,6 +111,7 @@ socket.on('init_data', function(init_data){
 });
 
 socket.on('init_tag', function(init_tag) {
+  console.log(init_tag);
   if(! init_tag_isfirst){
     tag_data = init_tag;
   }
@@ -119,4 +121,8 @@ socket.on('init_tag', function(init_tag) {
 socket.on('update_data', function(update_data){
     CreateObject(update_data);
     DrawObject();
+});
+
+socket.on("position_limit", function(position_limit){
+  console.log(position_limit);
 });
