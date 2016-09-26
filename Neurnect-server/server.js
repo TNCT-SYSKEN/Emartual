@@ -25,16 +25,16 @@ app.use(favicon(__dirname + '/views/image/favicon.ico'));
 
 io.sockets.on("connection", function(socket){
   //初回ページの要求
-  dbmodule.dball(function(init_data){
-    io.sockets.emit("init_data", init_data);
+  dbmodule.dball(function(init){
+    io.sockets.emit("init", init.data);
   });
 
   //DBへtagデータの受け渡しの要求
-  dbmodule.tagall(function(init_tag){
-    for(var i = 0; i < init_tag.length; i++){
-      init_tag[i].color = color_settings.color_settings[init_tag[i].color];
+  dbmodule.tagall(function(init){
+    for(var i = 0; i < init.tag.length; i++){
+      init.tag[i].color = color_settings.color_settings[init.tag[i].color];
     }
-    io.sockets.emit("init_tag", init_tag);
+    io.sockets.emit("init", init.tag);
   });
 
   //positonの抽出
@@ -60,6 +60,7 @@ io.sockets.on("connection", function(socket){
   socket.on('upload_tag', function(upload_tag){
     var propcount = Math.floor(Math.random() * (6 - 0) + 0);
     var count = 0;
+    var update_tag = null;
     for (var result in color_settings.color_settings){
       if (propcount == count){
         upload_tag.color = result;
@@ -68,8 +69,9 @@ io.sockets.on("connection", function(socket){
       count++;
     }
     dbmodule.taginsert(upload_tag);
-    upload_tag.color = color_settings.color_settings[upload_tag.color];
-    io.sockets.emit("update_tag", upload_tag);
+    update_tag.tag = upload_tag.tag;
+    update_tag.color = color_settings.color_settings[upload_tag.color];
+    io.sockets.emit("update_tag", update_tag);
   });
 
   socket.on('upload_data', function(upload_data){
