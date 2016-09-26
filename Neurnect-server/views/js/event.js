@@ -28,14 +28,26 @@ $('#submit').click(function (){
     $("input#tag-select").after($("<span>").addClass('control-label').text("空行では送信できません"));
   }
   else{
+    //新規タグ判定用
+    var isnewtag = true;
+
+    for(var i = 0; i < tag_data.length; ++i){
+        if(tag_data[i].tag == upload_tag){
+          isnewtag = false;
+        }
+    }
+
     // データのemit
-    socket.emit('upload_data', {
-      "text": upload_text,
-      "form": $("#graphic-form").val(),
-      "position": upload_position,
-      "tag": upload_tag,
-      "link": "",
-      "date": new Date()
+    socket.emit('upload', {
+      "data": {
+        "text": upload_text,
+        "form": $("#graphic-form").val(),
+        "position": upload_position,
+        "tag": upload_tag,
+        "link": "",
+        "date": new Date()
+      },
+      "isnewtag": isnewtag
     });
 
     if( upload_position.x > position_limit.x_max){
@@ -46,19 +58,6 @@ $('#submit').click(function (){
     }
     if( upload_position.y < position_limit.y_min){
       position_limit.y_min = upload_position.y;
-    }
-
-    //新規タグ判定用
-    var istag = false;
-
-    for(var i = 0; i < tag_data.length; ++i){
-        if(tag_data[i].tag == upload_tag){
-          istag = true;
-        }
-    }
-
-    if(! istag){
-      socket.emit('upload_tag', {"tag": upload_tag});
     }
 
     // 投稿フォーム非表示
@@ -126,6 +125,7 @@ $('#uploadtext').keyup(function(){
 let tag_data = null;
 
 // debug用
+/*
 tag_data = [
   {
     "tag": "hoge",
@@ -140,55 +140,42 @@ tag_data = [
     "color": 0x5a5a5a
   }
 ];
-
-socket.on('update_tag', function(update_tag) {
-  console.log(update_tag);
-  tag_data.push(update_tag);
-});
+*/
 
 // 初回送信であるかの判定用
-let init_data_isfirst = false;
-let init_tag_isfirst = false;
+let init_isfirst = false;
 
-socket.on('init_data', function(init_data){
-  if(! init_data_isfirst){
-    for(let item of init_data){
+socket.on('init', function(init){
+  if(! init_isfirst){
+    tag_data = init.tag;
+
+    for(let item of init.data){
       CreateObject(item);
     }
     DrawObject();
+  }
+  init_isfirst = true;
+});
 
-    console.log("最初" + (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2);
+socket.on('update', function(update){
+    tag_data.push(update.tag);
+
+    CreateObject(update.data);
+    DrawObject();
+});
+
+var position_limit = null;
+
+socket.on('position_limit', function(position){
+  if(position_limit === null){
+    position_limit = position;
 
     // objectの初期描画位置の変更
     moveObjectPosition({
       "x": (-1 * position_limit.x_max + renderer.width) / 2,
       "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
     });
+
+    console.log("最初" + (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2);
   }
-  init_data_isfirst = true;
-});
-
-socket.on('init_tag', function(init_tag) {
-  console.log(init_tag);
-  if(! init_tag_isfirst){
-    tag_data = init_tag;
-  }
-  init_tag_isfirst = true;
-});
-
-socket.on('update_data', function(update_data){
-    CreateObject(update_data);
-    DrawObject();
-});
-
-var position_limit = null;
-// debug用
-position_limit = {
-  "x_max": 2000,
-  "y_max": 500,
-  "y_min": 50
-};
-
-socket.on('position_limit', function(position){
-  position_limit = position;
 });
