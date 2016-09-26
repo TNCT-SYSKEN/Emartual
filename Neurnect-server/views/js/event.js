@@ -142,6 +142,7 @@ tag_data = [
 ];
 
 socket.on('update_tag', function(update_tag) {
+  console.log(update_tag);
   tag_data.push(update_tag);
 });
 
@@ -168,6 +169,7 @@ socket.on('init_data', function(init_data){
 });
 
 socket.on('init_tag', function(init_tag) {
+  console.log(init_tag);
   if(! init_tag_isfirst){
     tag_data = init_tag;
   }
