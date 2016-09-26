@@ -91,15 +91,6 @@ $('#graphic-form').change(function (){
 // タグ名と色の対応
 let tag_data = null;
 
-tag_data = [{
-  "tag": "hoge",
-  "color": 0xd046ff
-},
-{
-  "tag": "fuga",
-  "color": 0xd046ff
-}];
-
 socket.on('update_tag', function(update_tag) {
   console.log(update_tag);
   tag_data.push(update_tag);
