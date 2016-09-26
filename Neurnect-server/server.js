@@ -61,33 +61,34 @@ io.sockets.on("connection", function(socket){
   socket.on('upload', function(upload){
       var propcount = Math.floor(Math.random() * (6 - 0) + 0);
       var count = 0;
-      var update = null;
+      var update_tag = null;
 
       if(upload.isnewtag){
         for (var result in color_settings.color_settings){
           if (propcount == count){
-            update.color = result;
+            update_tag.color = result;
             break;
           }
           count++;
         }
         dbmodule.taginsert({
-          "tag": upload.tag,
-          "color": upload.tag.color
+          "tag": upload.data.tag,
+          "color": update_tag.color
         });
       }
       else{
-        dbmodule.tagfindone(upload.tag);
+        dbmodule.tagfindone(upload.data.tag, function(doc){
+          update_tag.color = doc.color;
+        });
       }
 
-      update.tag = upload.tag;
-      update.color = color_settings.color_settings[upload.color];
+      update_tag.tag = upload.data.tag;
+      update_tag.color = color_settings.color_settings[upload.color];
 
       dbmodule.dbinsert(upload.data);
       io.sockets.emit("update", {
         "data": upload.data,
-        "tag": update.tag,
-        "color": update.color
+        "tag": update_tag
       });
     });
   });
