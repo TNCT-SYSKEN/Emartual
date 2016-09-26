@@ -78,7 +78,7 @@ io.sockets.on("connection", function(socket){
         });
       }
       else{
-        dbmodule.tagfindone(upload.data.tag, function(doc){
+        dbmodule.tagfindone(update_tag.tag, function(doc){
           update_tag.color = doc.color;
         });
       }
