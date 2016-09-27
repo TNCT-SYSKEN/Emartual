@@ -1,8 +1,8 @@
 // Socket.IOコネクション
-var socket = io.connect('http://localhost:1337/');
+var socket = io.connect(location.href);
 
 // ウィンドウリサイズ対応
-$(window).resize(resizeContainer)
+$(window).resize(resizeContainer);
 window.onorientationchange = resizeContainer;
 
 $('#submit').click(function (){
@@ -32,9 +32,9 @@ $('#submit').click(function (){
     var isnewtag = true;
 
     for(var i = 0; i < tag_data.length; ++i){
-        if(tag_data[i].tag == upload_tag){
-          isnewtag = false;
-        }
+      if(tag_data[i].tag == upload_tag){
+        isnewtag = false;
+      }
     }
 
     // データのemit
@@ -63,13 +63,10 @@ $('#submit').click(function (){
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
 
-    console.log(upload_position.x);
-    console.log(upload_position.y);
-
     // 追加予定のオブジェクトに移動
     moveObjectPosition({
-      "x":  -1 * upload_position.x + renderer.width / 2,
-      "y": upload_position.y + renderer.height / 2
+      "x": -1 * upload_position.x + renderer.width / 2,
+      "y": -1 * upload_position.y + renderer.height / 2
     });
   }
 });
@@ -101,11 +98,9 @@ $('#form_remove').click(function (){
 
 $('#reload').click(function (){
   DrawObject();
-});
 
-$('#debug-btn').click(function(){
   moveObjectPosition({
-    "x": Math.floor(position_limit.x_max / 2),
+    "x": (-1 * position_limit.x_max + renderer.width) / 2,
     "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
   });
 });
@@ -124,29 +119,11 @@ $('#uploadtext').keyup(function(){
 // タグ名と色の対応
 let tag_data = null;
 
-// debug用
-/*
-tag_data = [
-  {
-    "tag": "hoge",
-    "color": 0x4661df
-  },
-  {
-    "tag": "fuga",
-    "color": 0xe3cc04
-  },
-  {
-    "tag": "piyo",
-    "color": 0x5a5a5a
-  }
-];
-*/
-
 // 初回送信であるかの判定用
-let init_isfirst = false;
+let init_isfirst = true;
 
 socket.on('init', function(init){
-  if(! init_isfirst){
+  if(init_isfirst){
     tag_data = init.tag;
 
     for(let item of init.data){
@@ -154,14 +131,14 @@ socket.on('init', function(init){
     }
     DrawObject();
   }
-  init_isfirst = true;
+  init_isfirst = false;
 });
 
 socket.on('update', function(update){
-    tag_data.push(update.tag);
+  tag_data.push(update.tag);
 
-    CreateObject(update.data);
-    DrawObject();
+  CreateObject(update.data);
+  DrawObject();
 });
 
 var position_limit = null;
@@ -175,7 +152,5 @@ socket.on('position_limit', function(position){
       "x": (-1 * position_limit.x_max + renderer.width) / 2,
       "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
     });
-
-    console.log("最初" + (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2);
   }
 });
