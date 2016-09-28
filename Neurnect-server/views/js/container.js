@@ -77,7 +77,7 @@ function CalcPosition(textData, formData, tagData){
   // バイアス(ランダム値)の最大値
   var rand_max = {
     "x": 20,
-    "y": 30
+    "y": 200
   };
 
   var bias = {
