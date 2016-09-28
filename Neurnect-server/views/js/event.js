@@ -50,16 +50,6 @@ $('#submit').click(function (){
       "isnewtag": isnewtag
     });
 
-    if( upload_position.x > position_limit.x_max){
-      position_limit.x_max = upload_position.x;
-    }
-    if( upload_position.y > position_limit.y_max){
-      position_limit.y_max = upload_position.y;
-    }
-    if( upload_position.y < position_limit.y_min){
-      position_limit.y_min = upload_position.y;
-    }
-
     // 投稿フォーム非表示
     $('.form').fadeOut("fast");
 
@@ -105,13 +95,6 @@ $('#reload').click(function (){
   });
 });
 
-$('#graphic-form').change(function (){
-  var str = $(this).val();
-
-  // 投稿フォーム後ろの変更をしたい
-  console.log(str);
-});
-
 $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
@@ -139,6 +122,16 @@ socket.on('update', function(update){
 
   CreateObject(update.data);
   DrawObject();
+
+  if( update.data.position.x > position_limit.x_max){
+    position_limit.x_max = update.data.position.x;
+  }
+  if( update.data.position.y > position_limit.y_max){
+    position_limit.y_max = update.data.position.y;
+  }
+  else if( update.data.position.y < position_limit.y_min){
+    position_limit.y_min = update.data.position.y;
+  }
 });
 
 var position_limit = null;
