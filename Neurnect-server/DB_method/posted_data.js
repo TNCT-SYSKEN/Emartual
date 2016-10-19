@@ -11,7 +11,7 @@ module.exports.dbdefine = function() {
     position:    { x: { type: Number, required: true }, y: { type: Number, required: true } },
     // MEMO: 仮にプロパティ名をcategoryに変更しているので何とかしてください
     // MEMO: ついでに設計書も変えてください
-    category:   { type: String, enum: ['normal', 'sports'], default: "normal" },
+    category:   { type: String, enum: ['normal', 'conversation'], default: "normal" },
     tag:    { type: String, required: true },
     like:   { type: Number, default: 0 },
     link:   { type: String },
