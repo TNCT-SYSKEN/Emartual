@@ -2,7 +2,7 @@
 const RENDERER_STYLE = {antialias: true, backgroundColor: 0xf7f7f7};
 const ELLIPSE = "ellipse";
 const RECT = "rect";
-let renderer = new PIXI.autoDetectRenderer(window.innerWidth - 15, window.innerHeight, RENDERER_STYLE);
+let renderer = new PIXI.autoDetectRenderer($('#container').width(), window.innerHeight, RENDERER_STYLE);
 $('#container').append(renderer.view);
 
 // ルートコンテナの作成
@@ -18,6 +18,12 @@ let before_position = [];
 // 前回のオブジェクトのサイズ
 let before_size = [];
 
+// objectコンテナに関して,指定の位置まで移動させる
+function moveObjectPosition(position){
+  object.position.x = position.x;
+  object.position.y = position.y;
+}
+
 // オブジェクトに必要なサイズの計算
 function CalcSize(textData, formData){
   // textのオブジェクトサイズ計算
@@ -31,17 +37,25 @@ function CalcSize(textData, formData){
 
   // 描画オブジェクトのサイズ計算
   if (formData == ELLIPSE){
+    let bias = {
+      "x": 15,
+      "y": 15
+    };
     // Ellipse
     objectSize = {
-      "width":  CalctextObj.width / 2 + 45,
-      "height": CalctextObj.height / 2 + 20
+      "width":  CalctextObj.width * Math.sqrt(2) / 2 + bias.x,
+      "height": CalctextObj.height * Math.sqrt(2) / 2 + bias.y
     };
   }
   else if(formData == RECT){
-    // Rectの描画
+    let bias = {
+      "x": 45,
+      "y": 20
+    };
+    // Rect
     objectSize = {
-      "width":  CalctextObj.width + 45,
-      "height": CalctextObj.height + 20
+      "width":  CalctextObj.width + bias.x,
+      "height": CalctextObj.height + bias.y
     };
   }
 
@@ -53,22 +67,41 @@ function CalcSize(textData, formData){
 // 新しく作成したオブジェクトの配置の計算
 function CalcPosition(textData, formData, tagData){
   // 0, 1, 2, 3の4値の乱数取得
-  var form_rand = Math.floor(Math.random() * (4 - 0) + 0);
+  var form_rand = createRandomVal(4, 0);
 
   // 描画予定のオブジェクトの配置保存
   var objectPosition = null;
   // 描画予定のオブジェクトのサイズ計算
   var objectSize = CalcSize(textData, formData);
 
-  var scalar_x = Math.floor(Math.random() * (20 - 0) + 0);
-  var scalar_y = Math.floor(Math.random() * (30 - 0) + 0);
+  // バイアス(ランダム値)の最大値
+  var rand_max = {
+    "x": 20,
+    "y": 200
+  };
+
+  var bias = {
+    "x": createRandomVal(rand_max.x, 0),
+    "y": createRandomVal(rand_max.y, 0)
+  };
 
   var before_position_index = isTagIn(before_position, tagData);
   var before_size_index = isTagIn(before_size, tagData);
-  if(before_position_index === null || before_size_index === null){
-    // タグの初回挿入
 
-    console.log("通った");
+  // タグの初回挿入
+  if(before_position_index === null || before_size_index === null){
+    let bias_x = {
+      "min": 20,
+      "max": 70
+    };
+    // 10文字の日本語テキストを描画した際のサイズ
+    let textwidth_10em = 201;
+    // rectのもの(これが最大)
+    let graphicswidth_bias = 20;
+    objectPosition = {
+      "x": objectSize.width + position_limit.x_max + textwidth_10em + graphicswidth_bias + createRandomVal(bias_x.max, bias_x.min),
+      "y": createRandomVal(position_limit.y_max, position_limit.y_min)
+    };
 
     return objectPosition;
   }
@@ -77,29 +110,29 @@ function CalcPosition(textData, formData, tagData){
   switch(form_rand){
     case 0:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + scalar_x,
-        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + bias.x,
+        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + bias.y
       };
       break;
 
     case 1:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - scalar_x,
-        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - bias.x,
+        "y": before_position[before_position_index].y + before_size[before_size_index].height + objectSize.height + bias.y
       };
       break;
 
     case 2:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + scalar_x,
-        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width + bias.x,
+        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - bias.y
       };
       break;
 
     case 3:
       objectPosition = {
-        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - scalar_x,
-        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - scalar_y
+        "x": before_position[before_position_index].x + before_size[before_size_index].width + objectSize.width - bias.x,
+        "y": before_position[before_position_index].y - before_size[before_size_index].height - objectSize.height - bias.y
       };
       break;
   }
@@ -121,6 +154,8 @@ function isTagIn(listobject, tag){
 
 // オブジェクトの挿入
 function CreateObject(document){
+  var tag_label = null;
+
   var tag_object_index = isTagIn(tag_object, document.tag);
 
   if(tag_object_index === null){
@@ -130,6 +165,9 @@ function CreateObject(document){
       "line": new PIXI.Graphics()
     });
     tag_object_index = isTagIn(tag_object, document.tag);
+
+    // タグ名のラベル表示
+    tag_label = new PIXI.Text("#" + document.tag, {fontSize:'20px', fill: 0x1d2129});
   }
 
   let line = tag_object[tag_object_index].line;
@@ -175,11 +213,15 @@ function CreateObject(document){
   if (document.form == ELLIPSE){
     // Ellipseの描画
     graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
-
   }
   else if(document.form == RECT){
+    // rect作成時のバイアス参考値
+    let bias = {
+      "x": 45,
+      "y": 20
+    };
     // Rectの描画
-    graphics.drawRect(document.position.x - (textObj.width + 45) / 2, document.position.y - (textObj.height + 20) / 2, objectSize.width, objectSize.height);
+    graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2, document.position.y - (textObj.height + bias.y) / 2, objectSize.width, objectSize.height);
   }
 
   // 前回のオブジェクトのサイズ
@@ -197,6 +239,19 @@ function CreateObject(document){
   object.addChildAt(line, 0);
   object.addChildAt(graphics, 1);
   object.addChildAt(textObj, 2);
+
+  // タグ名ラベルの追加
+  if(tag_label !== null){
+    // アンカー変更
+    tag_label.anchor.x = 0.5;
+    tag_label.anchor.y = 0.5;
+
+    // 配置変更
+    tag_label.position.x = textObj.position.x - objectSize.width - tag_label.width / 2;
+    tag_label.position.y = textObj.position.y - objectSize.height - tag_label.height / 2;
+
+    object.addChildAt(tag_label, 3);
+  }
 }
 
 // レンダラの描画開始
@@ -216,6 +271,7 @@ function DrawObject(){
 
   // オブジェクトコンテナをルートコンテナに追加
   stage.addChild(object);
+
   //ルートコンテナの描画
   renderer.render(stage);
 
@@ -255,4 +311,8 @@ function onDragEnd(){
   this.dragging = false;
   // set the interaction data to null
   this.data = null;
+}
+
+function resizeContainer(){
+  renderer.resize($('#container').width(), window.innerHeight);
 }

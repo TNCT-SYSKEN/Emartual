@@ -1,16 +1,23 @@
 # Neurnect
 
-`タグで繋がるニューロンSNS`
+`タグで繋がるニューロンSNS`  
+URL: http://neurnect.sysken.org/
 
 ## Summary
 
-後々書きましょう
+投稿されるメッセージ同士に関連性を持たせる  
+↓  
+メッセージがつながる  
+↓  
+見ていて楽しい  
+↓  
+:+1:
 
 ## Member
   * [Liao40](https://github.com/Liao40)
-    - 担当 webサーバー
+    - 担当 webサーバ
   * [Syaz0326](https://github.com/Syaz0326)
-    - 担当 DBサーバー
+    - 担当 データベース
   * [rikyuusima](https://github.com/rikyuusima)
     - 担当 webフロント
 

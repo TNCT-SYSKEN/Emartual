@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title>Neurnect Main</title>
+    <title>Neurnect</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.0.0/pixi.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
@@ -30,19 +30,7 @@
     <!-- 投稿フォーム -->
     <div class="form col-sm-offset-3 col-sm-6">
       <a class="btn btn-default pull-right close" id="form_remove"><span class="glyphicon glyphicon-remove-circle"></span></a>
-      <div class="ellipse">
         <form>
-          <div class="form-group">
-            <label class="control-label">Text:</label>
-            <input type="text" class="form-control" id="uploadtext" placeholder="メインテキスト">
-          </div>
-          <div class="form-group">
-            <a class="btn btn-primary form-control" id="submit">送信</a>
-          </div>
-          <div class="form-group">
-            <label class="control-label">Tag:</label>
-            <input type="tag" class="form-control" id="tag-select" placeholder="タグ">
-          </div>
           <div class="form-group">
             <label class="control-label">Form:</label>
             <select class="selectpicker" id="graphic-form">
@@ -50,15 +38,23 @@
               <option>rect</option>
             </select>
           </div>
-          <div class="form-group">
-            <input type="button" class="form-control btn-primary" id="debug-btn" value="デバッグ用">
+          <div class="col-sm-6 form-group">
+            <label class="control-label">Text:</label>
+            <span class="control-label" id="uploadtext-limit">100</span>
+            <textarea class="form-control" id="uploadtext" maxlength="100" placeholder="メインテキスト"></textarea>
+          </div>
+          <div class="col-sm-6 form-group">
+            <label class="control-label">Tag:</label>
+            <input type="tag" class="form-control" id="tag-select" placeholder="タグ">
+          </div>
+          <div class="col-sm-6 form-group">
+            <a class="btn btn-primary form-control" id="submit">送信</a>
           </div>
         </form>
-      </div>
     </div>
 
     <!-- 描画コンテナ -->
-    <div id="container"></div>
+    <div class="col-sm-12" id="container"></div>
 
     <script type="text/ecmascript" src="/js/typical.js"></script>
     <script type="text/ecmascript" src="/js/container.js"></script>

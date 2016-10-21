@@ -14,7 +14,9 @@ a.btn{
 div.form{
   background-color: white;
   height: auto;
-  border: inset;
+  border: solid;
+  border-
+  border-color: #1d2129;
   display: none;
   position: absolute;
 }
@@ -25,10 +27,20 @@ div.ellipse{
   border-color: black;
   margin: 10px;
   border-radius: 50%;
-  width: 200px;
-  height: 100px;
+  width: 500px;
+  height: 250px;
+  position: absolute;
+  z-index: 1001;
 }
 
-input#postdata{
-  border: none;
+#container{
+  z-index: 0;
+}
+
+.form{
+  z-index: 1000;
+}
+
+#uploadtext{
+  resize: none;
 }
