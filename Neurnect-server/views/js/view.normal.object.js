@@ -1,5 +1,5 @@
 // コンストラクタ
-function Normal(){
+function Normal_View(){
   // オブジェクトコンテナの作成
   this.object = new PIXI.Container();
 }
@@ -7,24 +7,24 @@ function Normal(){
 // プロパティ
 
 // オブジェクトコンテナ
-Normal.object = new PIXI.Container();
+Normal_View.object = new PIXI.Container();
 // Graphicsコンテナとlineのコンテナをタグ毎に管理
-Normal.tag_object = [];
+Normal_View.tag_object = [];
 
 // 前回のオブジェクトの位置
-Normal.before_position = [];
+Normal_View.before_position = [];
 
 // 前回のオブジェクトのサイズ
-Normal.before_size = [];
+Normal_View.before_size = [];
 
 // objectコンテナに関して,指定の位置まで移動させる
-Normal.moveObjectPosition = function(position){
-  this.position.x = position.x;
-  this.position.y = position.y;
+Normal_View.moveObjectPosition = function(position){
+  this.object.position.x = position.x;
+  this.object.position.y = position.y;
 };
 
 // オブジェクトに必要なサイズの計算
-Normal.CalcSize = function(textData, formData){
+Normal_View.CalcSize = function(textData, formData){
   // textのオブジェクトサイズ計算
   var CalctextObj = new PIXI.Text(textData, {fontSize:'20px', fill: 0x1d2129});
 
@@ -64,7 +64,7 @@ Normal.CalcSize = function(textData, formData){
 };
 
 // 新しく作成したオブジェクトの配置の計算
-Normal.CalcPosition = function(textData, formData, tagData){
+Normal_View.CalcPosition = function(textData, formData, tagData){
   // 0, 1, 2, 3の4値の乱数取得
   var form_rand = this.createRandomVal(4, 0);
 
@@ -141,7 +141,7 @@ Normal.CalcPosition = function(textData, formData, tagData){
 
 // 引数のオブジェクトに引数のタグが存在しているか
 // 存在している場合は配列のインデックス，居ない場合はnullを返す
-Normal.isTagIn = function(listobject, tag){
+Normal_View.isTagIn = function(listobject, tag){
   for(var i = 0; i < listobject.length; i++){
     if(listobject[i].tag == tag){
       return i;
@@ -152,32 +152,32 @@ Normal.isTagIn = function(listobject, tag){
 };
 
 // オブジェクトの挿入
-Normal.CreateObject = function(document){
+Normal_View.CreateObject = function(document){
   var tag_label = null;
 
-  var tag_object_index = this.isTagIn(tag_object, document.tag);
+  var tag_object_index = this.isTagIn(this.tag_object, document.tag);
 
   if(tag_object_index === null){
-    tag_object.push({
+    this.tag_object.push({
       "tag": document.tag,
       "graphics": new PIXI.Graphics(),
       "line": new PIXI.Graphics()
     });
-    tag_object_index = this.isTagIn(tag_object, document.tag);
+    tag_object_index = this.isTagIn(this.tag_object, document.tag);
 
     // タグ名のラベル表示
     tag_label = new PIXI.Text("#" + document.tag, {fontSize:'20px', fill: 0x1d2129});
   }
 
-  let line = tag_object[tag_object_index].line;
-  let graphics = tag_object[tag_object_index].graphics;
+  let line = this.tag_object[tag_object_index].line;
+  let graphics = this.tag_object[tag_object_index].graphics;
 
   // 描画プロパティ
   line.beginFill(0xFFFFFF);
   graphics.beginFill(0xFFFFFF);
   // タグ名を元に色を指定
-  line.lineStyle(4, tag_data[this.isTagIn(tag_data, document.tag)].color);
-  graphics.lineStyle(4, tag_data[this.isTagIn(tag_data, document.tag)].color);
+  line.lineStyle(4, Normal_Tag.list[this.isTagIn(Normal_Tag.list, document.tag)].color);
+  graphics.lineStyle(4, Normal_Tag.list[this.isTagIn(Normal_Tag.list, document.tag)].color);
 
   // 前回のオブジェクトの位置
   var before_position_index = this.isTagIn(this.before_position, document.tag);
@@ -235,9 +235,9 @@ Normal.CreateObject = function(document){
   this.before_size[before_size_index].height = objectSize.height;
 
   // オブジェクトコンテナに追加
-  object.addChildAt(line, 0);
-  object.addChildAt(graphics, 1);
-  object.addChildAt(textObj, 2);
+  this.object.addChildAt(line, 0);
+  this.object.addChildAt(graphics, 1);
+  this.object.addChildAt(textObj, 2);
 
   // タグ名ラベルの追加
   if(tag_label !== null){
@@ -249,16 +249,16 @@ Normal.CreateObject = function(document){
     tag_label.position.x = textObj.position.x - objectSize.width - tag_label.width / 2;
     tag_label.position.y = textObj.position.y - objectSize.height - tag_label.height / 2;
 
-    object.addChildAt(tag_label, 3);
+    this.object.addChildAt(tag_label, 3);
   }
-}
+};
 
 // レンダラの描画開始
-Normal.DrawObject = function(){
-  object.interactive = true;
+Normal_View.DrawObject = function(){
+  this.object.interactive = true;
 
   // ドラッグ有効化
-  object
+  this.object
     .on('mousedown', this.onDragStart)
     .on('touchstart', this.onDragStart)
     .on('mouseup', this.onDragEnd)
@@ -269,27 +269,29 @@ Normal.DrawObject = function(){
     .on('touchmove', this.onDragMove);
 
   // オブジェクトコンテナをルートコンテナに追加
-  stage.addChild(object);
+  Field.stage.addChild(this.object);
 
   //ルートコンテナの描画
-  renderer.render(stage);
+  Field.renderer.render(Field.stage);
 
   // アニメーションメソッドの呼び出し
   this.animate();
 };
 
 // アニメーションメソッド
-Normal.animate = function(){
-  this.requestAnimationFrame(animate);
-  renderer.render(stage);
+Normal_View.animate = function(){
+  requestAnimationFrame(Normal_View.animate);
+
+  Field.renderer.render(Field.stage);
 };
 
 // ドラッグ開始時のイベント
-Normal.onDragStart = function(event){
+Normal_View.onDragStart = function(event){
   // store a reference to the data
   // the reason for this is because of multitouch
   // we want to track the movement of this particular touch
   this.data = event.data;
+  console.log(this);
   this.dragging = true;
   this.dragPoint = event.data.getLocalPosition(this.parent);
   this.dragPoint.x -= this.position.x;
@@ -297,21 +299,22 @@ Normal.onDragStart = function(event){
 };
 
 // ドラッグ中のイベント
-Normal.onDragMove = function(){
+Normal_View.onDragMove = function(){
   if(this.dragging){
     var newPosition = this.data.getLocalPosition(this.parent);
+    console.log(this.position.x);
     this.position.x = newPosition.x - this.dragPoint.x;
     this.position.y = newPosition.y - this.dragPoint.y;
   }
 };
 
 // ドラッグ終了時のイベント
-Normal.onDragEnd = function(){
+Normal_View.onDragEnd = function(){
   this.dragging = false;
   // set the interaction data to null
   this.data = null;
 };
 
-Normal.resizeContainer = function(){
+Normal_View.resizeContainer = function(){
   renderer.resize($('#container').width(), window.innerHeight);
 };

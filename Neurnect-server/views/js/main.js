@@ -6,5 +6,5 @@ const RECT = "rect";
 // main
 (function(){
   new Normal();
-  new Field($('#container'));
+  Field($('#container'));
 })();
