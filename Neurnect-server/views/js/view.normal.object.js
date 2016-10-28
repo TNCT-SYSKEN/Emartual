@@ -291,7 +291,6 @@ Normal_View.onDragStart = function(event){
   // the reason for this is because of multitouch
   // we want to track the movement of this particular touch
   this.data = event.data;
-  console.log(this);
   this.dragging = true;
   this.dragPoint = event.data.getLocalPosition(this.parent);
   this.dragPoint.x -= this.position.x;
@@ -302,7 +301,6 @@ Normal_View.onDragStart = function(event){
 Normal_View.onDragMove = function(){
   if(this.dragging){
     var newPosition = this.data.getLocalPosition(this.parent);
-    console.log(this.position.x);
     this.position.x = newPosition.x - this.dragPoint.x;
     this.position.y = newPosition.y - this.dragPoint.y;
   }
@@ -316,5 +314,5 @@ Normal_View.onDragEnd = function(){
 };
 
 Normal_View.resizeContainer = function(){
-  renderer.resize($('#container').width(), window.innerHeight);
+  Field.renderer.resize(Field.$container.width(), window.innerHeight);
 };

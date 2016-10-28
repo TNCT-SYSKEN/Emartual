@@ -2,8 +2,8 @@
 var socket = io.connect(location.href);
 
 // ウィンドウリサイズ対応
-$(window).resize(Normal.resizeContainer);
-window.onorientationchange = Normal.resizeContainer;
+$(window).resize(Normal_View.resizeContainer);
+window.onorientationchange = Normal_View.resizeContainer;
 
 $('#submit').click(function (){
   // 入力されたテキスト

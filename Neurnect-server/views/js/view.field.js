@@ -1,7 +1,8 @@
 // コンストラクタ
 function Field($container){
+  Field.$container = $container;
   // レンダラの作成とDOM操作での要素追加
-  Field.renderer = new PIXI.autoDetectRenderer($container.width(), window.innerHeight, RENDERER_STYLE);
+  Field.renderer = new PIXI.autoDetectRenderer(Field.$container.width(), window.innerHeight, RENDERER_STYLE);
   $container.append(Field.renderer.view);
 
   // ルートコンテナの作成
@@ -9,5 +10,6 @@ function Field($container){
 }
 
 // プロパティ(データを保持しているので良くない)
+Field.$container = null;
 Field.renderer = null;
 Field.stage = null;
