@@ -24,8 +24,9 @@ mainUI.mainUI(app); //mainUIの情報を受け取る
 app.use(favicon(__dirname + '/views/image/favicon.ico'));
 
 io.sockets.on("connection", function(socket){
+
   //初回ページの要求
-  dbmodule.dball(function(init_data){
+  dbmodule.dbcate("normal", function(init_data){  //normalカテゴリーを表示
     //DBへtagデータの受け渡しの要求
     dbmodule.tagall(function(init_tag){
       for(var i = 0; i < init_tag.length; i++){
@@ -38,16 +39,14 @@ io.sockets.on("connection", function(socket){
     });
   });
 
+
   //positonの抽出
   dbmodule.dbposition_x_max(function(position_x){
     var x_max = position_x;
-
     dbmodule.dbposition_y_max(function(position_y_max){
       var y_max = position_y_max;
-
       dbmodule.dbposition_y_min(function(position_y_min){
         var y_min = position_y_min;
-
         io.sockets.emit("position_limit", {
           "x_max": x_max,
           "y_max": y_max,
@@ -56,6 +55,7 @@ io.sockets.on("connection", function(socket){
       });
     });
   });
+
 
   //tag情報の受け渡し
   socket.on('upload', function(upload){
@@ -83,7 +83,9 @@ io.sockets.on("connection", function(socket){
       });
     }
 
+
     update_tag.color = color_settings.color_settings[update_tag.color];
+
 
     dbmodule.dbinsert(upload.data);
     io.sockets.emit("update", {
@@ -93,7 +95,9 @@ io.sockets.on("connection", function(socket){
   });
 });
 
+
 SendFiles.send_Files(app);
+
 
 server.listen(setting.port, setting.host, function(){
   console.log("server listening...  " + setting.host + ":" + setting.port);
