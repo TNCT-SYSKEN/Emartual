@@ -31,7 +31,7 @@ io.sockets.on("connection", function(socket){
       for(var i = 0; i < init_tag.length; i++){
         init_tag[i].color = color_settings.color_settings[init_tag[i].color];
       }
-      socket./*broadcast.to().*/emit("init", {
+      socket.to(init_data).emit("init", {
         "data": init_data,
         "tag": init_tag
       });
