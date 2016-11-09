@@ -12,49 +12,68 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.4.8.js"></script>
     <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
     <!-- ナビゲーションバー -->
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse" id="navbar">
       <div class="navbar-header">
         <a class="navbar-brand" href="/">Neurnect</a>
       </div>
     </nav>
 
-    <!-- ボタン各種 -->
-    <div class="center-block">
-      <select class="selectpicker" id ="category">
-        <option value="normal" selected>normal</option>
-        <option value="conversation">conversation</option>
-      </select>
-      <a class="btn btn-primary" id="reload"><span class="glyphicon glyphicon-refresh"></span></a>
-      <a class="btn btn-primary" id="post"><span class="glyphicon glyphicon-pencil"></span></a>
-    </div>
-
-    <!-- 投稿フォーム -->
-    <div class="form col-sm-offset-3 col-sm-6">
-      <a class="btn btn-default pull-right close" id="form_remove"><span class="glyphicon glyphicon-remove-circle"></span></a>
-        <form>
-          <div class="form-group">
-            <label class="control-label">Form:</label>
-            <select class="selectpicker" id="graphic-form">
-              <option value="ellipse">◯</option>
-              <option value="rect">□</option>
-            </select>
-          </div>
-          <div class="col-sm-6 form-group">
-            <label class="control-label">Text:</label>
-            <span class="control-label" id="uploadtext-limit">100</span>
-            <textarea class="form-control" id="uploadtext" maxlength="100" placeholder="メインテキスト"></textarea>
-          </div>
-          <div class="col-sm-6 form-group">
-            <label class="control-label">Tag:</label>
-            <input type="tag" class="form-control" id="tag-select" placeholder="タグ">
-          </div>
-          <div class="col-sm-6 form-group">
-            <a class="btn btn-primary form-control" id="submit">送信</a>
-          </div>
-        </form>
+    <div class="menu">
+      <form id="post" action="index.html" method="post">
+        <label for="form" class="form-label">Form:
+          <select>
+            <option value="ellipse">ellipse</option>
+            <option value="rect">rect</option>
+          </select>
+        </label>
+        <br>
+        <label for="tag-select"class="post-label">Tag:
+          <input type="text" id="tag-select" placeholder="タグ">
+        </label>
+        <label for="uploadtext"　class="post-label">Text:100
+          <textarea id="uploadtext" rows="3" cols="30" placeholder="メインテキスト" maxlength="100"></textarea>
+        </label>
+        <input type="submit" value="&#xf044">
+      </form>
+      <ul>
+        <li>
+          <a class="menu-button" href="">
+            <span class="menu-list">
+              <span class="menu-icon">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+              </span>
+              <span class="menu-text">reload</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="menu-button" href="">
+            <span class="menu-list">
+              <span class="menu-icon">
+                <i class="fa fa-hashtag" aria-hidden="true"></i>
+              </span>
+              <span class="menu-text">free</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="menu-button" href="">
+            <span class="menu-list">
+              <span class="menu-icon">
+                <i class="fa fa-comments" aria-hidden="true"></i>
+              </span>
+              <span class="menu-text">conversation</span>
+            </span>
+          </a>
+        </li>
+      </ul>
+      <a  class="title" href="">
+        <img class="logo" src="./image/Neurnect_logo.png" alt="Neurnect" />
+      </a>
     </div>
 
     <!-- 描画コンテナ -->
