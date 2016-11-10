@@ -25,13 +25,13 @@ app.use(favicon(__dirname + '/views/image/favicon.ico'));
 
 io.sockets.on("connection", function(socket){
   //初回ページの要求
-  dbmodule.dbcate("cate_name", function(init_data){  //normalカテゴリを表示
+  dbmodule.dbcate("normal", function(init_data){  //normalカテゴリを表示
     //DBへtagデータの受け渡しの要求
     dbmodule.tagall(function(init_tag){
       for(var i = 0; i < init_tag.length; i++){
         init_tag[i].color = color_settings.color_settings[init_tag[i].color];
       }
-      socket.to(init_data).emit("init", {
+      socket.emit("init", {
         "data": init_data,
         "tag": init_tag
       });
@@ -56,13 +56,13 @@ io.sockets.on("connection", function(socket){
 
   //カテゴリチャンネルへの参加
   socket.on("request_category",function(cate_name){
-    socket.join(cate_name); //カテゴリチャンネルに参加
     dbmodule.dbcate(cate_name,function(cate_data){  //カテゴリデータの抽出
+      socket.join(cate_name.category); //カテゴリチャンネルに参加
       dbmodule.tagall(function(cate_tag){ //DBへのTagデータの受け渡し要求
         for(var i = 0; i < cate_tag.length; i++){
           cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
         }
-        socket.to(cate_data).emit("response_category",{
+        socket.to(cate_name.category).emit("response_category",{
           "data": cate_data,
           "tag": cate_tag
         });
@@ -101,7 +101,7 @@ io.sockets.on("connection", function(socket){
       update_tag.color = color_settings.color_settings[update_tag.color];
       //upload.dataをDBに渡す
       dbmodule.dbinsert(upload.data);
-      socket.to(cate_name).emit("update", { //update.dataをフロントへ渡す
+      socket.to(cate_name.category).emit("update", { //update.dataをフロントへ渡す
         "data": upload.data,
         "tag": update_tag
       });
