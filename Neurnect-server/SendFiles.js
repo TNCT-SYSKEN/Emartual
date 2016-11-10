@@ -3,7 +3,6 @@ module.exports.send_Files = function(app){
     res.sendFile(__dirname + "/views/js/typical.js");
   });
 
-
   app.get('/js/model.normal.js', function(req, res){
     res.sendFile(__dirname + "/views/js/model.normal.js");
   });
@@ -18,6 +17,14 @@ module.exports.send_Files = function(app){
 
   app.get('/js/model.normal.tag.js', function(req, res){
     res.sendFile(__dirname + "/views/js/model.normal.tag.js");
+  });
+
+  app.get('/js/model.category.js', function(req, res){
+    res.sendFile(__dirname + "/views/js/model.category.js");
+  });
+
+  app.get('/js/view.conversation.js', function(req, res){
+    res.sendFile(__dirname + "/views/js/view.conversation.js");
   });
 
   app.get('/js/event.js', function(req, res){
