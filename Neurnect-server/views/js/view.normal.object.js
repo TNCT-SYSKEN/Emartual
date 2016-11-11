@@ -6,6 +6,9 @@ function Normal_View(){
 
 // プロパティ
 
+// animationFrame戻り値保存
+Normal_View._animationID = null;
+
 // オブジェクトコンテナ
 Normal_View.object = new PIXI.Container();
 // Graphicsコンテナとlineのコンテナをタグ毎に管理
@@ -253,6 +256,11 @@ Normal_View.CreateObject = function(document){
   }
 };
 
+Normal_View.clearObject = function(){
+  Field.stage.removeChild(this.object);
+  cancelAnimationFrame(this._animationID);
+};
+
 // レンダラの描画開始
 Normal_View.DrawObject = function(){
   this.object.interactive = true;
@@ -280,7 +288,7 @@ Normal_View.DrawObject = function(){
 
 // アニメーションメソッド
 Normal_View.animate = function(){
-  requestAnimationFrame(Normal_View.animate);
+  this._animationID = requestAnimationFrame(Normal_View.animate);
 
   Field.renderer.render(Field.stage);
 };

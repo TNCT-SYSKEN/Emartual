@@ -5,6 +5,16 @@ var socket = io.connect(location.href);
 $(window).resize(Normal_View.resizeContainer);
 window.onorientationchange = Normal_View.resizeContainer;
 
+// 即時関数
+(function(){
+  // 初期join
+  let join_room = "normal";
+
+  socket.emit('init_upload', {
+    'category': join_room
+  });
+})();
+
 $('#submit').click(function (){
   // 入力されたテキスト
   var upload_text = addNewLine($("#uploadtext").val());
@@ -87,11 +97,11 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  DrawObject();
+  Normal_View.DrawObject();
 
-  moveObjectPosition({
-    "x": (-1 * position_limit.x_max + renderer.width) / 2,
-    "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
+  Normal_View.moveObjectPosition({
+    "x": (-1 * position_limit.x_max + Field.renderer.width) / 2,
+    "y": (-1 * (position_limit.y_max + position_limit.y_min) + Field.renderer.height) / 2
   });
 });
 
@@ -99,22 +109,53 @@ $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
 
-// 初回送信であるかの判定用
-let init_isfirst = true;
+// カテゴリテストプログラム
+$("#category-test").click(function(){
+  Category.set_name("conversation");
 
-socket.on('init', function(init){
-  if(init_isfirst){
+  // 前オブジェクトの全削除
+  Normal.clear_data();
+  Normal_Tag.clear_data();
+  Normal_View.clearObject();
+
+  socket.emit("request_category", {
+    "category": Category.get_name()
+  });
+});
+
+// Conversationデータ保持の要素を作るべき
+socket.on("response_category", function(init){
+  for(let item of init.data){
+    Conversation.add_data(item);
+  }
+
+  Conversation_View.CreateSpecialObject({text: "ほげほげ"});
+
+  for(let item of Conversation.list){
+    Conversation_View.CreateObject(item.data);
+  }
+
+  Conversation_View.DrawObject();
+});
+
+socket.on('init_update', function(init){
     for(let tag of init.tag){
       Normal_Tag(tag);
     }
 
     for(let item of init.data){
       Normal.add_data(item);
-      Normal_View.CreateObject(item);
     }
+
+    for(let item of Normal.list){
+      Normal_View.CreateObject(item.data);
+    }
+
     Normal_View.DrawObject();
-  }
-  init_isfirst = false;
+
+  // カテゴリ名登録
+  let defalut_category = 'normal';
+  Category.set_name(defalut_category);
 });
 
 socket.on('update', function(update){
