@@ -4,8 +4,8 @@ html{
 
 body{
   height: 100%;
-  background-color: #f7f7f7;
   margin-top: 0px;
+  background-color: #f7f7f7;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
@@ -18,30 +18,30 @@ a.btn{
   margin-bottom: 0px;
 }
 
-div.menu{
-  color: #fff;
+#menu{
   position: fixed;
-  background-color: #727FBA;
   left: -231px;
   width: 251px;
   height: 100%;
-  border-radius: 0 10px 10px 0;
-  box-shadow: 3px 0px 5px 1px #888;
   z-index: 1;
+  border-radius: 0 10px 10px 0;
+  background-color: #727FBA;
+  color: #fff;
+  box-shadow: 3px 0px 5px 1px #888;
   transition: transform 300ms ease;
 }
 
-div.menu:hover{
+#menu:hover{
   transform: translate(231px);
 }
 
-form#post{
+#post{
   border-bottom: 3px solid #626EA0;
   border-color: #626EA0;
   margin-top: 3px;
 }
 
-form#post label{
+#post label{
   font-size: 20px;
 }
 
@@ -49,57 +49,63 @@ select{
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
+  position: relative;
+  width: 150px;
+  height: 30px;
   border: 1px solid #999;
   border-radius: 3px;
   margin-bottom: 2px;
   padding: 0 0 0 10px;
   background: none transparent;
+  background-color: #fefefe;
   vertical-align: middle;
   font-size: inherit;
   color: #707070;
   box-sizing: content-box;
-  width: 150px;
-  height: 30px;
-  position: relative;
-  background-color: #fefefe;
 }
 
 select:hover{
   background-color: #ddd;
 }
 
-label.form-label::after{
+.form-label::after{
   position: relative;
   right: 28px;
-  color: #727FBA;
-  content: "\f063";
-  font-family: FontAwesome;
   pointer-events: none;
+  color: #727FBA;
+  font-family: FontAwesome;
+  content: "\f063";
   transition: content 250ms ease;
 }
 
-label.form-label:active::after{
+.form-label:active::after{
   content: "\f062";
 }
 
-input#tag-select{
+.post-label{
+  margin-bottom: 0px;
+}
+
+#tag-select{
   width: 70%;
   height: auto;
-  background-color: #fefefe;
   padding-left: 8px;
   border: 1px solid #999;
   border-color: #999;
   border-radius: 3px;
+  background-color: #fefefe;
+  color: #292f23;
   font-size: 20px;
 }
 
-textarea#uploadtext{
+#uploadtext{
   width: 225px;
   height: 60px;
-  background-color: #fff;
+  resize: none;
   border: 1px solid #999;
   border-radius: 3px;
-  resize: none;
+  background-color: #fff;
+  color: #292f23;
   font-size: 20px;
 }
 
@@ -109,51 +115,54 @@ ul{
   padding: 0px;
 }
 
-a.menu-button{
+.menu-button{
   display: block;
   margin: 10px 23px 10px 0px;
   text-decoration: none;
+  cursor: pointer;
 }
 
-span.menu-list{
+.menu-list{
   width: 200px;
   color: #fefefe;
   font-size: 30px;
   vertical-align: middle;
 }
 
-span.menu-icon{
+.menu-icon{
   margin-left: 5px;
 }
 
-span.menu-text{
+.menu-text{
   margin-left: 8px;
 }
 
-input[type="submit"]{
+input[type="button"]{
+  position: relative;
+  left: 189px;
   width: 40px;
   height: 25px;
-  color: #fefefe;
-  background-color: #5E6899;
   border: none;
-  position: relative;
-  margin-bottom: 3px;
-  left: 189px;
+  margin-bottom: 6px;
+  background-color: #5E6899;
+  color: #fefefe;
   font-size: 20px;
   font-family: FontAwesome;
 }
 
-input[type="submit"]:hover,
-a.menu-button:hover{
+input[type="button"]:hover,
+.menu-button:hover{
   background-color: #505982;
+  text-decoration: none;
 }
 
-input[type="submit"]:active,
-a.menu-button:active{
+input[type="button"]:active,
+.menu-button:active{
   background-color: #4A537A;
+  text-decoration: none;
 }
 
-a.title{
+.title{
   position: absolute;
   left: 30px;
   bottom: 10px;
@@ -163,11 +172,11 @@ a.title{
   text-decoration: none;
 }
 
-img.logo{
+.logo{
   width: 80%;
 }
 
-a.title:hover{
+.title:hover{
   color: #ECF5FF;
 }
 

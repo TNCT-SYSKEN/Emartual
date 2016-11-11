@@ -15,72 +15,74 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
-    <!-- ナビゲーションバー -->
-    <nav class="navbar navbar-inverse" id="navbar">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">Neurnect</a>
+    <div class="container-fluid">
+      <!-- ナビゲーションバー -->
+      <nav class="navbar navbar-inverse" id="navbar">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Neurnect</a>
+        </div>
+      </nav>
+
+      <div id="menu">
+        <form id="post">
+          <label for="form" class="form-label">Form:
+            <select id="graphic-form">
+              <option value="ellipse">ellipse</option>
+              <option value="rect">rect</option>
+            </select>
+          </label>
+          <br>
+          <label for="tag-select"class="post-label">Tag:
+            <input type="text" id="tag-select" placeholder="タグ">
+          </label>
+          <label for="uploadtext" class="post-label">Text:100
+            <textarea id="uploadtext" rows="3" cols="30" placeholder="メインテキスト" maxlength="100"></textarea>
+          </label>
+          <input type="button" id="submit" value="&#xf044">
+        </form>
+        <ul>
+          <li>
+            <a class="menu-button" id="reload">
+              <span class="menu-list">
+                <span class="menu-icon">
+                  <i class="fa fa-refresh" aria-hidden="true"></i>
+                </span>
+                <span class="menu-text">reload</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="menu-button">
+              <span class="menu-list">
+                <span class="menu-icon">
+                  <i class="fa fa-hashtag" aria-hidden="true"></i>
+                </span>
+                <span class="menu-text">free</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="menu-button">
+              <span class="menu-list">
+                <span class="menu-icon">
+                  <i class="fa fa-comments" aria-hidden="true"></i>
+                </span>
+                <span class="menu-text">conversation</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+        <a  class="title" href="">
+          <img class="logo" src="./image/Neurnect_logo.png" alt="Neurnect" />
+        </a>
       </div>
-    </nav>
 
-    <div class="menu">
-      <form id="post" action="index.html" method="post">
-        <label for="form" class="form-label">Form:
-          <select>
-            <option value="ellipse">ellipse</option>
-            <option value="rect">rect</option>
-          </select>
-        </label>
-        <br>
-        <label for="tag-select"class="post-label">Tag:
-          <input type="text" id="tag-select" placeholder="タグ">
-        </label>
-        <label for="uploadtext"　class="post-label">Text:100
-          <textarea id="uploadtext" rows="3" cols="30" placeholder="メインテキスト" maxlength="100"></textarea>
-        </label>
-        <input type="submit" value="&#xf044">
-      </form>
-      <ul>
-        <li>
-          <a class="menu-button" href="">
-            <span class="menu-list">
-              <span class="menu-icon">
-                <i class="fa fa-refresh" aria-hidden="true"></i>
-              </span>
-              <span class="menu-text">reload</span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="menu-button" href="">
-            <span class="menu-list">
-              <span class="menu-icon">
-                <i class="fa fa-hashtag" aria-hidden="true"></i>
-              </span>
-              <span class="menu-text">free</span>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a class="menu-button" href="">
-            <span class="menu-list">
-              <span class="menu-icon">
-                <i class="fa fa-comments" aria-hidden="true"></i>
-              </span>
-              <span class="menu-text">conversation</span>
-            </span>
-          </a>
-        </li>
-      </ul>
-      <a  class="title" href="">
-        <img class="logo" src="./image/Neurnect_logo.png" alt="Neurnect" />
-      </a>
+      <!-- 描画コンテナ -->
+      <div class="col-sm-12" id="container"></div>
+
+      <script type="text/ecmascript" src="/js/typical.js"></script>
+      <script type="text/ecmascript" src="/js/container.js"></script>
+      <script type="text/ecmascript" src="/js/event.js"></script>
     </div>
-
-    <!-- 描画コンテナ -->
-    <div class="col-sm-12" id="container"></div>
-
-    <script type="text/ecmascript" src="/js/typical.js"></script>
-    <script type="text/ecmascript" src="/js/container.js"></script>
-    <script type="text/ecmascript" src="/js/event.js"></script>
   </body>
 </html>
