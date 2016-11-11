@@ -41,7 +41,7 @@ io.sockets.on("connection", function(socket){
   //カテゴリチャンネルへの参加
   socket.on("request_category",function(cate_name){
     dbmodule.dbcate(cate_name.category,function(cate_data){  //カテゴリデータの抽出
-  //  socket.join(cate_name.category); //カテゴリチャンネルに参加
+      socket.join(cate_name.category); //カテゴリチャンネルに参加
       dbmodule.tagall(function(cate_tag){ //DBへのTagデータの受け渡し要求
         for(var i = 0; i < cate_tag.length; i++){
           cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
