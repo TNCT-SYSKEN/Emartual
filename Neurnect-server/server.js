@@ -38,26 +38,10 @@ io.sockets.on("connection", function(socket){
     });
   });
 
-  //positonの抽出
-  dbmodule.dbposition_x_max(function(position_x){
-    var x_max = position_x;
-    dbmodule.dbposition_y_max(function(position_y_max){
-      var y_max = position_y_max;
-      dbmodule.dbposition_y_min(function(position_y_min){
-        var y_min = position_y_min;
-        io.sockets.emit("position_limit", {
-          "x_max": x_max,
-          "y_max": y_max,
-          "y_min": y_min
-        });
-      });
-    });
-  });
-
   //カテゴリチャンネルへの参加
   socket.on("request_category",function(cate_name){
     dbmodule.dbcate(cate_name,function(cate_data){  //カテゴリデータの抽出
-      socket.join(cate_name.category); //カテゴリチャンネルに参加
+  //  socket.join(cate_name.category); //カテゴリチャンネルに参加
       dbmodule.tagall(function(cate_tag){ //DBへのTagデータの受け渡し要求
         for(var i = 0; i < cate_tag.length; i++){
           cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
@@ -69,7 +53,21 @@ io.sockets.on("connection", function(socket){
       });
     });
 
-
+    //positonの抽出
+    dbmodule.dbposition_x_max(function(position_x){
+      var x_max = position_x;
+      dbmodule.dbposition_y_max(function(position_y_max){
+        var y_max = position_y_max;
+        dbmodule.dbposition_y_min(function(position_y_min){
+          var y_min = position_y_min;
+          socket.to(cate_name.category).emit("position_limit", {
+            "x_max": x_max,
+            "y_max": y_max,
+            "y_min": y_min
+          });
+        });
+      });
+    });
 
     //tag情報の受け渡し
     socket.on('upload', function(upload){
@@ -101,7 +99,7 @@ io.sockets.on("connection", function(socket){
       update_tag.color = color_settings.color_settings[update_tag.color];
       //upload.dataをDBに渡す
       dbmodule.dbinsert(upload.data);
-      socket.to(cate_name.category).emit("update", { //update.dataをフロントへ渡す
+      socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
         "data": upload.data,
         "tag": update_tag
       });
