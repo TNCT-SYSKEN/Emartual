@@ -2,9 +2,25 @@
   "extends": ["eslint:recommended"],
   "rules": {
     "no-console": 0,
-    "semi": "error"
+    "semi": "error",
+    // 未定義を警告レベルに
+    "no-unused-vars": [1, {"vars" : "all", "args" : "after-used"} ]
   },
   "env": {
+    "browser": true,
+    "jquery": true,
+    "es6": true,
     "node": true
+  },
+  "globals": {
+    "Normal": true,
+    "Normal_Tag": true,
+    "Normal_View": true,
+    "Normal_Object": true,
+    "Field": true,
+    "PIXI": true,
+    "RENDERER_STYLE": true,
+    "ELLIPSE": true,
+    "RECT": true
   }
 }

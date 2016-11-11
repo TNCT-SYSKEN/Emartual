@@ -2,8 +2,8 @@
 var socket = io.connect(location.href);
 
 // ウィンドウリサイズ対応
-$(window).resize(resizeContainer);
-window.onorientationchange = resizeContainer;
+$(window).resize(Normal_View.resizeContainer);
+window.onorientationchange = Normal_View.resizeContainer;
 
 $('#submit').click(function (){
   // 入力されたテキスト
@@ -99,29 +99,31 @@ $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
 
-// タグ名と色の対応
-let tag_data = null;
-
 // 初回送信であるかの判定用
 let init_isfirst = true;
 
 socket.on('init', function(init){
   if(init_isfirst){
-    tag_data = init.tag;
+    for(let tag of init.tag){
+      Normal_Tag(tag);
+    }
 
     for(let item of init.data){
-      CreateObject(item);
+      Normal.add_data(item);
+      Normal_View.CreateObject(item);
     }
-    DrawObject();
+    Normal_View.DrawObject();
   }
   init_isfirst = false;
 });
 
 socket.on('update', function(update){
-  tag_data.push(update.tag);
+  Normal_Tag.add_data(update.tag);
 
-  CreateObject(update.data);
-  DrawObject();
+  Normal.add_data(update.data);
+
+  Normal_View.CreateObject(update.data);
+  Normal_View.DrawObject();
 
   if( update.data.position.x > position_limit.x_max){
     position_limit.x_max = update.data.position.x;
@@ -141,9 +143,9 @@ socket.on('position_limit', function(position){
     position_limit = position;
 
     // objectの初期描画位置の変更
-    moveObjectPosition({
-      "x": (-1 * position_limit.x_max + renderer.width) / 2,
-      "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
+    Normal_View.moveObjectPosition({
+      "x": (-1 * position_limit.x_max + Field.renderer.width) / 2,
+      "y": (-1 * (position_limit.y_max + position_limit.y_min) + Field.renderer.height) / 2
     });
   }
 });

@@ -24,16 +24,37 @@ mainUI.mainUI(app); //mainUIの情報を受け取る
 app.use(favicon(__dirname + '/views/image/favicon.ico'));
 
 io.sockets.on("connection", function(socket){
-  //初回ページの要求
-  dbmodule.dball(function(init_data){
-    //DBへtagデータの受け渡しの要求
-    dbmodule.tagall(function(init_tag){
-      for(var i = 0; i < init_tag.length; i++){
-        init_tag[i].color = color_settings.color_settings[init_tag[i].color];
-      }
-      io.sockets.emit("init", {
-        "data": init_data,
-        "tag": init_tag
+  socket.on('init_upload', function(cate_name){
+    //初回ページの要求
+    dbmodule.dbcate(cate_name.category, function(init_data){  //normalカテゴリを表示
+      //DBへtagデータの受け渡しの要求
+      dbmodule.tagall(function(init_tag){
+        for(var i = 0; i < init_tag.length; i++){
+          init_tag[i].color = color_settings.color_settings[init_tag[i].color];
+        }
+        // 初期join
+        socket.join(cate_name.category);
+
+        socket.emit("init_update", {
+          "data": init_data,
+          "tag": init_tag
+        });
+      });
+    });
+  });
+
+  //カテゴリチャンネルへの参加
+  socket.on("request_category", function(cate_name){
+    dbmodule.dbcate(cate_name.category, function(cate_data){  //カテゴリデータの抽出
+      dbmodule.tagall(function(cate_tag){ //DBへのTagデータの受け渡し要求
+        for(var i = 0; i < cate_tag.length; i++){
+          cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
+        }
+        socket.join(cate_name.category); //カテゴリチャンネルに参加
+        socket.emit("response_category", {
+          "data": cate_data,
+          "tag": cate_tag
+        });
       });
     });
   });
@@ -41,14 +62,11 @@ io.sockets.on("connection", function(socket){
   //positonの抽出
   dbmodule.dbposition_x_max(function(position_x){
     var x_max = position_x;
-
     dbmodule.dbposition_y_max(function(position_y_max){
       var y_max = position_y_max;
-
       dbmodule.dbposition_y_min(function(position_y_min){
         var y_min = position_y_min;
-
-        io.sockets.emit("position_limit", {
+        socket.emit("position_limit", {
           "x_max": x_max,
           "y_max": y_max,
           "y_min": y_min
@@ -64,6 +82,7 @@ io.sockets.on("connection", function(socket){
     var update_tag = {};
     update_tag.tag = upload.data.tag;
 
+    //新しいタグが投稿されたら
     if(upload.isnewtag){
       for (var result in color_settings.color_settings){
         if (propcount == count){
@@ -84,9 +103,9 @@ io.sockets.on("connection", function(socket){
     }
 
     update_tag.color = color_settings.color_settings[update_tag.color];
-
+    //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
-    io.sockets.emit("update", {
+    socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
       "data": upload.data,
       "tag": update_tag
     });
