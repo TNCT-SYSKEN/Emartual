@@ -25,6 +25,22 @@ app.use(favicon(__dirname + '/views/image/favicon.ico'));
 
 io.sockets.on("connection", function(socket){
   socket.on('init_upload', function(cate_name){
+    //positonの抽出
+    dbmodule.dbposition_x_max(function(position_x){
+      var x_max = position_x;
+      dbmodule.dbposition_y_max(function(position_y_max){
+        var y_max = position_y_max;
+        dbmodule.dbposition_y_min(function(position_y_min){
+          var y_min = position_y_min;
+          socket.emit("position_limit", {
+            "x_max": x_max,
+            "y_max": y_max,
+            "y_min": y_min
+          });
+        });
+      });
+    });
+
     //初回ページの要求
     dbmodule.dbcate(cate_name.category, function(init_data){  //normalカテゴリを表示
       //DBへtagデータの受け渡しの要求
@@ -54,22 +70,6 @@ io.sockets.on("connection", function(socket){
         socket.emit("response_category", {
           "data": cate_data,
           "tag": cate_tag
-        });
-      });
-    });
-  });
-
-  //positonの抽出
-  dbmodule.dbposition_x_max(function(position_x){
-    var x_max = position_x;
-    dbmodule.dbposition_y_max(function(position_y_max){
-      var y_max = position_y_max;
-      dbmodule.dbposition_y_min(function(position_y_min){
-        var y_min = position_y_min;
-        socket.emit("position_limit", {
-          "x_max": x_max,
-          "y_max": y_max,
-          "y_min": y_min
         });
       });
     });

@@ -5,6 +5,8 @@ function Normal(data){
 
 // インスタンス保存
 Normal.list = [];
+// オブジェクトの最大値，最小値
+Normal.position_limit = {};
 
 // インスタンスをNormal.listに保存する
 Normal.add_data = function(data){

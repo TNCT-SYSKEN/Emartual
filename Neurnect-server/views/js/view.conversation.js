@@ -38,8 +38,8 @@ Conversation_View.CreateObject = function(document){
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
   // 配置
-  textObj.position.x = 400;
-  textObj.position.y = 400;
+  textObj.position = document.position;
+
   // 幾何学形の保存
   let graphics = new PIXI.Graphics();
   graphics.beginFill(0xFFFFFF);
@@ -51,7 +51,7 @@ Conversation_View.CreateObject = function(document){
 
   // 幾何学形の描画設定
   let objectSize = this.CalcSize(textObj, ELLIPSE);
-  graphics.drawEllipse(400, 400, objectSize.width, objectSize.height);
+  graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
 
   line.moveTo(Conversation.special_object.x + Conversation.special_size, Conversation.special_object.y + Conversation.special_size);
   line.lineTo(textObj.position.x, textObj.position.y);

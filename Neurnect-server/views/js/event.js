@@ -64,7 +64,7 @@ $('#submit').click(function (){
     $('.form').fadeOut("fast");
 
     // 追加予定のオブジェクトに移動
-    moveObjectPosition({
+    Normal_View.moveObjectPosition({
       "x": -1 * upload_position.x + renderer.width / 2,
       "y": -1 * upload_position.y + renderer.height / 2
     });
@@ -100,11 +100,11 @@ $('#reload').click(function (){
   Normal_View.DrawObject();
 
   Normal_View.moveObjectPosition({
-    "x": (-1 * position_limit.x_max + Field.renderer.width) / 2,
-    "y": (-1 * (position_limit.y_max + position_limit.y_min) + Field.renderer.height) / 2
+    "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
+    "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
   });
 
-  
+
 });
 
 $('#uploadtext').keyup(function(){
@@ -168,27 +168,23 @@ socket.on('update', function(update){
   Normal_View.CreateObject(update.data);
   Normal_View.DrawObject();
 
-  if( update.data.position.x > position_limit.x_max){
-    position_limit.x_max = update.data.position.x;
+  if( update.data.position.x > Normal.position_limit.x_max){
+    Normal.position_limit.x_max = update.data.position.x;
   }
-  if( update.data.position.y > position_limit.y_max){
-    position_limit.y_max = update.data.position.y;
+  if( update.data.position.y > Normal.position_limit.y_max){
+    Normal.position_limit.y_max = update.data.position.y;
   }
-  else if( update.data.position.y < position_limit.y_min){
-    position_limit.y_min = update.data.position.y;
+  else if( update.data.position.y < Normal.position_limit.y_min){
+    Normal.position_limit.y_min = update.data.position.y;
   }
 });
 
-var position_limit = null;
-
 socket.on('position_limit', function(position){
-  if(position_limit === null){
-    position_limit = position;
+  Normal.position_limit = position;
 
-    // objectの初期描画位置の変更
-    Normal_View.moveObjectPosition({
-      "x": (-1 * position_limit.x_max + Field.renderer.width) / 2,
-      "y": (-1 * (position_limit.y_max + position_limit.y_min) + Field.renderer.height) / 2
-    });
-  }
+  // objectの初期描画位置の変更
+  Normal_View.moveObjectPosition({
+    "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
+    "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
+  });
 });
