@@ -258,6 +258,7 @@ Normal_View.CreateObject = function(document){
 
 Normal_View.clearObject = function(){
   Field.stage.removeChild(this.object);
+  this.object = new PIXI.Container();
   cancelAnimationFrame(this._animationID);
 };
 
@@ -279,9 +280,6 @@ Normal_View.DrawObject = function(){
   // オブジェクトコンテナをルートコンテナに追加
   Field.stage.addChild(this.object);
 
-  //ルートコンテナの描画
-  Field.renderer.render(Field.stage);
-
   // アニメーションメソッドの呼び出し
   this.animate();
 };
@@ -290,6 +288,7 @@ Normal_View.DrawObject = function(){
 Normal_View.animate = function(){
   this._animationID = requestAnimationFrame(Normal_View.animate);
 
+  //ルートコンテナの描画
   Field.renderer.render(Field.stage);
 };
 

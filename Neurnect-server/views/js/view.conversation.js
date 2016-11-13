@@ -9,46 +9,94 @@ Conversation_View.CreateSpecialObject = function(document){
   let textObj = new PIXI.Text(document.text, {fontSize: '30px', fill: 0x1d2129});
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
-  textObj.position.x = 100;
-  textObj.position.y = 100;
+  Conversation.special_position.x = 100;
+  Conversation.special_position.y = 100;
+  textObj.position = Conversation.special_position;
+
   // 幾何学形の保存
   let graphics = new PIXI.Graphics();
   // graphicsプロパティ
   graphics.beginFill(0xFFFFFF);
-  graphics.lineStyle(4, /*color*/0x0000FF);
+  graphics.lineStyle(4, 0x4661df);
 
-  // 幾何学形の描画
-  // テスト用
-  graphics.drawEllipse(100, 100, 200, 200);
-  Conversation.special_object.addChildAt(graphics, 0);
-  Conversation.special_object.addChildAt(textObj, 1);
+  // 幾何学形の描画設定
+  let bias = 50;
+  Conversation.special_size = this.CalcSize(textObj, ELLIPSE).width + bias;
+
+  // 描画
+  graphics.drawEllipse(Conversation.special_position.x, Conversation.special_position.y, Conversation.special_size, Conversation.special_size);
+  Conversation.special_object.addChild(graphics);
+  Conversation.special_object.addChild(textObj);
 
   Conversation.object.addChild(Conversation.special_object);
 };
 
 // 一般オブジェクトの生成
 Conversation_View.CreateObject = function(document){
-  console.log(document.text);
   let textObj = new PIXI.Text(document.text, {fontSize: '20px', fill: 0x1d2129});
+  // アンカー
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
-  textObj.position.x = 200;
-  textObj.position.y = 200;
+  // 配置
+  textObj.position.x = 400;
+  textObj.position.y = 400;
+  // 幾何学形の保存
+  let graphics = new PIXI.Graphics();
+  graphics.beginFill(0xFFFFFF);
+  graphics.lineStyle(4, 0x4661df);
+  // 線の保存
+  let line = new PIXI.Graphics();
+  line.beginFill(0xFFFFFF);
+  line.lineStyle(4, 0x4661df);
 
-  // test
-  Conversation.object.addChild(textObj);
+  // 幾何学形の描画設定
+  let objectSize = this.CalcSize(textObj, ELLIPSE);
+  graphics.drawEllipse(400, 400, objectSize.width, objectSize.height);
 
-  Field.stage.addChild(Conversation.object);
-  Field.renderer.render(Field.stage);
+  line.moveTo(Conversation.special_object.x + Conversation.special_size, Conversation.special_object.y + Conversation.special_size);
+  line.lineTo(textObj.position.x, textObj.position.y);
 
-  this.animate();
+  // 描画
+  Conversation.object.addChildAt(line, 0);
+  Conversation.object.addChildAt(graphics, 1);
+  Conversation.object.addChildAt(textObj, 2);
 };
 
-// アニメーションメソッド
-Conversation_View.animate = function(){
-  requestAnimationFrame(Conversation_View.animate);
+// オブジェクトに必要なサイズの計算
+Conversation_View.CalcSize = function(CalctextObj, formData){
+  // textのアンカーポイント変更
+  CalctextObj.anchor.x = 0.5;
+  CalctextObj.anchor.y = 0.5;
 
-  Field.renderer.render(Field.stage);
+  var objectSize = null;
+
+  // 描画オブジェクトのサイズ計算
+  if (formData == ELLIPSE){
+    let bias = {
+      "x": 15,
+      "y": 15
+    };
+    // Ellipse
+    objectSize = {
+      "width":  CalctextObj.width * Math.sqrt(2) / 2 + bias.x,
+      "height": CalctextObj.height * Math.sqrt(2) / 2 + bias.y
+    };
+  }
+  else if(formData == RECT){
+    let bias = {
+      "x": 45,
+      "y": 20
+    };
+    // Rect
+    objectSize = {
+      "width":  CalctextObj.width + bias.x,
+      "height": CalctextObj.height + bias.y
+    };
+  }
+
+  CalctextObj = null;
+
+  return objectSize;
 };
 
 // レンダラの描画開始
@@ -69,9 +117,6 @@ Conversation_View.DrawObject = function(){
   // オブジェクトコンテナをルートコンテナに追加
   Field.stage.addChild(Conversation.object);
 
-  //ルートコンテナの描画
-  Field.renderer.render(Field.stage);
-
   // アニメーションメソッドの呼び出し
   this.animate();
 };
@@ -80,6 +125,7 @@ Conversation_View.DrawObject = function(){
 Conversation_View.animate = function(){
   requestAnimationFrame(Conversation_View.animate);
 
+  //ルートコンテナの描画
   Field.renderer.render(Field.stage);
 };
 

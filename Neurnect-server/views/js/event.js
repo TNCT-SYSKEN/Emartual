@@ -103,6 +103,8 @@ $('#reload').click(function (){
     "x": (-1 * position_limit.x_max + Field.renderer.width) / 2,
     "y": (-1 * (position_limit.y_max + position_limit.y_min) + Field.renderer.height) / 2
   });
+
+  
 });
 
 $('#uploadtext').keyup(function(){

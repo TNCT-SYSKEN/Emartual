@@ -11,6 +11,10 @@ Conversation.list = [];
 Conversation.object = new PIXI.Container();
 Conversation.special_object = new PIXI.Container();
 
+// 数値保存
+Conversation.special_position = {};
+Conversation.special_size = null;
+
 Conversation.add_data = function(data){
   let conversation = new Conversation(data);
 
