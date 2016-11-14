@@ -101,8 +101,8 @@ Normal_View.CalcPosition = function(textData, formData, tagData){
     // rectのもの(これが最大)
     let graphicswidth_bias = 20;
     objectPosition = {
-      "x": objectSize.width + position_limit.x_max + textwidth_10em + graphicswidth_bias + createRandomVal(bias_x.max, bias_x.min),
-      "y": createRandomVal(position_limit.y_max, position_limit.y_min)
+      "x": objectSize.width + Normal.position_limit.x_max + textwidth_10em + graphicswidth_bias + createRandomVal(bias_x.max, bias_x.min),
+      "y": createRandomVal(Normal.position_limit.y_max, Normal.position_limit.y_min)
     };
 
     return objectPosition;
