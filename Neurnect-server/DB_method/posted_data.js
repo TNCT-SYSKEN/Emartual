@@ -7,7 +7,7 @@ module.exports.dbdefine = function() {
     form:   { type: String, enum: ['ellipse', 'rect', 'unique'], default: "ellipse" },
     image:  { type: String },
     position:    { x: { type: Number, required: true }, y: { type: Number, required: true } },
-    category:   { type: String, enum: ['normal', 'conversation'], default: "normal" },
+    category:   { type: String, default: "normal"},
     tag:    { type: String, required: true },
     like:   { type: Number, default: 0 },
     link:   { type: String },
@@ -21,7 +21,7 @@ module.exports.dbdefine = function() {
 module.exports.dbinsert = function(dbobj) {
   var Posted_data = this.mongoose.model('Posted_data');
   var posted_data = new Posted_data(dbobj);
-  
+
   posted_data.save(function(err) {
     if(err){ console.log(err); }
   });
