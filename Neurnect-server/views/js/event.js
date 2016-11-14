@@ -20,7 +20,7 @@ $('#submit').click(function (){
   var upload_text = addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = removeSpace($("input#tag-select").val());
-  var upload_position = CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
+  var upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
 
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
@@ -41,8 +41,8 @@ $('#submit').click(function (){
     //新規タグ判定用
     var isnewtag = true;
 
-    for(var i = 0; i < tag_data.length; ++i){
-      if(tag_data[i].tag == upload_tag){
+    for(var i = 0; i < Normal_Tag.list.length; ++i){
+      if(Normal_Tag.list[i].tag == upload_tag){
         isnewtag = false;
       }
     }
@@ -54,6 +54,7 @@ $('#submit').click(function (){
         "form": $("#graphic-form").val(),
         "position": upload_position,
         "tag": upload_tag,
+        "category": Category.get_name(),
         "link": "",
         "date": new Date()
       },
@@ -65,8 +66,8 @@ $('#submit').click(function (){
 
     // 追加予定のオブジェクトに移動
     Normal_View.moveObjectPosition({
-      "x": -1 * upload_position.x + renderer.width / 2,
-      "y": -1 * upload_position.y + renderer.height / 2
+      "x": -1 * upload_position.x + Field.renderer.width / 2,
+      "y": -1 * upload_position.y + Field.renderer.height / 2
     });
   }
 });
@@ -103,8 +104,6 @@ $('#reload').click(function (){
     "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
     "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
   });
-
-
 });
 
 $('#uploadtext').keyup(function(){
@@ -125,7 +124,6 @@ $("#category-test").click(function(){
   });
 });
 
-// Conversationデータ保持の要素を作るべき
 socket.on("response_category", function(init){
   for(let item of init.data){
     Conversation.add_data(item);
@@ -161,7 +159,7 @@ socket.on('init_update', function(init){
 });
 
 socket.on('update', function(update){
-  Normal_Tag.add_data(update.tag);
+  Normal_Tag(update.tag);
 
   Normal.add_data(update.data);
 

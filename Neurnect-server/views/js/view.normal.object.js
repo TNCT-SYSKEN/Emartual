@@ -69,7 +69,7 @@ Normal_View.CalcSize = function(textData, formData){
 // 新しく作成したオブジェクトの配置の計算
 Normal_View.CalcPosition = function(textData, formData, tagData){
   // 0, 1, 2, 3の4値の乱数取得
-  var form_rand = this.createRandomVal(4, 0);
+  var form_rand = createRandomVal(4, 0);
 
   // 描画予定のオブジェクトの配置保存
   var objectPosition = null;
@@ -83,11 +83,11 @@ Normal_View.CalcPosition = function(textData, formData, tagData){
   };
 
   var bias = {
-    "x": this.createRandomVal(rand_max.x, 0),
-    "y": this.createRandomVal(rand_max.y, 0)
+    "x": createRandomVal(rand_max.x, 0),
+    "y": createRandomVal(rand_max.y, 0)
   };
 
-  var before_position_index = this.isTagIn(this.this.before_position, tagData);
+  var before_position_index = this.isTagIn(this.before_position, tagData);
   var before_size_index = this.isTagIn(this.before_size, tagData);
 
   // タグの初回挿入
@@ -101,8 +101,8 @@ Normal_View.CalcPosition = function(textData, formData, tagData){
     // rectのもの(これが最大)
     let graphicswidth_bias = 20;
     objectPosition = {
-      "x": objectSize.width + position_limit.x_max + textwidth_10em + graphicswidth_bias + this.createRandomVal(bias_x.max, bias_x.min),
-      "y": this.createRandomVal(position_limit.y_max, position_limit.y_min)
+      "x": objectSize.width + position_limit.x_max + textwidth_10em + graphicswidth_bias + createRandomVal(bias_x.max, bias_x.min),
+      "y": createRandomVal(position_limit.y_max, position_limit.y_min)
     };
 
     return objectPosition;
