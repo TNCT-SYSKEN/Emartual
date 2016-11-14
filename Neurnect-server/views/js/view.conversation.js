@@ -107,7 +107,22 @@ Conversation_View.CalcSize = function(CalctextObj, formData){
 
 // オブジェクトの配置計算
 Conversation_View.CalcPosition = function(textData, formData){
+  let rand_max = {
+    "x": Field.renderer.width,
+    "y": Field.renderer.height
+  };
 
+  let rand_min = {
+    "x": Conversation.special_size,
+    "y": Conversation.special_size
+  };
+
+  let objectPosition = {
+    "x": Typical.createRandomVal(rand_min.x, rand_max.x),
+    "y": Typical.createRandomVal(rand_min.y, rand_max.y)
+  };
+
+  return objectPosition;
 };
 
 // レンダラの描画開始

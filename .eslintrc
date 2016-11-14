@@ -14,6 +14,7 @@
   },
   "globals": {
     "io": true,
+    "Typical": true,
     "Normal": true,
     "Normal_Tag": true,
     "Normal_View": true,

@@ -17,15 +17,16 @@ window.onorientationchange = Normal_View.resizeContainer;
 
 $('#submit').click(function (){
   // 入力されたテキスト
-  var upload_text = addNewLine($("#uploadtext").val());
+  var upload_text = Typical.addNewLine($("#uploadtext").val());
   // 選択されたタグ
-  var upload_tag = removeSpace($("input#tag-select").val());
+  var upload_tag = Typical.removeSpace($("input#tag-select").val());
   // 配置
   var upload_position = null;
 
   if(Category.get_name() == NORMAL){
     upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
   }
+  // TODO: 要修正
   else if(Category.get_name() == CONVERSATION){
     upload_position = Conversation_View.CalcPosition(upload_text, "ellipse");
   }
@@ -37,11 +38,11 @@ $('#submit').click(function (){
   $("input#tag-select").next().remove();
 
   // formのtext, tagが空行かの検出
-  if(isBlankLine(upload_text)){
+  if(Typical.isBlankLine(upload_text)){
     $("#uploadtext").parent().addClass('has-error');
     $("#uploadtext").after($("<span>").addClass('control-label').text("空行では送信できません"));
   }
-  else if(isBlankLine($("input#tag-select").val())){
+  else if(Typical.isBlankLine($("input#tag-select").val())){
     $("input#tag-select").parent().addClass('has-error');
     $("input#tag-select").after($("<span>").addClass('control-label').text("空行では送信できません"));
   }
@@ -117,6 +118,7 @@ $('#reload').click(function (){
   else if(Category.get_name() == CONVERSATION){
     Conversation_View.DrawObject();
 
+    // TODO: 要修正
     Conversation_View.moveObjectPosition({
       "x": Field.renderer.width / 2,
       "y": Field.renderer.height / 2
@@ -178,21 +180,28 @@ socket.on('init_update', function(init){
 });
 
 socket.on('update', function(update){
-  Normal_Tag(update.tag);
+  if(update.data.category == NORMAL){
+    Normal_Tag(update.tag);
 
-  Normal.add_data(update.data);
+    Normal.add_data(update.data);
 
-  Normal_View.CreateObject(update.data);
-  Normal_View.DrawObject();
+    Normal_View.CreateObject(update.data);
+    Normal_View.DrawObject();
 
-  if( update.data.position.x > Normal.position_limit.x_max){
-    Normal.position_limit.x_max = update.data.position.x;
+    if( update.data.position.x > Normal.position_limit.x_max){
+      Normal.position_limit.x_max = update.data.position.x;
+    }
+    if( update.data.position.y > Normal.position_limit.y_max){
+      Normal.position_limit.y_max = update.data.position.y;
+    }
+    else if( update.data.position.y < Normal.position_limit.y_min){
+      Normal.position_limit.y_min = update.data.position.y;
+    }
   }
-  if( update.data.position.y > Normal.position_limit.y_max){
-    Normal.position_limit.y_max = update.data.position.y;
-  }
-  else if( update.data.position.y < Normal.position_limit.y_min){
-    Normal.position_limit.y_min = update.data.position.y;
+  else if(update.data.category == CONVERSATION){
+    Conversation.add_data(update);
+    Conversation_View.CreateObject(update.data);
+    Conversation_View.DrawObject();
   }
 });
 
