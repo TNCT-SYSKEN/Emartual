@@ -105,7 +105,7 @@ io.sockets.on("connection", function(socket){
     update_tag.color = color_settings.color_settings[update_tag.color];
     //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
-    socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
+    io.sockets.in(upload.data.category).emit("update", { //update.dataをフロントへ渡す
       "data": upload.data,
       "tag": update_tag
     });
