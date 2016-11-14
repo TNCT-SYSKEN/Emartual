@@ -38,7 +38,7 @@
           <label for="uploadtext" class="post-label">Text:100
             <textarea id="uploadtext" rows="3" cols="30" placeholder="メインテキスト" maxlength="100"></textarea>
           </label>
-          <input type="button" id="submit" value="&#xf044">
+          <input type="button" id="submit" class="submit" value="&#xf044">
         </form>
         <ul>
           <li>
@@ -72,7 +72,21 @@
             </a>
           </li>
         </ul>
-        <a  class="title" href="">
+        <a class="menu-button" id="request-theme" onclick="obj=document.getElementById('theme-post').style; obj.display=(obj.display=='none')?'block':'none';">
+          <span class="menu-list">
+            <span class="menu-text request-text">
+              request theme
+            </span>
+            <span>
+              <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </span>
+          </span>
+        </a>
+        <form id="theme-post" style="display: none;">
+          <input type="text" id="request-theme"  placeholder="テーマのリクエスト">
+          <input type="button" id="theme-submit" class="submit" value="&#xf044">
+        </form>
+        <a class="title" href="">
           <img class="logo" src="./image/Neurnect_logo.png" alt="Neurnect" />
         </a>
       </div>

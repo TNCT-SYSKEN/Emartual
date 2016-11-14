@@ -86,16 +86,19 @@ select:hover{
   margin-bottom: 0px;
 }
 
-#tag-select{
-  width: 70%;
+input[type="text"]{
   height: auto;
-  padding-left: 8px;
   border: 1px solid #999;
   border-color: #999;
   border-radius: 3px;
   background-color: #fefefe;
   color: #292f23;
   font-size: 20px;
+}
+
+#tag-select{
+  width: 70%;
+  padding-left: 8px;
 }
 
 #uploadtext{
@@ -134,7 +137,11 @@ ul{
 }
 
 .menu-text{
-  margin-left: 8px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -moz-touch-callout: none;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 
 input[type="button"]{
@@ -162,6 +169,14 @@ input[type="button"]:active,
   text-decoration: none;
 }
 
+#theme-input{
+  width: 90%;
+}
+
+.request-text{
+  margin-left: 5px;
+}
+
 .title{
   position: absolute;
   left: 30px;
@@ -172,12 +187,12 @@ input[type="button"]:active,
   text-decoration: none;
 }
 
-.logo{
-  width: 80%;
-}
-
 .title:hover{
   color: #ECF5FF;
+}
+
+.logo{
+  width: 80%;
 }
 
 #container{
