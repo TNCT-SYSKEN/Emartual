@@ -23,6 +23,10 @@ module.exports.send_Files = function(app){
     res.sendFile(__dirname + "/views/js/model.category.js");
   });
 
+  app.get('/js/model.conversation.js', function(req, res){
+    res.sendFile(__dirname + "/views/js/model.conversation.js");
+  });
+
   app.get('/js/view.conversation.js', function(req, res){
     res.sendFile(__dirname + "/views/js/view.conversation.js");
   });

@@ -6,5 +6,6 @@ const RECT = "rect";
 // main
 (function(){
   new Normal();
+  new Conversation();
   Field($('#container'));
 })();
