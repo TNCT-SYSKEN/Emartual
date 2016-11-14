@@ -8,10 +8,10 @@ window.onorientationchange = Normal_View.resizeContainer;
 // 即時関数
 (function(){
   // 初期join
-  let join_room = "normal";
+  Category.set_name("normal");
 
   socket.emit('init_upload', {
-    'category': join_room
+    'category': Category.get_name()
   });
 })();
 
@@ -20,7 +20,15 @@ $('#submit').click(function (){
   var upload_text = addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = removeSpace($("input#tag-select").val());
-  var upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
+  // 配置
+  var upload_position = null;
+
+  if(Category.get_name() == NORMAL){
+    upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
+  }
+  else if(Category.get_name() == CONVERSATION){
+    upload_position = Conversation_View.CalcPosition(upload_text, "ellipse");
+  }
 
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
@@ -98,12 +106,22 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  Normal_View.DrawObject();
+  if(Category.get_name() == NORMAL){
+    Normal_View.DrawObject();
 
-  Normal_View.moveObjectPosition({
-    "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
-    "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
-  });
+    Normal_View.moveObjectPosition({
+      "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
+      "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
+    });
+  }
+  else if(Category.get_name() == CONVERSATION){
+    Conversation_View.DrawObject();
+
+    Conversation_View.moveObjectPosition({
+      "x": Field.renderer.width / 2,
+      "y": Field.renderer.height / 2
+    });
+  }
 });
 
 $('#uploadtext').keyup(function(){
@@ -134,6 +152,7 @@ socket.on("response_category", function(init){
   for(let item of Conversation.list){
     Conversation_View.CreateObject(item.data);
   }
+
 
   Conversation_View.DrawObject();
 });

@@ -3,14 +3,20 @@ function Conversation_View(){
 
 // メソッド
 
+// objectコンテナに関して,指定の位置まで移動させる
+Conversation_View.moveObjectPosition = function(position){
+  Conversation.object.position.x = position.x;
+  Conversation.object.position.y = position.y;
+};
+
 // テーマオブジェクトの生成
 Conversation_View.CreateSpecialObject = function(document){
   // テキストオブジェクトの生成
   let textObj = new PIXI.Text(document.text, {fontSize: '30px', fill: 0x1d2129});
   textObj.anchor.x = 0.5;
   textObj.anchor.y = 0.5;
-  Conversation.special_position.x = 100;
-  Conversation.special_position.y = 100;
+  Conversation.special_position.x = Field.renderer.width / 2;
+  Conversation.special_position.y = Field.renderer.height / 2;
   textObj.position = Conversation.special_position;
 
   // 幾何学形の保存
@@ -53,7 +59,7 @@ Conversation_View.CreateObject = function(document){
   let objectSize = this.CalcSize(textObj, ELLIPSE);
   graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
 
-  line.moveTo(Conversation.special_object.x + Conversation.special_size, Conversation.special_object.y + Conversation.special_size);
+  line.moveTo(Conversation.special_position.x, Conversation.special_position.y);
   line.lineTo(textObj.position.x, textObj.position.y);
 
   // 描画
@@ -97,6 +103,11 @@ Conversation_View.CalcSize = function(CalctextObj, formData){
   CalctextObj = null;
 
   return objectSize;
+};
+
+// オブジェクトの配置計算
+Conversation_View.CalcPosition = function(textData, formData){
+
 };
 
 // レンダラの描画開始

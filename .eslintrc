@@ -10,9 +10,10 @@
     "browser": true,
     "jquery": true,
     "es6": true,
-    "node": true
+    "node": true,
   },
   "globals": {
+    "io": true,
     "Normal": true,
     "Normal_Tag": true,
     "Normal_View": true,
@@ -24,6 +25,8 @@
     "PIXI": true,
     "RENDERER_STYLE": true,
     "ELLIPSE": true,
-    "RECT": true
+    "RECT": true,
+    "NORMAL": true,
+    "CONVERSATION": true
   }
 }
