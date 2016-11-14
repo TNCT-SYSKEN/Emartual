@@ -2,15 +2,25 @@
 var socket = io.connect(location.href);
 
 // ウィンドウリサイズ対応
-$(window).resize(resizeContainer);
-window.onorientationchange = resizeContainer;
+$(window).resize(Normal_View.resizeContainer);
+window.onorientationchange = Normal_View.resizeContainer;
+
+// 即時関数
+(function(){
+  // 初期join
+  let join_room = "normal";
+
+  socket.emit('init_upload', {
+    'category': join_room
+  });
+})();
 
 $('#submit').click(function (){
   // 入力されたテキスト
   var upload_text = addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = removeSpace($("input#tag-select").val());
-  var upload_position = CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
+  var upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
 
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
@@ -31,8 +41,8 @@ $('#submit').click(function (){
     //新規タグ判定用
     var isnewtag = true;
 
-    for(var i = 0; i < tag_data.length; ++i){
-      if(tag_data[i].tag == upload_tag){
+    for(var i = 0; i < Normal_Tag.list.length; ++i){
+      if(Normal_Tag.list[i].tag == upload_tag){
         isnewtag = false;
       }
     }
@@ -44,6 +54,7 @@ $('#submit').click(function (){
         "form": $("#graphic-form").val(),
         "position": upload_position,
         "tag": upload_tag,
+        "category": Category.get_name(),
         "link": "",
         "date": new Date()
       },
@@ -54,17 +65,17 @@ $('#submit').click(function (){
     $('.form').fadeOut("fast");
 
     // 追加予定のオブジェクトに移動
-    moveObjectPosition({
-      "x": -1 * upload_position.x + renderer.width / 2,
-      "y": -1 * upload_position.y + renderer.height / 2
+    Normal_View.moveObjectPosition({
+      "x": -1 * upload_position.x + Field.renderer.width / 2,
+      "y": -1 * upload_position.y + Field.renderer.height / 2
     });
   }
 });
 
 $('#post').click(function (){
   // 入力要素の初期化
-  $('#uploadtext').val('');
-  $('input#tag-select').val('');
+  //$('#uploadtext').val('');
+  //$('input#tag-select').val('');
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
   $("#uploadtext").next().remove();
@@ -78,7 +89,7 @@ $('#post').click(function (){
   $('.form').fadeIn("fast");
 
   // #uploadtextに対するフォーカス
-  $('#uploadtext').focus();
+  //$('#uploadtext').focus();
 });
 
 $('#form_remove').click(function (){
@@ -87,11 +98,11 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  DrawObject();
+  Normal_View.DrawObject();
 
-  moveObjectPosition({
-    "x": (-1 * position_limit.x_max + renderer.width) / 2,
-    "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
+  Normal_View.moveObjectPosition({
+    "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
+    "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
   });
 });
 
@@ -99,51 +110,79 @@ $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
 
-// タグ名と色の対応
-let tag_data = null;
+// カテゴリテストプログラム
+$("#category-test").click(function(){
+  Category.set_name("conversation");
 
-// 初回送信であるかの判定用
-let init_isfirst = true;
+  // 前オブジェクトの全削除
+  Normal.clear_data();
+  Normal_Tag.clear_data();
+  Normal_View.clearObject();
 
-socket.on('init', function(init){
-  if(init_isfirst){
-    tag_data = init.tag;
+  socket.emit("request_category", {
+    "category": Category.get_name()
+  });
+});
+
+socket.on("response_category", function(init){
+  for(let item of init.data){
+    Conversation.add_data(item);
+  }
+
+  Conversation_View.CreateSpecialObject({text: "ほげほげ"});
+
+  for(let item of Conversation.list){
+    Conversation_View.CreateObject(item.data);
+  }
+
+  Conversation_View.DrawObject();
+});
+
+socket.on('init_update', function(init){
+    for(let tag of init.tag){
+      Normal_Tag(tag);
+    }
 
     for(let item of init.data){
-      CreateObject(item);
+      Normal.add_data(item);
     }
-    DrawObject();
-  }
-  init_isfirst = false;
+
+    for(let item of Normal.list){
+      Normal_View.CreateObject(item.data);
+    }
+
+    Normal_View.DrawObject();
+
+  // カテゴリ名登録
+  let defalut_category = 'normal';
+  Category.set_name(defalut_category);
 });
 
 socket.on('update', function(update){
-  tag_data.push(update.tag);
+  Normal_Tag(update.tag);
 
-  CreateObject(update.data);
-  DrawObject();
+  Normal.add_data(update.data);
 
-  if( update.data.position.x > position_limit.x_max){
-    position_limit.x_max = update.data.position.x;
+  Normal_View.CreateObject(update.data);
+  Normal_View.DrawObject();
+
+  if( update.data.position.x > Normal.position_limit.x_max){
+    Normal.position_limit.x_max = update.data.position.x;
   }
-  if( update.data.position.y > position_limit.y_max){
-    position_limit.y_max = update.data.position.y;
+  if( update.data.position.y > Normal.position_limit.y_max){
+    Normal.position_limit.y_max = update.data.position.y;
   }
-  else if( update.data.position.y < position_limit.y_min){
-    position_limit.y_min = update.data.position.y;
+  else if( update.data.position.y < Normal.position_limit.y_min){
+    Normal.position_limit.y_min = update.data.position.y;
   }
 });
 
-var position_limit = null;
-
 socket.on('position_limit', function(position){
-  if(position_limit === null){
-    position_limit = position;
+  Normal.position_limit = position;
 
-    // objectの初期描画位置の変更
-    moveObjectPosition({
-      "x": (-1 * position_limit.x_max + renderer.width) / 2,
-      "y": (-1 * (position_limit.y_max + position_limit.y_min) + renderer.height) / 2
-    });
-  }
+  // objectの初期描画位置の変更
+  Normal_View.moveObjectPosition({
+    "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
+    "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
+  });
 });

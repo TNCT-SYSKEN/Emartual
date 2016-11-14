@@ -1,8 +1,3 @@
-// MEMO: 抽出されたドキュメントはcallbackに渡すこととする
-// MEMO: 理由: 非同期I/OのためPosted.findが後から実行される可能性があるため
-// MEMO: 理由: つまるところundefinedの状態でmongoose-test.jsの処理が進む
-// MEMO: これを全てに適用して
-
 //全件抽出
 module.exports.dball = function(callback) {
   var Posted_data = this.mongoose.model('Posted_data');
@@ -110,9 +105,18 @@ module.exports.dbposition_y_max = function(callback){
 module.exports.dbposition_y_min = function(callback){
   var Posted_data = this.mongoose.model('Posted_data');
 
-  Posted_data.find({}, function(err,docs) {
+  Posted_data.find({}, function(err, docs) {
     if(err){console.log(err);}
 
     callback(docs[0].position.y);
   }).select('position.y').sort('+position.y').limit(1);
+};
+
+//任意のカテゴリのドキュメントを削除
+module.exports.dbcateremove = function(category){
+  var Posted_data = this.mongoose.model('Posted_data');
+
+  Posted_data.remove({category: category}, function(err){
+    if(err){ console.log(err); }
+  });
 };
