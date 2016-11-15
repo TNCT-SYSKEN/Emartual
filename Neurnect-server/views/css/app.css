@@ -14,6 +14,11 @@ a.btn{
   height: auto;
 }
 
+.navbar-Neurnect{
+  width: 100%;
+  background-color: #e7e7e7;
+}
+
 #navbar{
   margin-bottom: 0px;
 }
@@ -110,6 +115,14 @@ input[type="text"]{
   background-color: #fff;
   color: #292f23;
   font-size: 20px;
+}
+
+.error::-webkit-input-placeholder{
+  color: #a94442;
+}
+
+.error::-moz-placeholder{
+  color: #a94442;
 }
 
 ul{
