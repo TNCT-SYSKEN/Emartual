@@ -7,6 +7,9 @@ window.onorientationchange = Normal_View.resizeContainer;
 
 // 即時関数
 (function(){
+  $(document).on("keypress", "input:not(.allow_submit)",function(event){
+    return event.which !== 13;
+  });
   // 初期join
   Category.set_name("normal");
 
@@ -32,19 +35,19 @@ $('#submit').click(function (){
   }
 
   // エラー表示の初期化
-  $("#uploadtext").parent().removeClass('has-error');
-  $("#uploadtext").next().remove();
-  $("input#tag-select").parent().removeClass('has-error');
-  $("input#tag-select").next().remove();
+  $("#uploadtext").attr('placeholder', 'メインテキスト');
+  $("#uploadtext").removeClass('error');
+  $("input#tag-select").attr('placeholder', 'タグ');
+  $("input#tag-select").removeClass('error');
 
   // formのtext, tagが空行かの検出
-  if(Typical.isBlankLine(upload_text)){
-    $("#uploadtext").parent().addClass('has-error');
-    $("#uploadtext").after($("<span>").addClass('control-label').text("空行では送信できません"));
+  if(Typical.isBlankLine(upload_tag)){
+    $("input#tag-select").attr('placeholder', 'タグを入力してください');
+    $("input#tag-select").addClass("error");
   }
-  else if(Typical.isBlankLine($("input#tag-select").val())){
-    $("input#tag-select").parent().addClass('has-error');
-    $("input#tag-select").after($("<span>").addClass('control-label').text("空行では送信できません"));
+  else if(Typical.isBlankLine(upload_text)){
+    $("#uploadtext").attr('placeholder', 'テキストを入力してください');
+    $("#uploadtext").addClass('error');
   }
   else{
     //新規タグ判定用
@@ -78,13 +81,14 @@ $('#submit').click(function (){
       "x": -1 * upload_position.x + Field.renderer.width / 2,
       "y": -1 * upload_position.y + Field.renderer.height / 2
     });
+
+    // 入力要素の初期化
+    $('#uploadtext').val('');
+    $('#tag-select').val('');
   }
 });
 
 $('#post').click(function (){
-  // 入力要素の初期化
-  $('#uploadtext').val('');
-  $('input#tag-select').val('');
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
   $("#uploadtext").next().remove();
@@ -96,9 +100,6 @@ $('#post').click(function (){
   // 投稿フォーム表示
   $('.form').draggable();
   $('.form').fadeIn("fast");
-
-  // #uploadtextに対するフォーカス
-  $('#uploadtext').focus();
 });
 
 $('#form_remove').click(function (){
@@ -131,7 +132,7 @@ $('#uploadtext').keyup(function(){
 });
 
 // カテゴリテストプログラム
-$("#category-test").click(function(){
+$("#switch-conversation").click(function(){
   Category.set_name("conversation");
 
   // 前オブジェクトの全削除
