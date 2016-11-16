@@ -17,10 +17,19 @@
   <body>
     <div class="container-fluid">
       <!-- ナビゲーションバー -->
-      <nav class="navbar navbar-Neurnect" id="navbar">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">Neurnect</a>
-        </div>
+      <nav class="navbar navbar-fixed-top navbar-Neurnect" id="navbar">
+        <header class="navbar-header">
+          <ul>
+            <li>
+              <a class="navbar-brand" href="/">Neurnect</a>
+            </li>
+            <li>
+              <span class="navbar-brand"></span>
+              <span class="navbar-brand this-category">normal</span>
+            </li>
+            <a href="https://github.com/TNCT-SYSKEN/Neurnect" class="git-link"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+          </ul>
+        </header>
       </nav>
 
       <div id="menu">
@@ -52,12 +61,12 @@
             </a>
           </li>
           <li>
-            <a class="menu-button">
+            <a class="menu-button" id="switch-normal">
               <span class="menu-list">
                 <span class="menu-icon">
                   <i class="fa fa-hashtag" aria-hidden="true"></i>
                 </span>
-                <span class="menu-text">free</span>
+                <span class="menu-text">normal</span>
               </span>
             </a>
           </li>
