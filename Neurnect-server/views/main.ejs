@@ -24,10 +24,15 @@
               <a class="navbar-brand" href="/">Neurnect</a>
             </li>
             <li>
-              <span class="navbar-brand"></span>
-              <span class="navbar-brand this-category">normal</span>
+              <span class="navbar-brand" id="this-category">normal</span>
             </li>
-            <a href="https://github.com/TNCT-SYSKEN/Neurnect" class="git-link"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+            <li class="hidden" id="remaining-time">
+              <span class="navbar-brand remaining-icon"><i class="fa fa-hourglass" aria-hidden="true"></i></span>
+              <span class="navbar-brand">08:43</span>
+            </li>
+            <li>
+              <a class="navbar-brand git-icon" href="https://github.com/TNCT-SYSKEN/Neurnect" class="git-link"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+            </li>
           </ul>
         </header>
       </nav>
@@ -44,7 +49,8 @@
           <label for="tag-select" class="post-label">Tag:
             <input type="text" id="tag-select" placeholder="タグ">
           </label>
-          <label for="uploadtext" class="post-label" id="text-label">Text:100
+          <label for="uploadtext" class="post-label" id="text-label">Text:
+            <span id="uploadtext-limit">100</span>
             <textarea id="uploadtext" placeholder="メインテキスト" rows="3" cols="30" maxlength="100"></textarea>
           </label>
           <input type="button" id="submit" class="submit" value="&#xf044">
@@ -99,7 +105,7 @@
         </ul>
 
         <a class="title" href="">
-          <img class="logo" src="./image/Neurnect_logo.png" alt="Neurnect" />
+          <img class="logo" src="/image/Neurnect_logo.png" alt="Neurnect" />
         </a>
       </div>
 

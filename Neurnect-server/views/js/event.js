@@ -160,6 +160,8 @@ $("#switch-conversation").click(function(){
   Conversation.clear_data();
   Conversation.ClearObject();
 
+  $("#this-category").text('conversation');
+  $("#remaining-time").removeClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
