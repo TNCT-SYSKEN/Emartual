@@ -7,26 +7,32 @@ window.onorientationchange = Normal_View.resizeContainer;
 
 // 即時関数
 (function(){
-  // 初期join
-  let join_room = "normal";
-
-  socket.emit('init_upload', {
-    'category': join_room
-  });
-})();
-
-$(function(){
   $(document).on("keypress", "input:not(.allow_submit)",function(event){
     return event.which !== 13;
   });
-});
+  // 初期join
+  Category.set_name("normal");
+
+  socket.emit('init_upload', {
+    'category': Category.get_name()
+  });
+})();
 
 $('#submit').click(function (){
   // 入力されたテキスト
-  var upload_text = addNewLine($("#uploadtext").val());
+  var upload_text = Typical.addNewLine($("#uploadtext").val());
   // 選択されたタグ
-  var upload_tag = removeSpace($("input#tag-select").val());
-  var upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
+  var upload_tag = Typical.removeSpace($("input#tag-select").val());
+  // 配置
+  var upload_position = null;
+
+  if(Category.get_name() == NORMAL){
+    upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
+  }
+  // TODO: 要修正
+  else if(Category.get_name() == CONVERSATION){
+    upload_position = Conversation_View.CalcPosition(upload_text, "ellipse");
+  }
 
   // エラー表示の初期化
   $("#uploadtext").attr('placeholder', 'メインテキスト');
@@ -35,11 +41,11 @@ $('#submit').click(function (){
   $("input#tag-select").removeClass('error');
 
   // formのtext, tagが空行かの検出
-  if(isBlankLine($("input#tag-select").val())){
+  if(Typical.isBlankLine(upload_tag)){
     $("input#tag-select").attr('placeholder', 'タグを入力してください');
     $("input#tag-select").addClass("error");
   }
-  else if(isBlankLine(upload_text)){
+  else if(Typical.isBlankLine(upload_text)){
     $("#uploadtext").attr('placeholder', 'テキストを入力してください');
     $("#uploadtext").addClass('error');
   }
@@ -75,15 +81,14 @@ $('#submit').click(function (){
       "x": -1 * upload_position.x + Field.renderer.width / 2,
       "y": -1 * upload_position.y + Field.renderer.height / 2
     });
+
+    // 入力要素の初期化
     $('#uploadtext').val('');
     $('#tag-select').val('');
   }
 });
 
 $('#post').click(function (){
-  // 入力要素の初期化
-  //$('#uploadtext').val('');
-  //$('input#tag-select').val('');
   // エラー表示の初期化
   $("#uploadtext").parent().removeClass('has-error');
   $("#uploadtext").next().remove();
@@ -95,9 +100,6 @@ $('#post').click(function (){
   // 投稿フォーム表示
   $('.form').draggable();
   $('.form').fadeIn("fast");
-
-  // #uploadtextに対するフォーカス
-  //$('#uploadtext').focus();
 });
 
 $('#form_remove').click(function (){
@@ -106,12 +108,23 @@ $('#form_remove').click(function (){
 });
 
 $('#reload').click(function (){
-  Normal_View.DrawObject();
+  if(Category.get_name() == NORMAL){
+    Normal_View.DrawObject();
 
-  Normal_View.moveObjectPosition({
-    "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
-    "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
-  });
+    Normal_View.moveObjectPosition({
+      "x": (-1 * Normal.position_limit.x_max + Field.renderer.width) / 2,
+      "y": (-1 * (Normal.position_limit.y_max + Normal.position_limit.y_min) + Field.renderer.height) / 2
+    });
+  }
+  else if(Category.get_name() == CONVERSATION){
+    Conversation_View.DrawObject();
+
+    // TODO: 要修正
+    Conversation_View.moveObjectPosition({
+      "x": Field.renderer.width / 2,
+      "y": Field.renderer.height / 2
+    });
+  }
 });
 
 $('#uploadtext').keyup(function(){
@@ -143,6 +156,7 @@ socket.on("response_category", function(init){
     Conversation_View.CreateObject(item.data);
   }
 
+
   Conversation_View.DrawObject();
 });
 
@@ -167,21 +181,28 @@ socket.on('init_update', function(init){
 });
 
 socket.on('update', function(update){
-  Normal_Tag(update.tag);
+  if(update.data.category == NORMAL){
+    Normal_Tag(update.tag);
 
-  Normal.add_data(update.data);
+    Normal.add_data(update.data);
 
-  Normal_View.CreateObject(update.data);
-  Normal_View.DrawObject();
+    Normal_View.CreateObject(update.data);
+    Normal_View.DrawObject();
 
-  if( update.data.position.x > Normal.position_limit.x_max){
-    Normal.position_limit.x_max = update.data.position.x;
+    if( update.data.position.x > Normal.position_limit.x_max){
+      Normal.position_limit.x_max = update.data.position.x;
+    }
+    if( update.data.position.y > Normal.position_limit.y_max){
+      Normal.position_limit.y_max = update.data.position.y;
+    }
+    else if( update.data.position.y < Normal.position_limit.y_min){
+      Normal.position_limit.y_min = update.data.position.y;
+    }
   }
-  if( update.data.position.y > Normal.position_limit.y_max){
-    Normal.position_limit.y_max = update.data.position.y;
-  }
-  else if( update.data.position.y < Normal.position_limit.y_min){
-    Normal.position_limit.y_min = update.data.position.y;
+  else if(update.data.category == CONVERSATION){
+    Conversation.add_data(update);
+    Conversation_View.CreateObject(update.data);
+    Conversation_View.DrawObject();
   }
 });
 
