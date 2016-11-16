@@ -5,8 +5,9 @@ html{
 body{
   height: 100%;
   margin-top: 0px;
+  padding-top: 53px;
   background-color: #f7f7f7;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Hiragino Kaku Gothic ProN","Myryo",Arial,sans-serif;
 }
 
 a.btn{
@@ -14,13 +15,53 @@ a.btn{
   height: auto;
 }
 
-.navbar-Neurnect{
-  width: 100%;
-  background-color: #e7e7e7;
-}
-
 #navbar{
   margin-bottom: 0px;
+}
+
+.navbar-Neurnect{
+  width: 100%;
+  border-radius: 4px;
+  background-color: black;
+}
+
+#navbar ul{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+#navbar li{
+  display: inline;
+  margin: 0px;
+  padding: 0px;
+}
+
+.navbar-brand{
+  color: #d7d7d7;
+}
+
+#this-category{
+  cursor: default;
+}
+
+.remaining-icon{
+  padding-right: 0px;
+}
+
+.git-icon{
+  position: absolute;
+  right: 40px;
+  bottom: 3px;
+  font-size: 25px;
+}
+
+#navbar a:hover{
+  color: #fff;
+}
+
+.hidden{
+  display: none;
 }
 
 #menu{
@@ -142,7 +183,7 @@ ul{
 .menu-list{
   width: 200px;
   color: #fefefe;
-  font-size: 30px;
+  font-size: 25px;
   vertical-align: middle;
 }
 
