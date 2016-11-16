@@ -140,6 +140,8 @@ $("#switch-conversation").click(function(){
   Normal_Tag.clear_data();
   Normal_View.clearObject();
 
+  $("#this-category").text('conversation');
+  $("#remaining-time").removeClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
