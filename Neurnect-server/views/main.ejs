@@ -31,7 +31,7 @@
               <span class="navbar-brand">08:43</span>
             </li>
             <li>
-              <a class="navbar-brand git-icon" href="https://github.com/TNCT-SYSKEN/Neurnect" class="git-link"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+              <a class="navbar-brand git-icon" href="https://github.com/TNCT-SYSKEN/Neurnect" target="_blank"><i class="fa fa-github-square" aria-hidden="true"></i></a>
             </li>
           </ul>
         </header>
@@ -46,7 +46,7 @@
             </select>
           </label>
           <br>
-          <label for="tag-select" class="post-label">Tag:
+          <label for="tag-select" class="post-label" id="tag-label">Tag:
             <input type="text" id="tag-select" placeholder="タグ">
           </label>
           <label for="uploadtext" class="post-label" id="text-label">Text:
@@ -86,25 +86,25 @@
               </span>
             </a>
           </li>
-          <li>
-            <a class="menu-button" id="request-theme" onclick="obj=document.getElementById('theme-post').style; obj.display=(obj.display=='none')?'block':'none';">
+          <li id="theme">
+            <a class="menu-button" id="request-theme">
               <span class="menu-list">
                 <span class="menu-text request-text">
                   request theme
                 </span>
-                <span>
+                <span id="request-theme-icon">
                   <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </span>
               </span>
             </a>
-            <form id="theme-post" style="display: none;">
+            <form id="theme-post" class="hidden">
               <input type="text" id="request-theme"  placeholder="テーマのリクエスト">
               <input type="button" id="theme-submit" class="submit" value="&#xf044">
             </form>
           </li>
         </ul>
 
-        <a class="title" href="">
+        <a class="title" id="title" href="">
           <img class="logo" src="/image/Neurnect_logo.png" alt="Neurnect" />
         </a>
       </div>
