@@ -88,25 +88,6 @@ $('#submit').click(function (){
   }
 });
 
-$('#post').click(function (){
-  // エラー表示の初期化
-  $("#uploadtext").parent().removeClass('has-error');
-  $("#uploadtext").next().remove();
-  $("input#tag-select").parent().removeClass('has-error');
-  $("input#tag-select").next().remove();
-  // 制限入力文字数表示の初期化
-  $('#uploadtext-limit').text(100);
-
-  // 投稿フォーム表示
-  $('.form').draggable();
-  $('.form').fadeIn("fast");
-});
-
-$('#form_remove').click(function (){
-  // 投稿フォーム非表示
-  $('.form').fadeOut("fast");
-});
-
 $('#reload').click(function (){
   if(Category.get_name() == NORMAL){
     Normal_View.DrawObject();
