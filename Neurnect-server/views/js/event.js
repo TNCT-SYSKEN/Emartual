@@ -115,14 +115,34 @@ $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
 
-// カテゴリテストプログラム
-$("#switch-conversation").click(function(){
-  Category.set_name("conversation");
+
+// カテゴリ切り替え
+// 一般化出来ると良い
+// normal
+$("#switch-normal").click(function(){
+  Category.set_name(NORMAL);
 
   // 前オブジェクトの全削除
   Normal.clear_data();
   Normal_Tag.clear_data();
-  Normal_View.clearObject();
+  Normal_View.ClearObject();
+  Conversation.clear_data();
+  Conversation.ClearObject();
+
+  socket.emit("request_category", {
+    "category": Category.get_name()
+  });
+});
+// conversation
+$("#switch-conversation").click(function(){
+  Category.set_name(CONVERSATION);
+
+  // 前オブジェクトの全削除
+  Normal.clear_data();
+  Normal_Tag.clear_data();
+  Normal_View.ClearObject();
+  Conversation.clear_data();
+  Conversation.ClearObject();
 
   $("#this-category").text('conversation');
   $("#remaining-time").removeClass('hidden');
@@ -147,18 +167,35 @@ $("#theme").ready(function(){
 });
 
 socket.on("response_category", function(init){
-  for(let item of init.data){
-    Conversation.add_data(item);
+  if(init.data[0].category == NORMAL){
+    for(let tag of init.tag){
+      Normal_Tag(tag);
+    }
+
+    for(let item of init.data){
+      Normal.add_data(item);
+    }
+
+    for(let item of Normal.list){
+      Normal_View.CreateObject(item.data);
+    }
+
+    Normal_View.DrawObject();
   }
+  else if(init.data[0].category == CONVERSATION){
+    for(let item of init.data){
+      Conversation.add_data(item);
+    }
 
-  Conversation_View.CreateSpecialObject({text: "ほげほげ"});
+    Conversation_View.CreateSpecialObject({text: "ほげほげ"});
 
-  for(let item of Conversation.list){
-    Conversation_View.CreateObject(item.data);
+    for(let item of Conversation.list){
+      Conversation_View.CreateObject(item.data);
+    }
+
+
+    Conversation_View.DrawObject();
   }
-
-
-  Conversation_View.DrawObject();
 });
 
 socket.on('init_update', function(init){
@@ -177,7 +214,7 @@ socket.on('init_update', function(init){
     Normal_View.DrawObject();
 
   // カテゴリ名登録
-  let defalut_category = 'normal';
+  let defalut_category = NORMAL;
   Category.set_name(defalut_category);
 });
 

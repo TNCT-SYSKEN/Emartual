@@ -42,4 +42,8 @@ module.exports.send_Files = function(app){
   app.get('/js/main.js', function(req, res){
     res.sendFile(__dirname + "/views/js/main.js");
   });
+
+  app.get('/image/Neurnect_logo.png', function(req, res){
+    res.sendFile(__dirname + "/views/image/Neurnect_logo.png");
+  });
 };

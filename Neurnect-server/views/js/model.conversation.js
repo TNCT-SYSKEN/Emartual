@@ -5,15 +5,18 @@ function Conversation(data){
 }
 
 // プロパティ
-// インスタンス保存
+// インスタンス
 Conversation.list = [];
 // オブジェクトコンテナ
 Conversation.object = new PIXI.Container();
 Conversation.special_object = new PIXI.Container();
 
-// 数値保存
+// 数値
 Conversation.special_position = {};
 Conversation.special_size = null;
+
+// アニメーションID
+Conversation._animationID = null;
 
 Conversation.add_data = function(data){
   let conversation = new Conversation(data);
