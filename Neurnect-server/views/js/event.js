@@ -40,6 +40,9 @@ $('#submit').click(function (){
   $("input#tag-select").attr('placeholder', 'タグ');
   $("input#tag-select").removeClass('error');
 
+  // 制限入力文字数表示の初期化
+  $('#uploadtext-limit').text(100);
+
   // formのtext, tagが空行かの検出
   if(Typical.isBlankLine(upload_tag)){
     $("input#tag-select").attr('placeholder', 'タグを入力してください');
@@ -125,6 +128,21 @@ $("#switch-conversation").click(function(){
   $("#remaining-time").removeClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
+  });
+});
+
+$("#theme").ready(function(){
+  var flag = "close";
+  $("#request-theme").click(function(){
+    if (flag == "close") {
+      $("#request-theme-icon").html('<i class="fa fa-caret-up" aria-hidden="true"></i>');
+      $("#theme-post").removeClass("hidden");
+      flag="open";
+    } else {
+      $("#request-theme-icon").html('<i class="fa fa-caret-down" aria-hidden="true"></i>');
+      $("#theme-post").addClass("hidden");
+      flag="close";
+    }
   });
 });
 

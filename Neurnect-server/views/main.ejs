@@ -86,25 +86,25 @@
               </span>
             </a>
           </li>
-          <li>
-            <a class="menu-button" id="request-theme" onclick="obj=document.getElementById('theme-post').style; obj.display=(obj.display=='none')?'block':'none';">
+          <li id="theme">
+            <a class="menu-button" id="request-theme">
               <span class="menu-list">
                 <span class="menu-text request-text">
                   request theme
                 </span>
-                <span>
+                <span id="request-theme-icon">
                   <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </span>
               </span>
             </a>
-            <form id="theme-post" style="display: none;">
+            <form id="theme-post" class="hidden">
               <input type="text" id="request-theme"  placeholder="テーマのリクエスト">
               <input type="button" id="theme-submit" class="submit" value="&#xf044">
             </form>
           </li>
         </ul>
 
-        <a class="title" href="">
+        <a class="title" id="title" href="">
           <img class="logo" src="/image/Neurnect_logo.png" alt="Neurnect" />
         </a>
       </div>
