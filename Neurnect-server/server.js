@@ -16,6 +16,7 @@ var color_settings = require("./color_settings.js");
 var dbmodule = new DBModule(mongoose);
 
 var counter = 0;
+var flag = 0;
 
 dbmodule.dbdefine();
 dbmodule.tagdefine();
@@ -81,29 +82,37 @@ io.sockets.on("connection", function(socket){
 
   //語るカテゴリのテーマ登録
   socket.on("conv_theme_request",function(conv_theme){
+
     conv_theme._id = counter;
     console.log(conv_theme._id);
     console.log(conv_theme.theme);
     dbmodule.themeinsert(conv_theme);
+    if(flag == 0){
+      setTimeout(() => {
+        //テーマの削除・変更
+        //  socket.on("theme_choose",function(){
+        dbmodule.themecount(function(themecount){
+          console.log("現在のテーマ総数 : " + themecount);
+          var propcount = Math.floor(Math.random() * (themecount - 0) + 0);
+          dbmodule.themefind(propcount, function(choose_theme){
+            console.log(choose_theme);
+            io.sockets.emit("conv_theme_response",{
+              "theme": choose_theme.theme,
+              "_id": choose_theme._id
+            });
+            dbmodule.themeremove();
+          });
+        });
+        counter = 0;
+        flag = 0;
+  //    });
+}, 15000);
+    }
     counter++;
+    flag++;
   });
 
-  //テーマの削除・変更
-  socket.on("theme_choose",function(){
-    dbmodule.themecount(function(themecount){
-      console.log("現在のテーマ総数 : " + themecount);
-      var propcount = Math.floor(Math.random() * (themecount - 0) + 0);
-      dbmodule.themefind(propcount, function(choose_theme){
-          console.log(choose_theme);
-          io.sockets.emit("conv_theme_response",{
-            "theme": choose_theme.theme,
-            "_id": choose_theme._id
-          });
-          dbmodule.themeremove();
-      });
-    });
-    counter = 0;
-  });
+
 
   //tag情報の受け渡し
   socket.on('upload', function(upload){
@@ -135,10 +144,19 @@ io.sockets.on("connection", function(socket){
     update_tag.color = color_settings.color_settings[update_tag.color];
     //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
-    socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
-      "data": upload.data,
-      "tag": update_tag
-    });
+
+    var NowCategory = upload.data.category;
+    if(NowCategory == "conversation"){
+      socket.to(upload.category).emit("upload", {
+        "data": upload.data
+      });
+    }
+    else{
+      socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
+        "data": upload.data,
+        "tag": update_tag
+      });
+    }
   });
 });
 
