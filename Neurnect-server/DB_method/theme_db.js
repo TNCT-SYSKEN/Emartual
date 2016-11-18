@@ -42,9 +42,9 @@ module.exports.themecount = function(callback){
 
 //themeコレクション内のドキュメントを全削除
 module.exports.themeremove = function(){
-  var Theme_data = this.mongoose.model('Theme_data');
+  var Theme = this.mongoose.model('Theme');
 
-  Theme_data.remove({}, function(err){
+  Theme.remove({}, function(err){
     if(err){ console.log(err); }
   });
 };

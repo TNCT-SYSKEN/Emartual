@@ -12,10 +12,14 @@ var DBModule = require("./DB_method/dbmodule.js");
 var SendFiles = require("./SendFiles.js");
 var color_settings = require("./color_settings.js");
 
+
 var dbmodule = new DBModule(mongoose);
+
+var counter = 0;
 
 dbmodule.dbdefine();
 dbmodule.tagdefine();
+dbmodule.themedefine();
 
 app.engine('ejs', ejs.renderFile);
 
@@ -75,6 +79,32 @@ io.sockets.on("connection", function(socket){
     });
   });
 
+  //語るカテゴリのテーマ登録
+  socket.on("conv_theme_request",function(conv_theme){
+    conv_theme._id = counter;
+    console.log(conv_theme._id);
+    console.log(conv_theme.theme);
+    dbmodule.themeinsert(conv_theme);
+    counter++;
+  });
+
+  //テーマの削除・変更
+  socket.on("theme_choose",function(){
+    dbmodule.themecount(function(themecount){
+      console.log("現在のテーマ総数 : " + themecount);
+      var propcount = Math.floor(Math.random() * (themecount - 0) + 0);
+      dbmodule.themefind(propcount, function(choose_theme){
+          console.log(choose_theme);
+          io.sockets.emit("conv_theme_response",{
+            "theme": choose_theme.theme,
+            "_id": choose_theme._id
+          });
+          dbmodule.themeremove();
+      });
+    });
+    counter = 0;
+  });
+
   //tag情報の受け渡し
   socket.on('upload', function(upload){
     var propcount = Math.floor(Math.random() * (6 - 0) + 0);
@@ -105,7 +135,7 @@ io.sockets.on("connection", function(socket){
     update_tag.color = color_settings.color_settings[update_tag.color];
     //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
-    io.sockets.in(upload.data.category).emit("update", { //update.dataをフロントへ渡す
+    socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
       "data": upload.data,
       "tag": update_tag
     });
