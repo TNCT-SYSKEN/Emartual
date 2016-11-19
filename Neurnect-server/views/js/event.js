@@ -1,29 +1,6 @@
 // Socket.IOコネクション
 var socket = io.connect(location.href);
 
-$('#test').click(function (){
-  var text = "RD-sounds(凋叶棕)";
-  socket.emit("conv_theme_request", {
-    "theme": text
-  });
-  text = "SOUND HOLIC";
-  socket.emit("conv_theme_request", {
-    "theme": text
-  });
-  text = "Liz Triangle";
-  socket.emit("conv_theme_request", {
-    "theme": text
-  });
-  text = "幽閉サテライト";
-  socket.emit("conv_theme_request", {
-    "theme": text
-  });
-});
-
-$('#test_res').click(function(){
-  socket.emit("theme_choose");
-});
-
 // ウィンドウリサイズ対応
 $(window).resize(Normal_View.resizeContainer);
 window.onorientationchange = Normal_View.resizeContainer;
