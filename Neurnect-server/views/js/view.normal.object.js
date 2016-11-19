@@ -256,9 +256,12 @@ Normal_View.CreateObject = function(document){
   }
 };
 
-Normal_View.clearObject = function(){
+Normal_View.ClearObject = function(){
   Field.stage.removeChild(this.object);
   this.object = new PIXI.Container();
+  this.before_size = [];
+  this.before_position = [];
+  this.tag_object = [];
   cancelAnimationFrame(this._animationID);
 };
 

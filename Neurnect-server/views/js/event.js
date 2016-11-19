@@ -40,6 +40,9 @@ $('#submit').click(function (){
   $("input#tag-select").attr('placeholder', 'タグ');
   $("input#tag-select").removeClass('error');
 
+  // 制限入力文字数表示の初期化
+  $('#uploadtext-limit').text(100);
+
   // formのtext, tagが空行かの検出
   if(Typical.isBlankLine(upload_tag)){
     $("input#tag-select").attr('placeholder', 'タグを入力してください');
@@ -88,25 +91,6 @@ $('#submit').click(function (){
   }
 });
 
-$('#post').click(function (){
-  // エラー表示の初期化
-  $("#uploadtext").parent().removeClass('has-error');
-  $("#uploadtext").next().remove();
-  $("input#tag-select").parent().removeClass('has-error');
-  $("input#tag-select").next().remove();
-  // 制限入力文字数表示の初期化
-  $('#uploadtext-limit').text(100);
-
-  // 投稿フォーム表示
-  $('.form').draggable();
-  $('.form').fadeIn("fast");
-});
-
-$('#form_remove').click(function (){
-  // 投稿フォーム非表示
-  $('.form').fadeOut("fast");
-});
-
 $('#reload').click(function (){
   if(Category.get_name() == NORMAL){
     Normal_View.DrawObject();
@@ -131,14 +115,34 @@ $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
 
-// カテゴリテストプログラム
-$("#switch-conversation").click(function(){
-  Category.set_name("conversation");
+
+// カテゴリ切り替え
+// 一般化出来ると良い
+// normal
+$("#switch-normal").click(function(){
+  Category.set_name(NORMAL);
 
   // 前オブジェクトの全削除
   Normal.clear_data();
   Normal_Tag.clear_data();
-  Normal_View.clearObject();
+  Normal_View.ClearObject();
+  Conversation.clear_data();
+  Conversation.ClearObject();
+
+  socket.emit("request_category", {
+    "category": Category.get_name()
+  });
+});
+// conversation
+$("#switch-conversation").click(function(){
+  Category.set_name(CONVERSATION);
+
+  // 前オブジェクトの全削除
+  Normal.clear_data();
+  Normal_Tag.clear_data();
+  Normal_View.ClearObject();
+  Conversation.clear_data();
+  Conversation.ClearObject();
 
   $("#this-category").text('conversation');
   $("#remaining-time").removeClass('hidden');
@@ -147,19 +151,51 @@ $("#switch-conversation").click(function(){
   });
 });
 
+$("#theme").ready(function(){
+  var flag = "close";
+  $("#request-theme").click(function(){
+    if (flag == "close") {
+      $("#request-theme-icon").html('<i class="fa fa-caret-up" aria-hidden="true"></i>');
+      $("#theme-post").removeClass("hidden");
+      flag="open";
+    } else {
+      $("#request-theme-icon").html('<i class="fa fa-caret-down" aria-hidden="true"></i>');
+      $("#theme-post").addClass("hidden");
+      flag="close";
+    }
+  });
+});
+
 socket.on("response_category", function(init){
-  for(let item of init.data){
-    Conversation.add_data(item);
+  if(init.data[0].category == NORMAL){
+    for(let tag of init.tag){
+      Normal_Tag(tag);
+    }
+
+    for(let item of init.data){
+      Normal.add_data(item);
+    }
+
+    for(let item of Normal.list){
+      Normal_View.CreateObject(item.data);
+    }
+
+    Normal_View.DrawObject();
   }
+  else if(init.data[0].category == CONVERSATION){
+    for(let item of init.data){
+      Conversation.add_data(item);
+    }
 
-  Conversation_View.CreateSpecialObject({text: "ほげほげ"});
+    Conversation_View.CreateSpecialObject({text: "ほげほげ"});
 
-  for(let item of Conversation.list){
-    Conversation_View.CreateObject(item.data);
+    for(let item of Conversation.list){
+      Conversation_View.CreateObject(item.data);
+    }
+
+
+    Conversation_View.DrawObject();
   }
-
-
-  Conversation_View.DrawObject();
 });
 
 socket.on('init_update', function(init){
@@ -178,7 +214,7 @@ socket.on('init_update', function(init){
     Normal_View.DrawObject();
 
   // カテゴリ名登録
-  let defalut_category = 'normal';
+  let defalut_category = NORMAL;
   Category.set_name(defalut_category);
 });
 

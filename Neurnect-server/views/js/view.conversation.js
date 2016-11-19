@@ -68,6 +68,12 @@ Conversation_View.CreateObject = function(document){
   Conversation.object.addChildAt(textObj, 2);
 };
 
+Conversation.ClearObject = function(){
+  Field.stage.removeChild(Conversation.object);
+  Conversation.object = new PIXI.Container();
+  cancelAnimationFrame(this._animationID);
+};
+
 // オブジェクトに必要なサイズの計算
 Conversation_View.CalcSize = function(CalctextObj, formData){
   // textのアンカーポイント変更
@@ -149,7 +155,7 @@ Conversation_View.DrawObject = function(){
 
 // アニメーションメソッド
 Conversation_View.animate = function(){
-  requestAnimationFrame(Conversation_View.animate);
+  Conversation._animationID = requestAnimationFrame(Conversation_View.animate);
 
   //ルートコンテナの描画
   Field.renderer.render(Field.stage);
