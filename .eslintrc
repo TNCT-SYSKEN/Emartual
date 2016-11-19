@@ -27,6 +27,7 @@
     "RENDERER_STYLE": true,
     "ELLIPSE": true,
     "RECT": true,
+    "AD": true,
     "NORMAL": true,
     "CONVERSATION": true
   }
