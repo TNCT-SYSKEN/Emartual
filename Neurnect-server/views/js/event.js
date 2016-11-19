@@ -44,7 +44,7 @@ $('#submit').click(function (){
   $('#uploadtext-limit').text(100);
 
   // formのtext, tagが空行かの検出
-  if(Typical.isBlankLine(upload_tag)){
+  if(Typical.isBlankLine(upload_tag) && Category.get_name() == NORMAL){
     $("input#tag-select").attr('placeholder', 'タグを入力してください');
     $("input#tag-select").addClass("error");
   }
@@ -55,11 +55,16 @@ $('#submit').click(function (){
   else{
     //新規タグ判定用
     var isnewtag = true;
-
-    for(var i = 0; i < Normal_Tag.list.length; ++i){
-      if(Normal_Tag.list[i].tag == upload_tag){
-        isnewtag = false;
+    if(Category.get_name() == NORMAL){
+      for(var i = 0; i < Normal_Tag.list.length; ++i){
+        if(Normal_Tag.list[i].tag == upload_tag){
+          isnewtag = false;
+        }
       }
+    }
+    else if(Category.get_name() == CONVERSATION){
+      upload_tag = CONVERSATION;
+      isnewtag = false;
     }
 
     // データのemit
@@ -129,6 +134,8 @@ $("#switch-normal").click(function(){
   Conversation.clear_data();
   Conversation.ClearObject();
 
+  $("#remaining-time").addClass('hidden');
+  $('#tag-label').removeClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
@@ -144,29 +151,30 @@ $("#switch-conversation").click(function(){
   Conversation.clear_data();
   Conversation.ClearObject();
 
-  $("#this-category").text('conversation');
   $("#remaining-time").removeClass('hidden');
+  $("#tag-label").addClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
 });
 
 $("#theme").ready(function(){
-  var flag = "close";
   $("#request-theme").click(function(){
-    if (flag == "close") {
+    if($("#theme-post").hasClass("hidden")){
       $("#request-theme-icon").html('<i class="fa fa-caret-up" aria-hidden="true"></i>');
       $("#theme-post").removeClass("hidden");
-      flag="open";
-    } else {
+    }
+    else{
       $("#request-theme-icon").html('<i class="fa fa-caret-down" aria-hidden="true"></i>');
       $("#theme-post").addClass("hidden");
-      flag="close";
     }
   });
 });
 
 socket.on("response_category", function(init){
+  // navbar部のカテゴリ名切り替え
+  $("#this-category").text(Category.get_name());
+
   if(init.data[0].category == NORMAL){
     for(let tag of init.tag){
       Normal_Tag(tag);
