@@ -4,7 +4,7 @@ module.exports.dbdefine = function() {
 
   var Posted_dataSchema = new Schema ({
     text:   { type: String, required: true },
-    form:   { type: String, enum: ['ellipse', 'rect', 'unique'], default: "ellipse" },
+    form:   { type: String, enum: ['ellipse', 'rect', 'advertisement'], default: "ellipse" },
     image:  { type: String },
     position:    { x: { type: Number, required: true }, y: { type: Number, required: true } },
     category:   { type: String, default: "normal"},
