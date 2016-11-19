@@ -129,6 +129,8 @@ $("#switch-normal").click(function(){
   Conversation.clear_data();
   Conversation.ClearObject();
 
+  $("#this-category").text('normal');
+  $("#remaining-time").addClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
