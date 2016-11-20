@@ -20,7 +20,6 @@ window.onorientationchange = Normal_View.resizeContainer;
 
 $('#submit').click(function (){
   // 入力されたテキスト
-  console.log("ふぉげ");
   var upload_text = Typical.addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = Typical.removeSpace($("input#tag-select").val());
@@ -177,7 +176,7 @@ socket.on("response_category", function(init){
   // navbar部のカテゴリ名切り替え
   $("#this-category").text(Category.get_name());
 
-  if(init.data[0].category == NORMAL){
+  if(Category.get_name() == NORMAL){
     for(let tag of init.tag){
       Normal_Tag(tag);
     }
@@ -192,7 +191,7 @@ socket.on("response_category", function(init){
 
     Normal_View.DrawObject();
   }
-  else if(init.data[0].category == CONVERSATION){
+  else if(Category.get_name() == CONVERSATION){
     for(let item of init.data){
       Conversation.add_data(item);
     }
