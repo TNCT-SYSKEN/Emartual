@@ -26,7 +26,7 @@ module.exports.themefind = function(id, callback) {
   Theme.find({ _id: id }, function(err, docs){
     if(err){ console.log(err); }
 
-    callback(docs);
+    callback(docs[0]);
   }).select('theme').limit(1);
 };
 
