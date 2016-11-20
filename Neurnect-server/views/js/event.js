@@ -20,6 +20,7 @@ window.onorientationchange = Normal_View.resizeContainer;
 
 $('#submit').click(function (){
   // 入力されたテキスト
+  console.log("ふぉげ");
   var upload_text = Typical.addNewLine($("#uploadtext").val());
   // 選択されたタグ
   var upload_tag = Typical.removeSpace($("input#tag-select").val());
@@ -31,6 +32,7 @@ $('#submit').click(function (){
   }
   // TODO: 要修正
   else if(Category.get_name() == CONVERSATION){
+    upload_tag = CONVERSATION;
     upload_position = Conversation_View.CalcPosition(upload_text, "ellipse");
   }
 
