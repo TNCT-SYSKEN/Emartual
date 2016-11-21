@@ -5,6 +5,7 @@ var express = require('express'),
     favicon = require('serve-favicon');
 var ejs = require('ejs');
 var mongoose = require('mongoose');
+var async = require('async');
 
 var setting = require("./setting.js");
 var mainUI = require("./mainUI.js");
@@ -12,11 +13,7 @@ var DBModule = require("./DB_method/dbmodule.js");
 var SendFiles = require("./SendFiles.js");
 var color_settings = require("./color_settings.js");
 
-
 var dbmodule = new DBModule(mongoose);
-
-var counter = 0;
-var old_theme;
 
 dbmodule.dbdefine();
 dbmodule.tagdefine();
@@ -71,10 +68,19 @@ io.sockets.on("connection", function(socket){
         for(var i = 0; i < cate_tag.length; i++){
           cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
         }
-        socket.join(cate_name.category); //カテゴリチャンネルに参加
-        socket.emit("response_category", {
-          "data": cate_data,
-          "tag": cate_tag
+        dbmodule.themecount(function(themecount){
+          var propcount = Math.floor(Math.random() * (themecount - 0) + 0); //投稿の総数を上限として数値を一つランダムで選ぶ
+          dbmodule.themefind(propcount, function(find_theme){
+            socket.join(cate_name.category); //カテゴリチャンネルに参加
+            socket.emit("response_category", {
+              "data": cate_data,
+              "tag": cate_tag
+            });
+            socket.emit("conv_theme_response", {
+              "theme": find_theme.theme,
+              "_id": find_theme._id
+            });
+          });
         });
       });
     });
@@ -82,39 +88,47 @@ io.sockets.on("connection", function(socket){
 
   //語るカテゴリのテーマ登録
   socket.on("conv_theme_request",function(conv_theme){
-    conv_theme._id = counter;
-    console.log(conv_theme._id);
-    console.log(conv_theme.theme);
-    dbmodule.themeinsert(conv_theme);
-    counter++;
+    dbmodule.themecount(function(count){
+      conv_theme._id = count; //counter数を投稿されたテーマのidとする
+      dbmodule.themeinsert(conv_theme); //DBにテーマを登録
+      console.log("conv_theme : " + conv_theme);
+    });
   });
 
   //テーマの削除・変更
   socket.on("theme_choose",function(){
     dbmodule.themecount(function(themecount){
-      console.log("現在のテーマ総数 : " + themecount);
-      var propcount = Math.floor(Math.random() * (themecount - 0) + 0);
-      if(themecount == 0){
-        console.log(old_theme);
-        io.sockets.emit("conv_theme_response", {
-          "theme": old_theme.theme,
-          "_id": old_theme._id
-        });
-        dbmodule.themeremove();
-      }
-      else{
+      var propcount = Math.floor(Math.random() * (themecount - 0) + 0); //投稿の総数を上限として数値を一つランダムで選ぶ
+      //語るカテゴリにテーマが投稿されていればランダムに1つ抽出しsocketを送る
         dbmodule.themefind(propcount, function(choose_theme){
-          console.log(choose_theme);
           io.sockets.emit("conv_theme_response",{
             "theme": choose_theme.theme,
             "_id": choose_theme._id
           });
-          old_theme = choose_theme;
-          dbmodule.themeremove();
+          async.waterfall([
+            function(callback){
+              callback(null, 'one', 'two');
+            },
+            function(arg1, arg2, callback){ //先に全件削除を行う
+              dbmodule.themeremove();
+              callback(null, 'three');
+            },
+            function(arg1, callback){ //その後に_idを0にして追加
+              dbmodule.themecount(function(count){
+                choose_theme._id = count; //count数を投稿されたテーマのidとする
+                callback(null, 'four');
+              });
+            },
+            function(arg1, callback){
+              dbmodule.themeinsert({
+                "theme": choose_theme.theme,
+                "_id": choose_theme._id
+              });
+              callback(null, 'done');
+            }
+          ]);
         });
-      }
     });
-    counter = 0;
   });
 
   //tag情報の受け渡し
@@ -148,10 +162,8 @@ io.sockets.on("connection", function(socket){
     //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
 
-    console.log(upload.data.category);
     var NowCategory = upload.data.category;
     if(NowCategory == "conversation"){
-      console.log(upload);
       socket.to(upload.category).emit("update", {
         "data": upload.data
       });
