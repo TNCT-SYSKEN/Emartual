@@ -31,18 +31,22 @@
               <span class="navbar-brand">08:43</span>
             </li>
             <li>
-              <a class="navbar-brand git-icon" href="https://github.com/TNCT-SYSKEN/Neurnect" target="_blank"><i class="fa fa-github-square" aria-hidden="true"></i></a>
+              <a class="navbar-brand icon" id="switch-theme"><i class="fa fa-repeat" aria-hidden="true"></i></a>
+            </li>
+            <li>
+              <a class="navbar-brand icon git-icon" href="https://github.com/TNCT-SYSKEN/Neurnect" target="_blank"><i class="fa fa-github-square" aria-hidden="true"></i></a>
             </li>
           </ul>
         </header>
       </nav>
 
-      <div id="menu">
+      <nav id="menu">
         <form id="post">
           <label for="form" class="form-label">Form:
             <select id="graphic-form">
               <option value="ellipse">ellipse</option>
               <option value="rect">rect</option>
+              <option value="advertisement">AD</option>
             </select>
           </label>
           <br>
@@ -104,13 +108,13 @@
           </li>
         </ul>
 
-        <a class="title" id="title" href="">
+        <a class="title" href="">
           <img class="logo" src="/image/Neurnect_logo.png" alt="Neurnect" />
         </a>
-      </div>
+      </nav>
 
       <!-- 描画コンテナ -->
-      <div class="col-sm-12" id="container"></div>
+      <article class="col-sm-12" id="container"></article>
 
       <script type="text/ecmascript" src="/js/model.normal.js"></script>
       <script type="text/ecmascript" src="/js/view.field.js"></script>
