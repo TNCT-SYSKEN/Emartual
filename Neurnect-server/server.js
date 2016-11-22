@@ -68,19 +68,19 @@ io.sockets.on("connection", function(socket){
         for(var i = 0; i < cate_tag.length; i++){
           cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
         }
-        dbmodule.themecount(function(themecount){
-          var propcount = Math.floor(Math.random() * (themecount - 0) + 0); //投稿の総数を上限として数値を一つランダムで選ぶ
-          dbmodule.themefind(propcount, function(find_theme){
-            socket.join(cate_name.category); //カテゴリチャンネルに参加
-            socket.emit("response_category", {
-              "data": cate_data,
-              "tag": cate_tag
-            });
-            socket.emit("conv_theme_response", {
-              "theme": find_theme.theme,
-              "_id": find_theme._id
-            });
+        dbmodule.themefind(0, function(find_theme){
+          socket.join(cate_name.category); //カテゴリチャンネルに参加
+          socket.emit("response_category", {
+            "data": cate_data,
+            "tag": cate_tag
           });
+          socket.emit("conv_theme_response", {
+            "theme": find_theme.theme,
+            "_id": find_theme._id
+          });
+          console.log("切替時");
+          console.log("find_theme.theme : " + find_theme.theme);
+          console.log("find_theme._id : " + find_theme._id);
         });
       });
     });
@@ -91,7 +91,9 @@ io.sockets.on("connection", function(socket){
     dbmodule.themecount(function(count){
       conv_theme._id = count; //counter数を投稿されたテーマのidとする
       dbmodule.themeinsert(conv_theme); //DBにテーマを登録
-      console.log("conv_theme : " + conv_theme);
+      console.log("登録時");
+      console.log("conv_theme.theme : " + conv_theme.theme);
+      console.log("conv_theme._id : " + conv_theme._id);
     });
   });
 
@@ -124,6 +126,9 @@ io.sockets.on("connection", function(socket){
                 "theme": choose_theme.theme,
                 "_id": choose_theme._id
               });
+              console.log("抽出時");
+              console.log("choose_theme.theme : " + choose_theme.theme);
+              console.log("choose_theme._id : " + choose_theme._id);
               callback(null, 'done');
             }
           ]);
