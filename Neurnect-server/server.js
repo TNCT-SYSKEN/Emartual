@@ -78,9 +78,6 @@ io.sockets.on("connection", function(socket){
             "theme": find_theme.theme,
             "_id": find_theme._id
           });
-          console.log("切替時");
-          console.log("find_theme.theme : " + find_theme.theme);
-          console.log("find_theme._id : " + find_theme._id);
         });
       });
     });
@@ -91,9 +88,6 @@ io.sockets.on("connection", function(socket){
     dbmodule.themecount(function(count){
       conv_theme._id = count; //counter数を投稿されたテーマのidとする
       dbmodule.themeinsert(conv_theme); //DBにテーマを登録
-      console.log("登録時");
-      console.log("conv_theme.theme : " + conv_theme.theme);
-      console.log("conv_theme._id : " + conv_theme._id);
     });
   });
 
@@ -126,9 +120,6 @@ io.sockets.on("connection", function(socket){
                 "theme": choose_theme.theme,
                 "_id": choose_theme._id
               });
-              console.log("抽出時");
-              console.log("choose_theme.theme : " + choose_theme.theme);
-              console.log("choose_theme._id : " + choose_theme._id);
               callback(null, 'done');
             }
           ]);
