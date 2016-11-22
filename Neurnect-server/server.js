@@ -5,6 +5,7 @@ var express = require('express'),
     favicon = require('serve-favicon');
 var ejs = require('ejs');
 var mongoose = require('mongoose');
+var async = require('async');
 
 var setting = require("./setting.js");
 var mainUI = require("./mainUI.js");
@@ -16,6 +17,7 @@ var dbmodule = new DBModule(mongoose);
 
 dbmodule.dbdefine();
 dbmodule.tagdefine();
+dbmodule.themedefine();
 
 app.engine('ejs', ejs.renderFile);
 
@@ -64,14 +66,72 @@ io.sockets.on("connection", function(socket){
     dbmodule.dbcate(cate_name.category, function(cate_data){  //カテゴリデータの抽出
       dbmodule.tagall(function(cate_tag){ //DBへのTagデータの受け渡し要求
         for(var i = 0; i < cate_tag.length; i++){
-          cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
+          if(cate_name.category != 'conversation'){
+            cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
+          }
+          else{
+            cate_tag[i].tag = null;
+            cate_tag[i].color = null;
+          }
         }
-        socket.join(cate_name.category); //カテゴリチャンネルに参加
-        socket.emit("response_category", {
-          "data": cate_data,
-          "tag": cate_tag
+        dbmodule.themefind(0, function(find_theme){
+          socket.join(cate_name.category); //カテゴリチャンネルに参加
+          socket.emit("response_category", {
+            "data": cate_data,
+            "tag": cate_tag
+          });
+          if(cate_name.category == 'conversation'){
+            socket.emit("conv_theme_response", {
+              "theme": find_theme.theme,
+              "_id": find_theme._id
+            });
+          }
         });
       });
+    });
+  });
+
+  //語るカテゴリのテーマ登録
+  socket.on("conv_theme_request",function(conv_theme){
+    dbmodule.themecount(function(count){
+      conv_theme._id = count; //counter数を投稿されたテーマのidとする
+      dbmodule.themeinsert(conv_theme); //DBにテーマを登録
+    });
+  });
+
+  //テーマの削除・変更
+  socket.on("theme_choose",function(){
+    dbmodule.themecount(function(themecount){
+      var propcount = Math.floor(Math.random() * (themecount - 0) + 0); //投稿の総数を上限として数値を一つランダムで選ぶ
+      //語るカテゴリにテーマが投稿されていればランダムに1つ抽出しsocketを送る
+        dbmodule.themefind(propcount, function(choose_theme){
+          io.sockets.emit("conv_theme_response",{
+            "theme": choose_theme.theme,
+            "_id": choose_theme._id
+          });
+          async.waterfall([
+            function(callback){
+              callback(null, 'one', 'two');
+            },
+            function(arg1, arg2, callback){ //先に全件削除を行う
+              dbmodule.themeremove();
+              callback(null, 'three');
+            },
+            function(arg1, callback){ //その後に_idを0にして追加
+              dbmodule.themecount(function(count){
+                choose_theme._id = count; //count数を投稿されたテーマのidとする
+                callback(null, 'four');
+              });
+            },
+            function(arg1, callback){
+              dbmodule.themeinsert({
+                "theme": choose_theme.theme,
+                "_id": choose_theme._id
+              });
+              callback(null, 'done');
+            }
+          ]);
+        });
     });
   });
 
@@ -105,10 +165,19 @@ io.sockets.on("connection", function(socket){
     update_tag.color = color_settings.color_settings[update_tag.color];
     //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
-    io.sockets.in(upload.data.category).emit("update", { //update.dataをフロントへ渡す
-      "data": upload.data,
-      "tag": update_tag
-    });
+
+    var NowCategory = upload.data.category;
+    if(NowCategory == "conversation"){
+      socket.to(upload.category).emit("update", {
+        "data": upload.data
+      });
+    }
+    else{
+      socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
+        "data": upload.data,
+        "tag": update_tag
+      });
+    }
   });
 });
 
