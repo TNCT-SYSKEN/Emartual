@@ -66,7 +66,13 @@ io.sockets.on("connection", function(socket){
     dbmodule.dbcate(cate_name.category, function(cate_data){  //カテゴリデータの抽出
       dbmodule.tagall(function(cate_tag){ //DBへのTagデータの受け渡し要求
         for(var i = 0; i < cate_tag.length; i++){
-          cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
+          if(cate_name.category != 'conversation'){
+            cate_tag[i].color = color_settings.color_settings[cate_tag[i].color];
+          }
+          else{
+            cate_tag[i].tag = null;
+            cate_tag[i].color = null;
+          }
         }
         dbmodule.themefind(0, function(find_theme){
           socket.join(cate_name.category); //カテゴリチャンネルに参加
@@ -74,10 +80,12 @@ io.sockets.on("connection", function(socket){
             "data": cate_data,
             "tag": cate_tag
           });
-          socket.emit("conv_theme_response", {
-            "theme": find_theme.theme,
-            "_id": find_theme._id
-          });
+          if(cate_name.category == 'conversation'){
+            socket.emit("conv_theme_response", {
+              "theme": find_theme.theme,
+              "_id": find_theme._id
+            });
+          }
         });
       });
     });
