@@ -156,26 +156,26 @@ io.sockets.on("connection", function(socket){
         "color": update_tag.color
       });
     }
-    else{
+    else if(upload.data.category == 'normal'){
       dbmodule.tagfindone(update_tag.tag, function(doc){
         update_tag.color = doc.color;
       });
     }
 
-    update_tag.color = color_settings.color_settings[update_tag.color];
     //upload.dataをDBに渡す
     dbmodule.dbinsert(upload.data);
 
-    var NowCategory = upload.data.category;
-    if(NowCategory == "conversation"){
-      socket.to(upload.category).emit("update", {
-        "data": upload.data
+    if(upload.data.category == "normal"){
+      update_tag.color = color_settings.color_settings[update_tag.color];
+
+      io.sockets.in(upload.data.category).emit("update", { //update.dataをフロントへ渡す
+        "data": upload.data,
+        "tag": update_tag
       });
     }
     else{
-      socket.to(upload.category).emit("update", { //update.dataをフロントへ渡す
-        "data": upload.data,
-        "tag": update_tag
+      io.sockets.in(upload.data.category).emit("update", {
+        "data": upload.data
       });
     }
   });
