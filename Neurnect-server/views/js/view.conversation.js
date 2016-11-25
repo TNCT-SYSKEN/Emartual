@@ -98,6 +98,7 @@ Conversation_View.CreateObject = function(document){
 Conversation.ClearObject = function(){
   Field.stage.removeChild(Conversation.object);
   Conversation.object = new PIXI.Container();
+  Conversation.special_object = new PIXI.Container();
   cancelAnimationFrame(this._animationID);
 };
 

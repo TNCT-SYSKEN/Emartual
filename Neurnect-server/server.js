@@ -120,16 +120,18 @@ io.sockets.on("connection", function(socket){
               callback(null, 'three');
             },
             function(arg1, callback){ //その後に_idを0にして追加
-              dbmodule.themecount(function(count){
-                choose_theme._id = count; //count数を投稿されたテーマのidとする
-                callback(null, 'four');
-              });
+              choose_theme._id = 0; // 初期値0を投稿されたテーマのidとする
+              callback(null, 'four');
             },
             function(arg1, callback){
               dbmodule.themeinsert({
                 "theme": choose_theme.theme,
                 "_id": choose_theme._id
               });
+
+              // Posted_dataコレクションからconversationドキュメントを全削除
+              var CONVERSATION = "conversation";
+              dbmodule.dbcateremove(CONVERSATION);
               callback(null, 'done');
             }
           ]);

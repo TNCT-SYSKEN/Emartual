@@ -105,6 +105,9 @@ $('#theme-submit').click(function(){
   socket.emit('conv_theme_request', {
     'theme': $('input#request-theme').val()
   });
+
+  // 空行にする
+  $('input#request-theme').val('');
 });
 
 $('#reload').click(function (){
@@ -199,6 +202,7 @@ socket.on('conv_theme_response', function(theme){
   Conversation.set_theme(theme.theme);
 
   Conversation_View.CreateSpecialObject({text: Conversation.theme});
+  Conversation_View.DrawObject();
 });
 
 socket.on("response_category", function(init){
@@ -232,7 +236,6 @@ socket.on("response_category", function(init){
     for(let item of Conversation.list){
       Conversation_View.CreateObject(item.data);
     }
-
 
     Conversation_View.DrawObject();
   }
