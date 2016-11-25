@@ -97,6 +97,13 @@ $('#submit').click(function (){
   }
 });
 
+// request-themeの送信
+$('#theme-submit').click(function(){
+  socket.emit('conv_theme_request', {
+    'theme': $('input#request-theme').val()
+  });
+});
+
 $('#reload').click(function (){
   if(Category.get_name() == NORMAL){
     Normal_View.DrawObject();
@@ -137,6 +144,7 @@ $("#switch-normal").click(function(){
 
   $("#remaining-time").addClass('hidden');
   $('#tag-label').removeClass('hidden');
+  $('#theme').addClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
@@ -154,11 +162,13 @@ $("#switch-conversation").click(function(){
 
   $("#remaining-time").removeClass('hidden');
   $("#tag-label").addClass('hidden');
+  $('#theme').removeClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
 });
 
+// themeクリックイベント
 $("#theme").ready(function(){
   $("#request-theme").click(function(){
     if($("#theme-post").hasClass("hidden")){
@@ -170,6 +180,23 @@ $("#theme").ready(function(){
       $("#theme-post").addClass("hidden");
     }
   });
+});
+
+// conversationテーマ切り替え要求
+$('#switch-theme').click(function(){
+  socket.emit('theme_choose');
+});
+
+// conversationテーマ切り替え応答
+socket.on('conv_theme_response', function(theme){
+  // 前データの全削除
+  Conversation.clear_data();
+  Conversation.ClearObject();
+
+  // 受信したテーマをもとに，special_objectを作成
+  Conversation.set_theme(theme.theme);
+
+  Conversation_View.CreateSpecialObject({text: Conversation.theme});
 });
 
 socket.on("response_category", function(init){
@@ -196,7 +223,9 @@ socket.on("response_category", function(init){
       Conversation.add_data(item);
     }
 
-    Conversation_View.CreateSpecialObject({text: "ほげほげ"});
+    Conversation.set_theme(init.theme);
+
+    Conversation_View.CreateSpecialObject({text: Conversation.theme});
 
     for(let item of Conversation.list){
       Conversation_View.CreateObject(item.data);

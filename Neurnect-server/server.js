@@ -76,14 +76,17 @@ io.sockets.on("connection", function(socket){
         }
         dbmodule.themefind(0, function(find_theme){
           socket.join(cate_name.category); //カテゴリチャンネルに参加
-          socket.emit("response_category", {
-            "data": cate_data,
-            "tag": cate_tag
-          });
           if(cate_name.category == 'conversation'){
-            socket.emit("conv_theme_response", {
-              "theme": find_theme.theme,
-              "_id": find_theme._id
+            socket.emit("response_category", {
+              "data": cate_data,
+              "tag": cate_tag,
+              "theme": find_theme.theme
+            });
+          }
+          else if(cate_name.category == 'normal'){
+            socket.emit("response_category", {
+              "data": cate_data,
+              "tag": cate_tag,
             });
           }
         });
@@ -106,8 +109,7 @@ io.sockets.on("connection", function(socket){
       //語るカテゴリにテーマが投稿されていればランダムに1つ抽出しsocketを送る
         dbmodule.themefind(propcount, function(choose_theme){
           io.sockets.emit("conv_theme_response",{
-            "theme": choose_theme.theme,
-            "_id": choose_theme._id
+            "theme": choose_theme.theme
           });
           async.waterfall([
             function(callback){

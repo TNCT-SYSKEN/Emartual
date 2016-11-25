@@ -7,6 +7,7 @@ function Conversation(data){
 // プロパティ
 // インスタンス
 Conversation.list = [];
+Conversation.theme = null;
 // オブジェクトコンテナ
 Conversation.object = new PIXI.Container();
 Conversation.special_object = new PIXI.Container();
@@ -24,6 +25,11 @@ Conversation.add_data = function(data){
   this.list.push(conversation);
 };
 
+Conversation.set_theme = function(theme){
+  this.theme = theme;
+};
+
 Conversation.clear_data = function(){
   this.list = [];
+  this.theme = null;
 };
