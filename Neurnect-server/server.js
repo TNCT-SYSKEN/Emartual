@@ -75,7 +75,28 @@ io.sockets.on("connection", function(socket){
           }
         }
         dbmodule.themefind(0, function(find_theme){
-          socket.join(cate_name.category); //カテゴリチャンネルに参加
+
+          async.waterfall([
+            function(callback){
+              callback(null, 'one', 'two');
+            },
+            function(arg1, arg2, callback){
+              // 現在joinしているroomを取得
+              var joinded_rooms = io.sockets.adapter.sids[socket.id];
+              // すべてのroomから抜ける
+              for(var room in joinded_rooms){
+                socket.leave(room);
+              }
+
+              callback(null, 'three');
+            },
+            function(arg1, callback){
+              socket.join(cate_name.category); //カテゴリチャンネルに参加
+
+              callback(null, 'done');
+            }
+          ]);
+
           if(cate_name.category == 'conversation'){
             socket.emit("response_category", {
               "data": cate_data,

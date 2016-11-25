@@ -150,6 +150,7 @@ $("#switch-normal").click(function(){
   $("#remaining-time").addClass('hidden');
   $('#tag-label').removeClass('hidden');
   $('#theme').addClass('hidden');
+  $('#switch-theme').addClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
@@ -168,6 +169,7 @@ $("#switch-conversation").click(function(){
   $("#remaining-time").removeClass('hidden');
   $("#tag-label").addClass('hidden');
   $('#theme').removeClass('hidden');
+  $('#switch-theme').removeClass('hidden');
   socket.emit("request_category", {
     "category": Category.get_name()
   });
