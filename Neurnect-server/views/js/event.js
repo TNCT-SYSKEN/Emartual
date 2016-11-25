@@ -18,6 +18,10 @@ window.onorientationchange = Normal_View.resizeContainer;
   });
 })();
 
+$("select").change(function(){
+  $(this).blur();
+});
+
 $('#submit').click(function (){
   // 入力されたテキスト
   var upload_text = Typical.addNewLine($("#uploadtext").val());
@@ -127,7 +131,6 @@ $('#reload').click(function (){
 $('#uploadtext').keyup(function(){
   $('#uploadtext-limit').text(100 - $('#uploadtext').val().length);
 });
-
 
 // カテゴリ切り替え
 // 一般化出来ると良い

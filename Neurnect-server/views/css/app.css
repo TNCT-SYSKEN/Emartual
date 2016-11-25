@@ -35,6 +35,7 @@ body{
 .navbar-brand{
   color: #d7d7d7;
   user-select: none;
+  -moz-user-select: none;
 }
 
 #this-category{
@@ -82,6 +83,7 @@ body{
   background-color: #727FBA;
   color: #fff;
   user-select: none;
+  -moz-user-select: none;
   box-shadow: 3px 0px 5px 1px #888;
   transition: transform 300ms ease;
 }
@@ -101,12 +103,17 @@ body{
   font-size: 20px;
 }
 
+.form-label{
+  width: 240px;
+  overflow: hidden;
+}
+
 select{
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
   position: relative;
-  width: 150px;
+  width: 95%;
   height: 30px;
   border: 1px solid #999;
   border-radius: 3px;
@@ -124,20 +131,23 @@ select:hover{
   background-color: #ddd;
 }
 
-.form-label::after{
-  position: relative;
-  right: 28px;
+.form-icon{
+  position: absolute;
+  left: 220px;
+  top: 34px;
   pointer-events: none;
   color: #727FBA;
-  font-family: FontAwesome;
-  content: "\f063";
-  transition: content 250ms ease;
-  -webkit-transition: content 250ms ease;
-  -moz-transition: content 250ms ease;
+  transform: rotate(0deg);
+  transition: transform 250ms ease-in-out;
+  -webkit-transition: transform 250ms ease-in-out;
+  -moz-transition: transform 250ms ease-in-out;
 }
 
-.form-label:active::after{
-  content: "\f062";
+#graphic-form:focus + .form-icon{
+  transform: rotate(180deg);
+  transition: transform 250ms ease-in-out;
+  -webkit-transition: transform 250ms ease-in-out;
+  -moz-transition: transform 250ms ease-in-out;
 }
 
 .post-label{
