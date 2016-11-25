@@ -56,8 +56,35 @@ Conversation_View.CreateObject = function(document){
   line.lineStyle(4, 0x4661df);
 
   // 幾何学形の描画設定
-  let objectSize = this.CalcSize(textObj, ELLIPSE);
-  graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
+  let objectSize = this.CalcSize(textObj, document.form);
+
+  if (document.form == ELLIPSE){
+    // Ellipseの描画
+    graphics.drawEllipse(document.position.x, document.position.y, objectSize.width, objectSize.height);
+  }
+  else if(document.form == RECT){
+    // rect作成時のバイアス参考値
+    let bias = {
+      "x": 45,
+      "y": 20
+    };
+    // Rectの描画
+    graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2, document.position.y - (textObj.height + bias.y) / 2, objectSize.width, objectSize.height);
+  }
+  else if(document.form == AD){
+      // ad作成時のバイアス参考値
+      let bias = {
+        "x": 45,
+        "y": 20
+      };
+      let bias_2 = {
+        "x": 20,
+        "y": 20
+      };
+      // ADの描画
+      graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2 - bias_2.x / 2, document.position.y - (textObj.height + bias.y) / 2 - bias_2.y / 2, objectSize.width + bias_2.x, objectSize.height + bias_2.y);
+      graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2, document.position.y - (textObj.height + bias.y) / 2, objectSize.width, objectSize.height);
+  }
 
   line.moveTo(Conversation.special_position.x, Conversation.special_position.y);
   line.lineTo(textObj.position.x, textObj.position.y);
@@ -94,7 +121,7 @@ Conversation_View.CalcSize = function(CalctextObj, formData){
       "height": CalctextObj.height * Math.sqrt(2) / 2 + bias.y
     };
   }
-  else if(formData == RECT){
+  else if(formData == RECT || formData == AD){
     let bias = {
       "x": 45,
       "y": 20

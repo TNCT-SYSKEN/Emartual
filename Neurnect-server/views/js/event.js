@@ -33,10 +33,9 @@ $('#submit').click(function (){
   if(Category.get_name() == NORMAL){
     upload_position = Normal_View.CalcPosition(upload_text, $("#graphic-form").val(), upload_tag);
   }
-  // TODO: 要修正
   else if(Category.get_name() == CONVERSATION){
     upload_tag = CONVERSATION;
-    upload_position = Conversation_View.CalcPosition(upload_text, "ellipse");
+    upload_position = Conversation_View.CalcPosition(upload_text, $('#graphic-form').val());
   }
 
   // エラー表示の初期化

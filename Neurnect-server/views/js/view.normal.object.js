@@ -226,7 +226,7 @@ Normal_View.CreateObject = function(document){
     graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2, document.position.y - (textObj.height + bias.y) / 2, objectSize.width, objectSize.height);
   }
   else if(document.form == AD){
-      // rect作成時のバイアス参考値
+      // ad作成時のバイアス参考値
       let bias = {
         "x": 45,
         "y": 20
@@ -235,7 +235,7 @@ Normal_View.CreateObject = function(document){
         "x": 20,
         "y": 20
       };
-      // Rectの描画
+      // ADの描画
       graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2 - bias_2.x / 2, document.position.y - (textObj.height + bias.y) / 2 - bias_2.y / 2, objectSize.width + bias_2.x, objectSize.height + bias_2.y);
       graphics.drawRect(document.position.x - (textObj.width + bias.x) / 2, document.position.y - (textObj.height + bias.y) / 2, objectSize.width, objectSize.height);
   }
