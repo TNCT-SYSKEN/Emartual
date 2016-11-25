@@ -126,7 +126,19 @@ io.sockets.on("connection", function(socket){
   //テーマの削除・変更
   socket.on("theme_choose",function(){
     dbmodule.themecount(function(themecount){
-      var propcount = Math.floor(Math.random() * (themecount - 0) + 0); //投稿の総数を上限として数値を一つランダムで選ぶ
+
+      var count_base = null;
+
+      // 新たなテーマのリクエストがなかった場合
+      if(themecount == 1){
+        // 前のテーマを送信する
+        count_base = 0;
+      }
+      else{
+        // 新たに投稿されたテーマのみから抽出する
+        count_base = 1;
+      }
+      var propcount = Math.floor(Math.random() * (themecount - count_base) + count_base); //投稿の総数を上限として数値を一つランダムで選ぶ
       //語るカテゴリにテーマが投稿されていればランダムに1つ抽出しsocketを送る
         dbmodule.themefind(propcount, function(choose_theme){
           io.sockets.emit("conv_theme_response",{
